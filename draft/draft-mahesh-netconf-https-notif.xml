@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<rfc category="std" docName="draft-mahesh-netconf-https-notif-00"
+     ipr="trust200902">
+  <?rfc toc="yes"?>
+
+  <front>
+    <title abbrev="BGP YANG Model">BGP YANG Model for Service Provider
+    Networks</title>
+
+    <author fullname="Mahesh Jethanandani" initials="M.J."
+            surname="Jethanandani">
+      <organization>VMware</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <city/>
+
+          <region/>
+
+          <code/>
+
+          <country/>
+        </postal>
+
+        <phone/>
+
+        <facsimile/>
+
+        <email>mjethanandani@gmail.com</email>
+
+        <uri/>
+      </address>
+    </author>
+
+    <author fullname="Kent" initials="K.W." surname="Watsen">
+      <organization>Watsen Networks</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <city/>
+
+          <region/>
+
+          <country>USA</country>
+        </postal>
+
+        <email>kent@watsen.net</email>
+      </address>
+    </author>
+
+    <date day="25" month="June" year="2019"/>
+
+    <area>Routing</area>
+
+    <workgroup>NETCONF</workgroup>
+
+    <keyword>http</keyword>
+
+    <keyword>yang</keyword>
+
+    <keyword>notification</keyword>
+
+    <abstract>
+      <t>This document defines a YANG data module for configuring HTTP(s)
+      based notification.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section anchor="intro" title="Introduction">
+      <t>This document defines a <xref target="RFC7950">YANG</xref> data
+      module for configuring HTTP(s) based notifications. The receiver of this
+      notifications is a HTTP(s) server that is specified as part of the
+      configuration. </t>
+
+      <section title="Note to RFC Editor">
+        <t>This document uses several placeholder values throughout the
+        document. Please replace them as follows and remove this note before
+        publication.</t>
+
+        <t>RFC XXXX, where XXXX is the number assigned to this document at the
+        time of publication.</t>
+
+        <t>YYYY-MM-DD with the actual date of the publication of this
+        document.</t>
+      </section>
+
+      <section title="Abbreviations">
+        <texttable>
+          <ttcol>Abbreviation</ttcol>
+
+          <ttcol/>
+        </texttable>
+      </section>
+    </section>
+
+    <section anchor="overview" title="Model overview">
+      <section anchor="overview.protocol" title="Receiver configuration">
+        <t/>
+
+        <figure>
+          <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD-tree.txt)
+
+]]></artwork>
+        </figure>
+      </section>
+    </section>
+
+    <section title="Security Considerations">
+      <t>The YANG module specified in this document defines a schema for data
+      that is designed to be accessed via network management protocols such as
+      <xref target="RFC6241">NETCONF</xref> or <xref
+      target="RFC8040">RESTCONF</xref>. The lowest NETCONF layer is the secure
+      transport layer, and the mandatory-to-implement secure transport is
+      <xref target="RFC6242">Secure Shell (SSH)</xref>. The lowest RESTCONF
+      layer is HTTPS, and the mandatory-to-implement secure transport is <xref
+      target="RFC8446">TLS</xref>. The <xref target="RFC8341">NETCONF Access
+      Control Model (NACM) </xref> provides the means to restrict access for
+      particular NETCONF or RESTCONF users to a preconfigured subset of all
+      available NETCONF or RESTCONF protocol operations and content.</t>
+
+      <t>There are a number of data nodes defined in this YANG module that are
+      writable/creatable/deletable (i.e., config true, which is the default).
+      These data nodes may be considered sensitive or vulnerable in some
+      network environments. Write operations (e.g., edit-config) to these data
+      nodes without proper protection can have a negative effect on network
+      operations. These are the subtrees and data nodes and their
+      sensitivity/vulnerability:</t>
+
+      <t>Some of the readable data nodes in this YANG module may be considered
+      sensitive or vulnerable in some network environments. It is thus
+      important to control read access (e.g., via get, get-config, or
+      notification) to these data nodes. These are the subtrees and data nodes
+      and their sensitivity/vulnerability:</t>
+
+      <t>Some of the RPC operations in this YANG module may be considered
+      sensitive or vulnerable in some network environments. It is thus
+      important to control access to these operations. These are the
+      operations and their sensitivity/vulnerability:</t>
+    </section>
+
+    <section title="IANA Considerations">
+      <t>This document registers one URI and one YANG module.</t>
+
+      <section title="URI Registration">
+        <t>in the <xref target="RFC3688">IETF XML registry</xref> [RFC3688].
+        Following the format in RFC 3688, the following registration is
+        requested to be made: <figure>
+            <artwork><![CDATA[URI: urn:ietf:params:xml:ns:yang:ietf-http-notif
+]]></artwork>
+          </figure></t>
+
+        <t>Registrant Contact: The IESG. XML: N/A, the requested URI is an XML
+        namespace.</t>
+      </section>
+
+      <section title="YANG Module Name Registration">
+        <t>This document registers three YANG module in the YANG Module Names
+        registry <xref target="RFC6020">YANG</xref>.</t>
+
+        <t><figure>
+            <artwork><![CDATA[name: ietf-https-notif
+namespace: urn:ietf:params:xml:ns:yang:ietf-https-notif
+prefix: hn
+reference: RFC XXXX
+]]></artwork>
+          </figure></t>
+      </section>
+    </section>
+
+    <section title="YANG modules">
+      <t>The YANG module is a definition of a set of receivers that contain
+      TCP, TLS and HTTP parameters. The module augments the <xref
+      target="I-D.ietf-netconf-subscribed-notifications">Subscribed
+      Notifications </xref> Subscriptions Container to create a reference to a
+      receiver.</t>
+
+      <figure>
+        <artwork><![CDATA[
+<CODE BEGINS> file "ietf-https-notif@YYYY-MM-DD.yang"
+INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD.yang)
+<CODE ENDS>
+
+]]></artwork>
+      </figure>
+    </section>
+
+    <section title="Examples">
+      <t>This section tries to show some examples in how the model can be
+      used.</t>
+
+      <section title="">
+        <t>This example shows how a HTTPS client can be configured to send
+        notifications to a receiver at address 10.10.10.10, port 443 with
+        server certificates that are not signed by a pinned CA, and the
+        corresponding trust anchor that is used to authenticate a
+        connection.</t>
+
+        <t><figure>
+            <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(../src/yang/example-https-notif-7.1.xml,68)
+
+]]></artwork>
+          </figure></t>
+      </section>
+    </section>
+
+    <section title="Contributors">
+      <t/>
+    </section>
+
+    <section title="Acknowledgements">
+      <t/>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative references">
+      <?rfc include='reference.RFC.3688'?>
+
+      <?rfc include='reference.RFC.6020'?>
+
+      <?rfc include='reference.RFC.6241'?>
+
+      <?rfc include='reference.RFC.6242'?>
+
+      <?rfc include='reference.RFC.6991'?>
+
+      <?rfc include='reference.RFC.7950'?>
+
+      <?rfc include='reference.RFC.8040'?>
+
+      <?rfc include='reference.RFC.8341'?>
+
+      <?rfc include='reference.RFC.8446'?>
+
+      <?rfc include='reference.I-D.ietf-netconf-subscribed-notifications'?>
+    </references>
+  </back>
+</rfc>
