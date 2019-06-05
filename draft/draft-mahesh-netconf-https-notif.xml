@@ -35,7 +35,7 @@
       </address>
     </author>
 
-    <author fullname="Kent" initials="K.W." surname="Watsen">
+    <author fullname="Kent Watsen" initials="K.W." surname="Watsen">
       <organization>Watsen Networks</organization>
 
       <address>
@@ -73,15 +73,20 @@
 
   <middle>
     <section anchor="intro" title="Introduction">
-      <t>This document defines a <xref target="RFC7950">YANG</xref> data
-      module for configuring HTTP(s) based notifications. The receiver of this
-      notifications is a HTTP(s) server that is specified as part of the
-      configuration. </t>
+      <t><xref target="I-D.ietf-netconf-subscribed-notifications">Subscribed
+      Notifications</xref> defines a YANG data model for configuring
+      subscribed notifications. It even defines a subscriptions container that
+      contains a list of receivers. But it defers the configuration and
+      management of those receivers to other documents. This document defines
+      a <xref target="RFC7950">YANG</xref> data module for configuring and
+      managing HTTP(s) based receivers for the notifications. Such a method
+      allows for the receiver to act as a third party collector, collecting
+      events from different publishers.</t>
 
       <section title="Note to RFC Editor">
         <t>This document uses several placeholder values throughout the
-        document. Please replace them as follows and remove this note before
-        publication.</t>
+        document. Please replace them as follows and remove this section
+        before publication.</t>
 
         <t>RFC XXXX, where XXXX is the number assigned to this document at the
         time of publication.</t>
@@ -92,20 +97,41 @@
 
       <section title="Abbreviations">
         <texttable>
-          <ttcol>Abbreviation</ttcol>
+          <ttcol>HTTP</ttcol>
 
-          <ttcol/>
+          <ttcol>HyperText Transfer Protocol</ttcol>
         </texttable>
       </section>
     </section>
 
-    <section anchor="overview" title="Model overview">
+    <section anchor="overview" title="YANG module  overview">
       <section anchor="overview.protocol" title="Receiver configuration">
-        <t/>
+        <t>The YANG module is a definition of a set of receivers that are
+        interested in the notifications published by the publisher. </t>
+
+        <t>An abridged tree diagram representing the module is shown
+        below.</t>
 
         <figure>
           <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD-tree.txt)
+INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD-sub-tree.txt)
+
+]]></artwork>
+        </figure>
+
+        <t/>
+
+        <t>The module contain TCP, TLS and HTTP parameters that are needed to
+        communicate with the receiver. The module augments the <xref
+        target="I-D.ietf-netconf-subscribed-notifications">Subscribed
+        Notifications</xref> receiver container to create a reference to a
+        receiver.</t>
+
+        <figure>
+          <artwork><![CDATA[
+<CODE BEGINS> file "ietf-https-notif@YYYY-MM-DD.yang"
+INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD.yang)
+<CODE ENDS>
 
 ]]></artwork>
         </figure>
@@ -174,28 +200,11 @@ reference: RFC XXXX
       </section>
     </section>
 
-    <section title="YANG modules">
-      <t>The YANG module is a definition of a set of receivers that contain
-      TCP, TLS and HTTP parameters. The module augments the <xref
-      target="I-D.ietf-netconf-subscribed-notifications">Subscribed
-      Notifications </xref> Subscriptions Container to create a reference to a
-      receiver.</t>
-
-      <figure>
-        <artwork><![CDATA[
-<CODE BEGINS> file "ietf-https-notif@YYYY-MM-DD.yang"
-INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD.yang)
-<CODE ENDS>
-
-]]></artwork>
-      </figure>
-    </section>
-
     <section title="Examples">
       <t>This section tries to show some examples in how the model can be
       used.</t>
 
-      <section title="">
+      <section title="Unpinned CA">
         <t>This example shows how a HTTPS client can be configured to send
         notifications to a receiver at address 10.10.10.10, port 443 with
         server certificates that are not signed by a pinned CA, and the
@@ -229,8 +238,6 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-https-notif-7.1.xml,68)
       <?rfc include='reference.RFC.6241'?>
 
       <?rfc include='reference.RFC.6242'?>
-
-      <?rfc include='reference.RFC.6991'?>
 
       <?rfc include='reference.RFC.7950'?>
 

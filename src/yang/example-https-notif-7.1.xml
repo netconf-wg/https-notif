@@ -5,9 +5,9 @@
       <receiver>
 	<name>foo</name>
 	<tcp-params>
-	  <remote-address>10.10.10.10</remote-address>
+	  <remote-address>192.0.2.1</remote-address>
 	  <remote-port>443</remote-port>
-	  <local-address>10.10.1.10</local-address>
+	  <local-address>192.0.3.1</local-address>
 	  <local-port>63001</local-port>
 	</tcp-params>
 	<tls-params>

@@ -104,10 +104,3 @@ module ietf-https-notif {
       "Augment the subscriptions container to define the receiver.";
   }
 }
-
-
-
-
-
-
-
