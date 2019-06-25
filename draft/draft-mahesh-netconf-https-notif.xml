@@ -5,8 +5,8 @@
   <?rfc toc="yes"?>
 
   <front>
-    <title abbrev="BGP YANG Model">BGP YANG Model for Service Provider
-    Networks</title>
+    <title abbrev="HTTP Configured Subscription">HTTP-based Transport for
+    Configured Subscription</title>
 
     <author fullname="Mahesh Jethanandani" initials="M.J."
             surname="Jethanandani">
@@ -49,7 +49,7 @@
           <country>USA</country>
         </postal>
 
-        <email>kent@watsen.net</email>
+        <email>kent+ietf@watsen.net</email>
       </address>
     </author>
 
@@ -66,22 +66,35 @@
     <keyword>notification</keyword>
 
     <abstract>
-      <t>This document defines a YANG data module for configuring HTTP(s)
-      based notification.</t>
+      <t>This document defines a YANG data module for configuring HTTP(S)
+      based configured subscription, as defined
+      I-D.ietf-netconf-subscribed-notifications. The use of HTTP(S) maximizes
+      transport-level interoperability, while allowing for encoding selection
+      from text, e.g. XML or JSON, to binary.</t>
     </abstract>
   </front>
 
   <middle>
     <section anchor="intro" title="Introduction">
       <t><xref target="I-D.ietf-netconf-subscribed-notifications">Subscribed
-      Notifications</xref> defines a YANG data model for configuring
+      Notifications</xref> defines a YANG data module for configuring
       subscribed notifications. It even defines a subscriptions container that
       contains a list of receivers. But it defers the configuration and
       management of those receivers to other documents. This document defines
       a <xref target="RFC7950">YANG</xref> data module for configuring and
-      managing HTTP(s) based receivers for the notifications. Such a method
-      allows for the receiver to act as a third party collector, collecting
-      events from different publishers.</t>
+      managing HTTP(s) based receivers for the notifications. Such a
+      configured receiver can be a third party collector, collecting events on
+      behalf of receivers that want to corelate events from different
+      publishers. Configured subscriptions enable a server, acting as a
+      publisher of notifications, to proactively push notifications to
+      external receivers without the receivers needing to first connect to the
+      server, as is the case with dynamic subscriptions.</t>
+
+      <t>This document enables the transmits of YANG modeled notifications, in
+      the configured encoding (i.e., XML, JSON) over HTTP or HTTPS. The use of
+      HTTP(S) maximizes transport-level interoperability, while the encoding
+      selection pivots between implementation simplicity (XML, JSON) and
+      throughput (text versus binary).</t>
 
       <section title="Note to RFC Editor">
         <t>This document uses several placeholder values throughout the
@@ -100,14 +113,45 @@
           <ttcol>HTTP</ttcol>
 
           <ttcol>HyperText Transfer Protocol</ttcol>
+
+          <c>TCP</c>
+
+          <c>Transmission Control Protocol</c>
+
+          <c>TLS</c>
+
+          <c>Transport Layer Security</c>
         </texttable>
+      </section>
+
+      <section title="Terminology">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+        "OPTIONAL" in this document are to be interpreted as described in BCP
+        14 <xref target="RFC2119">RFC2119</xref> <xref
+        target="RFC8174">RFC8174</xref> when, and only when, they appear in
+        all capitals, as shown here.</t>
+
+        <section title="Subscribed Notifications">
+          <t>The following terms are defined in <xref
+          target="I-D.ietf-netconf-subscribed-notifications">Subscribed
+          Notifications</xref>.</t>
+
+          <t><list style="symbols">
+              <t>Subscribed Notifications</t>
+            </list></t>
+        </section>
       </section>
     </section>
 
     <section anchor="overview" title="YANG module  overview">
       <section anchor="overview.protocol" title="Receiver configuration">
         <t>The YANG module is a definition of a set of receivers that are
-        interested in the notifications published by the publisher. </t>
+        interested in the notifications published by the publisher. Each
+        receiver is configured for its TCP, TLS, and HTTP parameters. Finally,
+        the Subscribed Notifications YANG module's receiver container is
+        augmented to add a reference to the list of receivers defined in the
+        YANG module.</t>
 
         <t>An abridged tree diagram representing the module is shown
         below.</t>
@@ -121,8 +165,8 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD-sub-tree.txt)
 
         <t/>
 
-        <t>The module contain TCP, TLS and HTTP parameters that are needed to
-        communicate with the receiver. The module augments the <xref
+        <t>The module contains the TCP, TLS and HTTP(S) parameters that are
+        needed to communicate with the receiver. The module augments the <xref
         target="I-D.ietf-netconf-subscribed-notifications">Subscribed
         Notifications</xref> receiver container to create a reference to a
         receiver.</t>
@@ -204,12 +248,11 @@ reference: RFC XXXX
       <t>This section tries to show some examples in how the model can be
       used.</t>
 
-      <section title="Unpinned CA">
+      <section title="HTTPS Configured Subscription">
         <t>This example shows how a HTTPS client can be configured to send
-        notifications to a receiver at address 10.10.10.10, port 443 with
-        server certificates that are not signed by a pinned CA, and the
-        corresponding trust anchor that is used to authenticate a
-        connection.</t>
+        notifications to a receiver at address 192.0.2.1, port 443 with server
+        certificates, and the corresponding truststore that is used to
+        authenticate a connection.</t>
 
         <t><figure>
             <artwork><![CDATA[
@@ -231,6 +274,8 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-https-notif-7.1.xml,68)
 
   <back>
     <references title="Normative references">
+      <?rfc include='reference.RFC.2119'?>
+
       <?rfc include='reference.RFC.3688'?>
 
       <?rfc include='reference.RFC.6020'?>
@@ -242,6 +287,8 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-https-notif-7.1.xml,68)
       <?rfc include='reference.RFC.7950'?>
 
       <?rfc include='reference.RFC.8040'?>
+
+      <?rfc include='reference.RFC.8174'?>
 
       <?rfc include='reference.RFC.8341'?>
 
