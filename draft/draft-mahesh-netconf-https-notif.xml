@@ -5,8 +5,8 @@
   <?rfc toc="yes"?>
 
   <front>
-    <title abbrev="HTTP Configured Subscription">HTTP-based Transport for
-    Configured Subscription</title>
+    <title abbrev="HTTP Configured Subscription">An HTTPS-based Transport for
+    Configured Subscriptions</title>
 
     <author fullname="Mahesh Jethanandani" initials="M.J."
             surname="Jethanandani">
@@ -53,7 +53,7 @@
       </address>
     </author>
 
-    <date day="25" month="June" year="2019"/>
+    <date day="26" month="June" year="2019"/>
 
     <area>Routing</area>
 
@@ -66,9 +66,9 @@
     <keyword>notification</keyword>
 
     <abstract>
-      <t>This document defines a YANG data module for configuring HTTP(S)
-      based configured subscription, as defined
-      I-D.ietf-netconf-subscribed-notifications. The use of HTTP(S) maximizes
+      <t>This document defines a YANG data module for configuring HTTPS based
+      configured subscription, as defined
+      I-D.ietf-netconf-subscribed-notifications. The use of HTTPS maximizes
       transport-level interoperability, while allowing for encoding selection
       from text, e.g. XML or JSON, to binary.</t>
     </abstract>
@@ -82,19 +82,19 @@
       contains a list of receivers. But it defers the configuration and
       management of those receivers to other documents. This document defines
       a <xref target="RFC7950">YANG</xref> data module for configuring and
-      managing HTTP(s) based receivers for the notifications. Such a
-      configured receiver can be a third party collector, collecting events on
-      behalf of receivers that want to corelate events from different
-      publishers. Configured subscriptions enable a server, acting as a
-      publisher of notifications, to proactively push notifications to
-      external receivers without the receivers needing to first connect to the
-      server, as is the case with dynamic subscriptions.</t>
+      managing HTTPS based receivers for the notifications. Such a configured
+      receiver can be a third party collector, collecting events on behalf of
+      receivers that want to co-relate events from different publishers.
+      Configured subscriptions enable a server, acting as a publisher of
+      notifications, to proactively push notifications to external receivers
+      without the receivers needing to first connect to the server, as is the
+      case with dynamic subscriptions.</t>
 
-      <t>This document enables the transmits of YANG modeled notifications, in
-      the configured encoding (i.e., XML, JSON) over HTTP or HTTPS. The use of
-      HTTP(S) maximizes transport-level interoperability, while the encoding
-      selection pivots between implementation simplicity (XML, JSON) and
-      throughput (text versus binary).</t>
+      <t>This document describes how to enable the transmission of YANG
+      modeled notifications, in the configured encoding (i.e., XML, JSON) over
+      HTTPS. The use of HTTPS maximizes transport-level interoperability,
+      while the encoding selection pivots between implementation simplicity
+      (XML, JSON) and throughput (text versus binary).</t>
 
       <section title="Note to RFC Editor">
         <t>This document uses several placeholder values throughout the
@@ -110,9 +110,13 @@
 
       <section title="Abbreviations">
         <texttable>
-          <ttcol>HTTP</ttcol>
+          <ttcol>Acronym</ttcol>
 
-          <ttcol>HyperText Transfer Protocol</ttcol>
+          <ttcol>Expansion</ttcol>
+
+          <c>HTTP</c>
+
+          <c>Hyper Text Transport Protocol</c>
 
           <c>TCP</c>
 
@@ -144,14 +148,15 @@
       </section>
     </section>
 
-    <section anchor="overview" title="YANG module  overview">
-      <section anchor="overview.protocol" title="Receiver configuration">
+    <section anchor="overview" title="YANG module">
+      <section anchor="overview.protocol" title="Overview">
         <t>The YANG module is a definition of a set of receivers that are
-        interested in the notifications published by the publisher. Each
-        receiver is configured for its TCP, TLS, and HTTP parameters. Finally,
-        the Subscribed Notifications YANG module's receiver container is
-        augmented to add a reference to the list of receivers defined in the
-        YANG module.</t>
+        interested in the notifications published by the publisher. The module
+        contains the TCP, TLS and HTTPS parameters that are needed to
+        communicate with the receiver. The module augments the <xref
+        target="I-D.ietf-netconf-subscribed-notifications">Subscribed
+        Notifications</xref> receiver container to create a reference to a
+        receiver defined by the YANG module.</t>
 
         <t>An abridged tree diagram representing the module is shown
         below.</t>
@@ -162,14 +167,10 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD-sub-tree.txt)
 
 ]]></artwork>
         </figure>
+      </section>
 
-        <t/>
-
-        <t>The module contains the TCP, TLS and HTTP(S) parameters that are
-        needed to communicate with the receiver. The module augments the <xref
-        target="I-D.ietf-netconf-subscribed-notifications">Subscribed
-        Notifications</xref> receiver container to create a reference to a
-        receiver.</t>
+      <section title="YANG module">
+        <t>The YANG module is shown below.</t>
 
         <figure>
           <artwork><![CDATA[
@@ -251,7 +252,7 @@ reference: RFC XXXX
       <section title="HTTPS Configured Subscription">
         <t>This example shows how a HTTPS client can be configured to send
         notifications to a receiver at address 192.0.2.1, port 443 with server
-        certificates, and the corresponding truststore that is used to
+        certificates, and the corresponding trust store that is used to
         authenticate a connection.</t>
 
         <t><figure>

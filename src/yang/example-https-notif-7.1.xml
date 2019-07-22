@@ -12,12 +12,13 @@
 	</tcp-params>
 	<tls-params>
 	  <server-authentication>
-            <pinned-ca-certs>explicitly-trusted-server-ca-certs</pinned-ca-certs>
-            <pinned-server-certs>explicitly-trusted-server-certs</pinned-server-certs>
+            <ca-certs>explicitly-trusted-server-ca-certs</ca-certs>
+            <server-certs>explicitly-trusted-server-certs</server-certs>
 	  </server-authentication>
 	</tls-params>
       </receiver>
-    </receivers>
+  </receivers>
+  
   <subscriptions
       xmlns="urn:ietf:params:xml:ns:yang:ietf-subscribed-notifications">
     <subscription>
@@ -33,21 +34,21 @@
 	</receivers>
       </subscription>
   </subscriptions>
-  <trust-anchors xmlns="urn:ietf:params:xml:ns:yang:ietf-trust-anchors">
-    <pinned-certificates>
+  
+  <truststore xmlns="urn:ietf:params:xml:ns:yang:ietf-truststore">
+    <certificates>
        <name>explicitly-trusted-server-certs</name>
        <description>
          Specific server authentication certificates for explicitly
          trusted servers.  These are needed for server certificates
          that are not signed by a pinned CA.
        </description>
-       <pinned-certificate>
+       <certificate>
          <name>Fred Flintstone</name>
          <cert>base64encodedvalue==</cert>
-       </pinned-certificate>
-     </pinned-certificates>
-
-     <pinned-certificates>
+       </certificate>
+     </certificates>
+     <certificates>
        <name>explicitly-trusted-server-ca-certs</name>
        <description>
          Trust anchors (i.e. CA certs) that are used to authenticate
@@ -55,10 +56,10 @@
          certificate has a chain of trust to one of these CA
          certificates.
        </description>
-       <pinned-certificate>
+       <certificate>
          <name>ca.example.com</name>
          <cert>base64encodedvalue==</cert>
-       </pinned-certificate>
-     </pinned-certificates>
-  </trust-anchors>
+       </certificate>
+     </certificates>
+  </truststore>
 </config>

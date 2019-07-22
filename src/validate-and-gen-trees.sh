@@ -3,7 +3,7 @@
 for i in ../bin/*\@$(date +%Y-%m-%d).yang
 do
     name=$(echo $i | cut -f 1-3 -d '.')
-    echo "Validating $name.yang"
+    echo "Validating YANG module $name.yang"
     if test "${name#^example}" = "$name"; then
         response=`pyang --lint --strict --canonical -p ../../iana/imported-modules -p ../bin/submodules -p ../bin -f tree --max-line-length=72 --tree-line-length=69 $name.yang > $name-tree.txt.tmp`
     else            
@@ -52,7 +52,7 @@ echo "Validating examples"
 for i in yang/example-https-notif-*.xml
 do
     name=$(echo $i | cut -f 1-2 -d '.')
-    echo "Validating $name.xml"
+    echo "Validating examples for $name.xml"
     response=`yanglint -s -i -t auto -p ../../iana/yang-parameters -p ../bin ../bin/ietf-https-notif\@$(date +%Y-%m-%d).yang $name.xml`
     if [ $? -ne 0 ]; then
        printf "failed (error code: $?)\n"

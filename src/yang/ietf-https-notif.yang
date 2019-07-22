@@ -29,9 +29,9 @@ module ietf-https-notif {
      WG List:  <netconf@ietf.org>
 
      Authors: Mahesh Jethanandani (mjethanandani at gmail dot com)
-              Kent Watsen (kent at watsen dot net)";
+              Kent Watsen (kent plus ietf at watsen dot net)";
   description
-    "YANG module for configuring HTTP(s) base configuration.
+    "YANG module for configuring HTTPS base configuration.
 
      Copyright (c) 2018 IETF Trust and the persons identified as
      the document authors.  All rights reserved.
@@ -65,7 +65,7 @@ module ietf-https-notif {
       leaf name {
 	type string;
 	description
-	  "";
+	  "A name that uniquely identifies this receiver.";
       }
 
       container tcp-params {
