@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
   <receivers
-      xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif">
+      xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif"
+      xmlns:x509c2n="urn:ietf:params:xml:ns:yang:ietf-x509-cert-to-name">
       <receiver>
 	<name>foo</name>
 	<tcp-params>
-	  <remote-address>192.0.2.1</remote-address>
+	  <remote-address>my-receiver.my-domain.com</remote-address>
 	  <remote-port>443</remote-port>
-	  <local-address>192.0.3.1</local-address>
-	  <local-port>63001</local-port>
 	</tcp-params>
 	<tls-params>
 	  <server-authentication>
@@ -16,6 +15,24 @@
             <server-certs>explicitly-trusted-server-certs</server-certs>
 	  </server-authentication>
 	</tls-params>
+	<http-params>
+	  <client-identity>
+	    <basic>
+	      <user-id>my-name</user-id>
+	      <password>my-password</password>
+	    </basic>
+	  </client-identity>
+	  <path>/some/path</path>
+	</http-params>
+	<receiver-identity>
+	  <cert-maps>
+	    <cert-to-name>
+	      <id>1</id>
+	      <fingerprint>11:0A:05:11:00</fingerprint>
+	      <map-type>x509c2n:san-any</map-type>
+	    </cert-to-name>
+	  </cert-maps>
+	</receiver-identity>
       </receiver>
   </receivers>
   
