@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd">
-<rfc category="std" docName="draft-ietf-netconf-https-notif-00"
+<rfc category="std" docName="draft-ietf-netconf-https-notif-02"
      ipr="trust200902">
   <?rfc toc="yes"?>
 
@@ -53,7 +53,7 @@
       </address>
     </author>
 
-    <date day="17" month="September" year="2019"/>
+    <date day="1" month="March" year="2020"/>
 
     <area>Routing</area>
 
@@ -76,25 +76,35 @@
 
   <middle>
     <section anchor="intro" title="Introduction">
-      <t><xref target="I-D.ietf-netconf-subscribed-notifications">Subscribed
-      Notifications</xref> defines a YANG data module for configuring
-      subscribed notifications. It even defines a subscriptions container that
-      contains a list of receivers. But it defers the configuration and
-      management of those receivers to other documents. This document defines
-      a <xref target="RFC7950">YANG</xref> data module for configuring and
-      managing HTTPS based receivers for the notifications. Such a configured
-      receiver can be a third party collector, collecting events on behalf of
-      receivers that want to co-relate events from different publishers.
-      Configured subscriptions enable a server, acting as a publisher of
-      notifications, to proactively push notifications to external receivers
-      without the receivers needing to first connect to the server, as is the
-      case with dynamic subscriptions.</t>
+      <t><xref target="RFC8639">Subscription to YANG Notifications</xref>
+      defines a YANG data module for configuring subscribed notifications. It
+      even defines a subscriptions container that contains a list of
+      receivers. But it defers the configuration and management of those
+      receivers to other documents. This document defines a <xref
+      target="RFC7950">YANG</xref> data module for configuring and managing
+      HTTPS based receivers for the notifications. Such a configured receiver
+      can be a third party collector, collecting events on behalf of receivers
+      that want to co-relate events from different publishers. Configured
+      subscriptions enable a server, acting as a publisher of notifications,
+      to proactively push notifications to external receivers without the
+      receivers needing to first connect to the server, as is the case with
+      dynamic subscriptions.</t>
 
       <t>This document describes how to enable the transmission of YANG
       modeled notifications, in the configured encoding (i.e., XML, JSON) over
       HTTPS. The use of HTTPS maximizes transport-level interoperability,
       while the encoding selection pivots between implementation simplicity
       (XML, JSON) and throughput (text versus binary).</t>
+
+      <section title="Applicability Statement">
+        <t>While the YANG module has been defined as an augmentation of <xref
+        target="RFC8639">Subscription to YANG Notifications</xref>, there is
+        nothing to say that the notification method defined in this document
+        could not be used outside of <xref target="RFC8639">Subscription to
+        YANG Notifications</xref>. As such, implementations MAY choose to to
+        implement <xref target="RFC8639">Subscription to YANG
+        Notifications</xref> when supporting this form of notification.</t>
+      </section>
 
       <section title="Note to RFC Editor">
         <t>This document uses several placeholder values throughout the
@@ -138,12 +148,134 @@
 
         <section title="Subscribed Notifications">
           <t>The following terms are defined in <xref
-          target="I-D.ietf-netconf-subscribed-notifications">Subscribed
-          Notifications</xref>.</t>
+          target="RFC8639">Subscribed Notifications</xref>.</t>
 
           <t><list style="symbols">
               <t>Subscribed Notifications</t>
             </list></t>
+        </section>
+      </section>
+
+      <section title="Receiver and Publisher Interaction">
+        <t>The interaction between the receiver and the publisher can include
+        the publisher learning of receiver capabilities and "pipelining" or
+        sending of multiple notifications as part of a "bundled-message", as
+        defined in <xref target="RFC8639">Notification Message Headers and
+        Bundles</xref></t>
+
+        <section title="Learning Receiver Capabilities">
+          <t>To learn the capabilities of the receiver, the publisher can
+          issue a HTTPS GET request with Accept-Type set to
+          application/ietf-https-notif-cap+json. If the receiver supports
+          capabilities such as binary encoding of data, it can return that as
+          a capability in a response. If the receiver does not support the
+          Content-Type, it returns an error.</t>
+
+          <t>The publisher should send the following request to learn the
+          receiver capabilities.</t>
+
+          <t><figure>
+              <artwork><![CDATA[GET / HTTP/1.1
+Host: example.com
+Accept-Type: application/ietf-https-notif-cap+json]]></artwork>
+            </figure></t>
+
+          <t>In case the receiver supports the Content-Type, its response
+          should look like this:</t>
+
+          <t><figure>
+              <artwork><![CDATA[HTTP/1.1 200 OK
+Date: Wed, 26 Feb 2020 20:33:30 GMT
+Server: example-server
+Cache-Control: no-cache
+Content-Type: application/ietf-https-notif-cap+xml
+Content-Length: nnn
+
+<receiver-capabilities>
+  <receiver-capability>
+    <urn:ietf:params:https-config:capability:binary-encoding:1.0\
+  </receiver-capability>
+</receiver-capabilities>]]></artwork>
+            </figure></t>
+
+          <t>In case the receiver does not support the Content-Type, its
+          response should look like this:</t>
+
+          <t><figure>
+              <artwork><![CDATA[HTTP/1.1 415 Unsupported Media Type
+Date: Wed, 26 Feb 2020 20:33:30 GMT
+Server: example-server]]></artwork>
+            </figure></t>
+        </section>
+
+        <section title="Pipelining of Messages">
+          <t>In the case of "pipelining", the flow of messages would look
+          something like this. It assumes that the publisher has already
+          learned the capability of the receiver.</t>
+
+          <t><figure>
+              <artwork><![CDATA[       -------------                               --------------
+       | Publisher |                               | Receiver   |
+       -------------                               --------------
+       Establish TCP             ------>
+       Establish TLS             ------>
+       Send HTTPS POST message
+       with YANG defined         ------>
+       notification #1
+       Send HTTPS POST message
+       with YANG defined         ------>
+       notification #2
+                                                   Send 204 (No Content)
+                                 <------           for notification #1
+
+                                                   Send 204 (No Content)
+                                 <------           for notification #2
+       Send HTTPS POST message
+       with YANG defined         ------->
+       notification #3
+                                                   Send 204 (No Content)
+                                 <------           for notification #3]]></artwork>
+            </figure></t>
+
+          <t>The content of the exchange would look something like this.</t>
+
+          <figure>
+            <artwork><![CDATA[Request:
+    POST /some/path HTTP/1.1
+    Host: my-receiver.my-domain.com
+    Content-Type: application/yang-data+xml
+    <notification
+      xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
+      <eventTime>2019-03-22T12:35:00Z</eventTime>
+      <foo xmlns="https://example.com/my-foobar-module">
+        ...
+      </foo>
+    </notification>
+    <notification
+      xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
+      <eventTime>2019-03-22T12:35:00Z</eventTime>
+      <bar xmlns="https://example.com/my-foobar-module">
+        ...
+      </bar>
+    </notification>
+    <notification
+      xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
+      <eventTime>2019-03-22T12:35:01Z</eventTime>
+      <baz xmlns="https://example.com/my-foobar-module">
+        ...
+      </baz>
+    </notification>
+Response:
+      HTTP/1.1 204 No Content
+      Date: Fri, 03 Mar 2019 12:35:00 GMT
+      Server: my-receiver.my-domain.com
+      HTTP/1.1 204 No Content
+      Date: Fri, 03 Mar 2019 12:35:00 GMT
+      Server: my-receiver.my-domain.com
+      HTTP/1.1 204 No Content
+      Date: Fri, 03 Mar 2019 12:35:01 GMT
+      Server: my-receiver.my-domain.com]]></artwork>
+          </figure>
         </section>
       </section>
     </section>
@@ -154,9 +286,15 @@
         interested in the notifications published by the publisher. The module
         contains the TCP, TLS and HTTPS parameters that are needed to
         communicate with the receiver. The module augments the <xref
-        target="I-D.ietf-netconf-subscribed-notifications">Subscribed
-        Notifications</xref> receiver container to create a reference to a
-        receiver defined by the YANG module.</t>
+        target="RFC8639">Subscription to YANG Notifications</xref> receiver
+        container to create a reference to a receiver defined by the YANG
+        module. As mentioned earlier, it uses POST method to deliver the
+        notification. The attribute 'path' defines the absolute path for the
+        resource on the receiver, as defined by 'path-absolute' in <xref
+        target="RFC3986">URI Generic Syntax</xref>. The user-id used by <xref
+        target="RFC8341">Network Configuration Access Control Model</xref>, is
+        that of the receiver and is derived from the certificate presented by
+        the receiver.</t>
 
         <t>An abridged tree diagram representing the module is shown
         below.</t>
@@ -243,6 +381,14 @@ reference: RFC XXXX
 ]]></artwork>
           </figure></t>
       </section>
+
+      <section title="Media Types">
+        <t/>
+
+        <section title="Media Type &quot;application/ietf-https-notif-cap+json">
+          <t>TBD</t>
+        </section>
+      </section>
     </section>
 
     <section title="Examples">
@@ -295,7 +441,11 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-https-notif-7.1.xml,68)
 
       <?rfc include='reference.RFC.8446'?>
 
-      <?rfc include='reference.I-D.ietf-netconf-subscribed-notifications'?>
+      <?rfc include='reference.RFC.8639'?>
+    </references>
+
+    <references title="Informative references">
+      <?rfc include='reference.RFC.3986'?>
     </references>
   </back>
 </rfc>
