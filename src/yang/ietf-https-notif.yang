@@ -76,12 +76,15 @@ module ietf-https-notif {
       "HTTPS transport for notifications.";
   }
 
-  augment "/sn:subscriptions/sn:subscription/sn:receivers" {
+  grouping https-receivers {
     description
-      "Augment the subscirbed notification module to add in the
-       receivers container.";
-
+      "Grouping for HTTPS based receivers such that it can be
+       implemented outside the constructs of a Subscription to YANG
+       Notification [RFC8639] module.";
     container https-receivers {
+      description
+        "HTTPS based notifications.";
+
       list https-receiver {
         key "name";
 
@@ -142,16 +145,21 @@ module ietf-https-notif {
         description
           "All receivers interested in this notification.";
       }
-      description
-        "HTTPS based notifications.";
     }
   }
   
+  augment "/sn:subscriptions" {
+    description
+      "Augment the subscirbed notification module to add in the
+       receivers container.";
+    uses https-receivers;
+  }
+
   augment "/sn:subscriptions/sn:subscription/sn:receivers/sn:receiver" {
     leaf receiver-ref {
       type leafref {
-        path "/sn:subscriptions/sn:subscription/sn:receivers/" +
-             "hn:https-receivers/hn:https-receiver/hn:name";
+        path "/sn:subscriptions/hn:https-receivers/hn:https-receiver/" +
+             "hn:name";
       }
       description
         "Reference to a receiver.";

@@ -2,46 +2,46 @@
 <config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
   <subscriptions
       xmlns="urn:ietf:params:xml:ns:yang:ietf-subscribed-notifications">
+    <https-receivers
+	xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif"
+	xmlns:x509c2n="urn:ietf:params:xml:ns:yang:ietf-x509-cert-to-name">
+      <https-receiver>
+	<name>foo</name>
+	<tcp-params>
+	  <remote-address>my-receiver.my-domain.com</remote-address>
+	  <remote-port>443</remote-port>
+	</tcp-params>
+	<tls-params>
+	  <server-authentication>
+	    <ca-certs>explicitly-trusted-server-ca-certs</ca-certs>
+	    <server-certs>explicitly-trusted-server-certs</server-certs>
+	  </server-authentication>
+	</tls-params>
+	<http-params>
+          <client-identity>
+	    <basic>
+	      <user-id>my-name</user-id>
+	      <password>my-password</password>
+	    </basic>
+          </client-identity>
+          <path>/some/path</path>
+	</http-params>
+	<receiver-identity>
+          <cert-maps>
+	    <cert-to-name>
+	      <id>1</id>
+	      <fingerprint>11:0A:05:11:00</fingerprint>
+	      <map-type>x509c2n:san-any</map-type>
+	    </cert-to-name>
+          </cert-maps>
+	</receiver-identity>
+      </https-receiver>
+    </https-receivers>
     <subscription>
       <id>6666</id>
       <stream-subtree-filter>foo</stream-subtree-filter>
       <stream>some-stream</stream>
       <receivers>
-	<https-receivers
-	    xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif"
-	    xmlns:x509c2n="urn:ietf:params:xml:ns:yang:ietf-x509-cert-to-name">
-	  <https-receiver>
-	    <name>foo</name>
-	    <tcp-params>
-	      <remote-address>my-receiver.my-domain.com</remote-address>
-	      <remote-port>443</remote-port>
-	    </tcp-params>
-	    <tls-params>
-	      <server-authentication>
-		<ca-certs>explicitly-trusted-server-ca-certs</ca-certs>
-		<server-certs>explicitly-trusted-server-certs</server-certs>
-	      </server-authentication>
-	    </tls-params>
-	    <http-params>
-              <client-identity>
-		<basic>
-		  <user-id>my-name</user-id>
-		  <password>my-password</password>
-		</basic>
-              </client-identity>
-              <path>/some/path</path>
-	    </http-params>
-	    <receiver-identity>
-              <cert-maps>
-		<cert-to-name>
-		  <id>1</id>
-		  <fingerprint>11:0A:05:11:00</fingerprint>
-		  <map-type>x509c2n:san-any</map-type>
-		</cert-to-name>
-              </cert-maps>
-	    </receiver-identity>
-	  </https-receiver>
-	</https-receivers>
 	<receiver>
 	  <name>my-receiver</name>
 	  <receiver-ref
