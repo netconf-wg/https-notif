@@ -36,7 +36,7 @@ idnits: $(next).txt
 	$(idnits) $<
 
 clean:
-	-rm -f $(draft).txt $(draft).html index.html
+	-rm -f $(draft)-[0-9][0-9].txt $(draft)-[0-9][0-9].html index.html
 	-rm -f $(next).txt $(next).html
 	-rm -f $(draft)-[0-9][0-9].xml
 ifeq (md,$(draft_type))

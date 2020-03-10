@@ -53,7 +53,7 @@
       </address>
     </author>
 
-    <date day="6" month="March" year="2020"/>
+    <date day="9" month="March" year="2020"/>
 
     <area>Routing</area>
 
@@ -67,10 +67,9 @@
 
     <abstract>
       <t>This document defines a YANG data module for configuring HTTPS based
-      configured subscription, as defined in Subscription to YANG
-      Notifications (RFC8639). The use of HTTPS maximizes transport-level
-      interoperability, while allowing for encoding selection from text, e.g.
-      XML or JSON, to binary.</t>
+      configured subscription, as defined in RFC 8639. The use of HTTPS
+      maximizes transport-level interoperability, while allowing for encoding
+      selection from text, e.g. XML or JSON, to binary.</t>
     </abstract>
   </front>
 
@@ -82,14 +81,10 @@
       but it defers the configuration and management of those receivers to
       other documents. This document defines a <xref target="RFC7950">YANG 1.1
       </xref> data module for configuring and managing HTTPS based receivers
-      for the notifications. Such a configured receiver can be a third party
-      collector, collecting events on behalf of ultimate receivers that want
-      it to correlate events from different publishers before forwarding the
-      event to the ultimate receiver. Configured subscriptions enable a
-      server, acting as a publisher of notifications, to proactively push
-      notifications to external receivers without the receivers needing to
-      first connect to the server, as is the case with dynamic
-      subscriptions.</t>
+      for the notifications. Configured subscriptions enable a server, acting
+      as a publisher of notifications, to proactively push notifications to
+      external receivers without the receivers needing to first connect to the
+      server, as is the case with dynamic subscriptions.</t>
 
       <t>This document describes how to enable the transmission of YANG
       modeled notifications, in the configured encoding (i.e., XML, JSON) over
@@ -158,46 +153,42 @@
             </list></t>
         </section>
       </section>
+    </section>
 
-      <section title="Receiver and Publisher Interaction">
-        <t>The interaction between the receiver and the publisher can include
-        the publisher learning of the receiver capabilities and sending of
-        multiple notifications as part of a "bundled-message", as defined in
-        <xref target="I-D.ietf-netconf-notification-messages">Notification
-        Message Headers and Bundles</xref>.</t>
+    <section title="Learning Receiver Capabilities">
+      <section title="Introduction">
+        <t>To learn the capabilities of the receiver, the publisher can issue
+        a HTTPS GET request with Accept-Type set to
+        application/ietf-https-notif-cap+xml or
+        application/ietf-https-notif-cap+json, with latter as the mandatory to
+        implement, and the default in case the type is not specified. If the
+        receiver supports capabilities such as binary encoding of data, it can
+        return that as a capability in a response. Please note that, when used
+        in conjunction with <xref target="RFC8639">Subscription to YANG
+        Notifications</xref>, dynamic discovery of the receiver&rsquo;s
+        supported encoding is considered only when the
+        "/subscriptions/subscription/encoding&rdquo; leaf is not configured,
+        per the &ldquo;encoding&rdquo; leaf&rsquo;s description statement.</t>
+      </section>
 
-        <section title="Learning Receiver Capabilities">
-          <t>To learn the capabilities of the receiver, the publisher can
-          issue a HTTPS GET request with Accept-Type set to
-          application/ietf-https-notif-cap+xml or
-          application/ietf-https-notif-cap+json, with latter as the mandatory
-          to implement, and the default in case the type is not specified. If
-          the receiver supports capabilities such as binary encoding of data,
-          it can return that as a capability in a response. Please note that,
-          when used in conjunction with <xref target="RFC8639">Subscription to
-          YANG Notifications</xref>, dynamic discovery of the receiver&rsquo;s
-          supported encoding is considered only when the
-          "/subscriptions/subscription/encoding&rdquo; leaf is not configured,
-          per the &ldquo;encoding&rdquo; leaf&rsquo;s description
-          statement.</t>
+      <section title="Example">
+        <t>The publisher can send the following request to learn the receiver
+        capabilities. The Accept-Type states its preferred order for
+        Content-Type that it wants to receive starting with XML, and if not
+        supported, to use JSON encoding. Currently, there is only one
+        capability of binary encoding defined.</t>
 
-          <t>The publisher can send the following request to learn the
-          receiver capabilities. The Accept-Type states its preferred order
-          for Content-Type that it wants to receive starting with XML, and if
-          not supported, to use JSON encoding. Currently, there is only one
-          capability of binary encoding defined.</t>
-
-          <t><figure>
-              <artwork><![CDATA[GET / HTTP/1.1
+        <t><figure>
+            <artwork><![CDATA[GET / HTTP/1.1
 Host: example.com
 Accept-Type: application/ietf-https-notif-cap+xml, application/ietf-https-notif-cap+json]]></artwork>
-            </figure></t>
+          </figure></t>
 
-          <t>In case the receiver supports the first Accept-Type, its response
-          should look like this:</t>
+        <t>In case the receiver supports the first Accept-Type, its response
+        should look like this:</t>
 
-          <t><figure>
-              <artwork><![CDATA[HTTP/1.1 200 OK
+        <t><figure>
+            <artwork><![CDATA[HTTP/1.1 200 OK
 Date: Wed, 26 Feb 2020 20:33:30 GMT
 Server: example-server
 Cache-Control: no-cache
@@ -209,80 +200,7 @@ Content-Length: nnn
     <urn:ietf:params:https-config:capability:binary-encoding:1.0>
   </receiver-capability>
 </receiver-capabilities>]]></artwork>
-            </figure></t>
-        </section>
-
-        <section title="Bundled Message">
-          <t>In the case of "bundled-message" as defined in <xref
-          target="I-D.ietf-netconf-notification-messages">Notification Message
-          Headers and Bundles</xref>, the flow of messages would look
-          something like this. It assumes that the publisher has already
-          learned the capability of the receiver.</t>
-
-          <t><figure>
-              <artwork><![CDATA[       -------------                               --------------
-       | Publisher |                               | Receiver   |
-       -------------                               --------------
-       Establish TCP             ------>
-       Establish TLS             ------>
-       Send HTTPS POST message
-       with YANG defined         ------>
-       notification #1
-       Send HTTPS POST message
-       with YANG defined         ------>
-       notification #2
-                                                   Send 204 (No Content)
-                                 <------           for notification #1
-
-                                                   Send 204 (No Content)
-                                 <------           for notification #2
-       Send HTTPS POST message
-       with YANG defined         ------->
-       notification #3
-                                                   Send 204 (No Content)
-                                 <------           for notification #3]]></artwork>
-            </figure></t>
-
-          <t>The content of the exchange would look something like this.</t>
-
-          <figure>
-            <artwork><![CDATA[Request:
-    POST /some/path HTTP/1.1
-    Host: my-receiver.my-domain.com
-    Content-Type: application/yang-data+xml
-    <notification
-      xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
-      <eventTime>2019-03-22T12:35:00Z</eventTime>
-      <foo xmlns="https://example.com/my-foobar-module">
-        ...
-      </foo>
-    </notification>
-    <notification
-      xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
-      <eventTime>2019-03-22T12:35:00Z</eventTime>
-      <bar xmlns="https://example.com/my-foobar-module">
-        ...
-      </bar>
-    </notification>
-    <notification
-      xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
-      <eventTime>2019-03-22T12:35:01Z</eventTime>
-      <baz xmlns="https://example.com/my-foobar-module">
-        ...
-      </baz>
-    </notification>
-Response:
-      HTTP/1.1 204 No Content
-      Date: Fri, 03 Mar 2019 12:35:00 GMT
-      Server: my-receiver.my-domain.com
-      HTTP/1.1 204 No Content
-      Date: Fri, 03 Mar 2019 12:35:00 GMT
-      Server: my-receiver.my-domain.com
-      HTTP/1.1 204 No Content
-      Date: Fri, 03 Mar 2019 12:35:01 GMT
-      Server: my-receiver.my-domain.com]]></artwork>
-          </figure>
-        </section>
+          </figure></t>
       </section>
     </section>
 
@@ -396,119 +314,119 @@ reference: RFC XXXX
 
       <section title="Media Types">
         <section title="Media Type &quot;application/ietf-https-notif-cap+xml">
-          <t>Type name: application</t>
+          <t><figure>
+              <artwork><![CDATA[Type name: application
 
-          <t>Subtype name: ietf-https-notif-cap+xml</t>
+Subtype name: ietf-https-notif-cap+xml
 
-          <t>Required parameters: None</t>
+Required parameters: None
 
-          <t>Optional parameters: None</t>
+Optional parameters: None
 
-          <t>Encoding considerations: 8-bit Each conceptual YANG data node is
-          encoded according to the XML Encoding Rules and Canonical Format for
-          the specific YANG data node type defined in <xref
-          target="RFC7950">YANG</xref>.</t>
+Encoding considerations:
+    8-bit Each conceptual YANG data node is encoded according to the XML
+    Encoding Rules and Canonical Format for the specific YANG data node
+    type defined in YANG 1.1 [RFC7950].
 
-          <t>Security considerations: Security considerations related to the
-          generation and consumption of RESTCONF messages are discussed in
-          Section NN of RFC XXXX. Additional security considerations are
-          specific to the semantics of particular YANG data models. Each YANG
-          module is expected to specify security considerations for the YANG
-          data defined in that module.</t>
+Security considerations:
+    Security considerations related to the generation and consumption of
+    RESTCONF messages are discussed in Section NN of RFC XXXX.
 
-          <t>Interoperability considerations: N/A</t>
+    Additional security considerations are specific to the semantics of
+    particular YANG data models. Each YANG module is expected to specify
+    security considerations for the YANG data defined in that module.
 
-          <t>Published specification: RFC XXXX</t>
+Interoperability considerations: N/A
 
-          <t>Applications that use this media type: Instance document data
-          parsers used within a protocol or automation tool that utilize
-          YANG-defined data structures.</t>
+Published specification: RFC XXXX
 
-          <t>Fragment identifier considerations: Fragment identifiers for this
-          type are not defined. All YANG data nodes are accessible as
-          resources using the path in the request URI.</t>
+Applications that use this media type:
+    Instance document data parsers used within a protocol or automation
+    tool that utilize YANG-defined data structures.
 
-          <t>Additional information:</t>
+Fragment identifier considerations:
+    Fragment identifiers for this type are not defined. All YANG data
+    nodes are accessible as resources using the path in the request URI.
 
-          <t>Deprecated alias names for this type: N/A</t>
+Additional information:
 
-          <t>Magic number(s): N/A</t>
+    Deprecated alias names for this type: N/A
+    Magic number(s): N/A
+    File extension(s): None
+    Macintosh file type code(s): "TEXT"
 
-          <t>File extension(s): None</t>
+Person & email address to contact for further information:
+    See Author's Address section of RFC XXXX.
 
-          <t>Macintosh file type code(s): "TEXT"</t>
+Intended usage: COMMON
 
-          <t>Person &amp; email address to contact for further information:
-          See Author's Address section of RFC XXXX.</t>
+Restrictions on usage: N/A
 
-          <t>Intended usage: COMMON</t>
+Author: See Author's Address section of RFC XXXX
 
-          <t>Restrictions on usage: N/A</t>
+Change controller:
+    Internet Engineering Task Force (mailto:iesg@ietf.org)
 
-          <t>Author: See Author's Address section of RFC XXXX</t>
-
-          <t>Change controller: Internet Engineering Task Force
-          (mailto:iesg@ietf.org).</t>
-
-          <t>Provisional registration? (standards tree only): no</t>
+Provisional registration? (standards tree only): no]]></artwork>
+            </figure></t>
         </section>
 
         <section title="Media Type &quot;application/ietf-https-notif-cap+json">
-          <t>Type name: application</t>
+          <t><figure>
+              <artwork><![CDATA[Type name: application
 
-          <t>Subtype name: ietf-https-notif-cap+json</t>
+Subtype name: ietf-https-notif-cap+json
 
-          <t>Required parameters: None</t>
+Required parameters: None
 
-          <t>Optional parameters: None</t>
+Optional parameters: None
 
-          <t>Encoding considerations: 8-bit Each conceptual YANG data node is
-          encoded according to the XML Encoding Rules and Canonical Format for
-          the specific YANG data node type defined in <xref
-          target="RFC7951">JSON Encoding of Data Modeled with YANG</xref>.</t>
+Encoding considerations:
+    8-bit Each conceptual YANG data node is encoded according to the XML
+    Encoding Rules and Canonical Format for the specific YANG data node
+    type defined in JSON Encoding of Data Modeled with YANG [RFC7951].
 
-          <t>Security considerations: Security considerations related to the
-          generation and consumption of RESTCONF messages are discussed in
-          Section NN of RFC XXXX. Additional security considerations are
-          specific to the semantics of particular YANG data models. Each YANG
-          module is expected to specify security considerations for the YANG
-          data defined in that module.</t>
+Security considerations:
+    Security considerations related to the generation and consumption of
+    RESTCONF messages are discussed in Section NN of RFC XXXX.
 
-          <t>Interoperability considerations: N/A</t>
+    Additional security considerations are specific to the semantics of
+    particular YANG data models. Each YANG module is expected to specify
+    security considerations for the YANG data defined in that module.
 
-          <t>Published specification: RFC XXXX</t>
+Interoperability considerations: N/A
 
-          <t>Applications that use this media type: Instance document data
-          parsers used within a protocol or automation tool that utilize
-          YANG-defined data structures.</t>
+Published specification: RFC XXXX
 
-          <t>Fragment identifier considerations: Fragment identifiers for this
-          type are not defined. All YANG data nodes are accessible as
-          resources using the path in the request URI.</t>
+Applications that use this media type:
+    Instance document data parsers used within a protocol or automation
+    tool that utilize YANG-defined data structures.
 
-          <t>Additional information:</t>
+Fragment identifier considerations:
+    Fragment identifiers for this type are not defined. All YANG data
+    nodes are accessible as resources using the path in the request URI.
 
-          <t>Deprecated alias names for this type: N/A</t>
+Additional information:
 
-          <t>Magic number(s): N/A</t>
+    Deprecated alias names for this type: N/A
+    Magic number(s): N/A
+    File extension(s): None
+    Macintosh file type code(s): "TEXT"
 
-          <t>File extension(s): None</t>
+Person & email address to contact for further information:
+    See Author's Address section of RFC XXXX.
 
-          <t>Macintosh file type code(s): "TEXT"</t>
+Intended usage: COMMON
 
-          <t>Person &amp; email address to contact for further information:
-          See Author's Address section of RFC XXXX.</t>
+Restrictions on usage: N/A
 
-          <t>Intended usage: COMMON</t>
+Author: See Author's Address section of RFC XXXX
 
-          <t>Restrictions on usage: N/A</t>
+Change controller:
+    Internet Engineering Task Force (mailto:iesg@ietf.org)
 
-          <t>Author: See Author's Address section of RFC XXXX</t>
-
-          <t>Change controller: Internet Engineering Task Force
-          (mailto:iesg@ietf.org).</t>
-
-          <t>Provisional registration? (standards tree only): no</t>
+Provisional registration? (standards tree only): no]]></artwork>
+            </figure></t>
         </section>
       </section>
     </section>
@@ -529,6 +447,77 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-https-notif-7.1.xml,68)
 
 ]]></artwork>
           </figure></t>
+      </section>
+
+      <section title="Bundled Message">
+        <t>In the case of "bundled-message" as defined in <xref
+        target="I-D.ietf-netconf-notification-messages">Notification Message
+        Headers and Bundles</xref>, something that this module supports, the
+        flow of messages would look something like this.</t>
+
+        <t><figure>
+            <artwork><![CDATA[       -------------                               --------------
+       | Publisher |                               | Receiver   |
+       -------------                               --------------
+       Establish TCP             ------>
+       Establish TLS             ------>
+       Send HTTPS POST message
+       with YANG defined         ------>
+       notification #1
+       Send HTTPS POST message
+       with YANG defined         ------>
+       notification #2
+                                                   Send 204 (No Content)
+                                 <------           for notification #1
+
+                                                   Send 204 (No Content)
+                                 <------           for notification #2
+       Send HTTPS POST message
+       with YANG defined         ------->
+       notification #3
+                                                   Send 204 (No Content)
+                                 <------           for notification #3]]></artwork>
+          </figure></t>
+
+        <t>The content of the exchange would look something like this.</t>
+
+        <figure>
+          <artwork><![CDATA[Request:
+    POST /some/path HTTP/1.1
+    Host: my-receiver.my-domain.com
+    Content-Type: application/yang-data+xml
+    <notification
+      xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
+      <eventTime>2019-03-22T12:35:00Z</eventTime>
+      <foo xmlns="https://example.com/my-foobar-module">
+        ...
+      </foo>
+    </notification>
+    <notification
+      xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
+      <eventTime>2019-03-22T12:35:00Z</eventTime>
+      <bar xmlns="https://example.com/my-foobar-module">
+        ...
+      </bar>
+    </notification>
+    <notification
+      xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
+      <eventTime>2019-03-22T12:35:01Z</eventTime>
+      <baz xmlns="https://example.com/my-foobar-module">
+        ...
+      </baz>
+    </notification>
+Response:
+      HTTP/1.1 204 No Content
+      Date: Fri, 03 Mar 2019 12:35:00 GMT
+      Server: my-receiver.my-domain.com
+      HTTP/1.1 204 No Content
+      Date: Fri, 03 Mar 2019 12:35:00 GMT
+      Server: my-receiver.my-domain.com
+      HTTP/1.1 204 No Content
+      Date: Fri, 03 Mar 2019 12:35:01 GMT
+      Server: my-receiver.my-domain.com]]></artwork>
+        </figure>
       </section>
     </section>
 
