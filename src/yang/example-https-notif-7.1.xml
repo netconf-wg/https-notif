@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-  <receivers
-      xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif"
-      xmlns:x509c2n="urn:ietf:params:xml:ns:yang:ietf-x509-cert-to-name">
-      <receiver>
+  <subscriptions
+      xmlns="urn:ietf:params:xml:ns:yang:ietf-subscribed-notifications">
+    <https-receivers
+	xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif"
+	xmlns:x509c2n="urn:ietf:params:xml:ns:yang:ietf-x509-cert-to-name">
+      <https-receiver>
 	<name>foo</name>
 	<tcp-params>
 	  <remote-address>my-receiver.my-domain.com</remote-address>
@@ -11,72 +13,69 @@
 	</tcp-params>
 	<tls-params>
 	  <server-authentication>
-            <ca-certs>explicitly-trusted-server-ca-certs</ca-certs>
-            <server-certs>explicitly-trusted-server-certs</server-certs>
+	    <ca-certs>explicitly-trusted-server-ca-certs</ca-certs>
+	    <server-certs>explicitly-trusted-server-certs</server-certs>
 	  </server-authentication>
 	</tls-params>
 	<http-params>
-	  <client-identity>
+          <client-identity>
 	    <basic>
 	      <user-id>my-name</user-id>
 	      <password>my-password</password>
 	    </basic>
-	  </client-identity>
-	  <path>/some/path</path>
+          </client-identity>
+          <path>/some/path</path>
 	</http-params>
 	<receiver-identity>
-	  <cert-maps>
+          <cert-maps>
 	    <cert-to-name>
 	      <id>1</id>
 	      <fingerprint>11:0A:05:11:00</fingerprint>
 	      <map-type>x509c2n:san-any</map-type>
 	    </cert-to-name>
-	  </cert-maps>
+          </cert-maps>
 	</receiver-identity>
-      </receiver>
-  </receivers>
-  
-  <subscriptions
-      xmlns="urn:ietf:params:xml:ns:yang:ietf-subscribed-notifications">
+      </https-receiver>
+    </https-receivers>
     <subscription>
       <id>6666</id>
       <stream-subtree-filter>foo</stream-subtree-filter>
       <stream>some-stream</stream>
-	<receivers>
-	  <receiver>
-	    <name>my-receiver</name>
-	    <receiver-ref
-		xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif">foo</receiver-ref>
-	  </receiver>
-	</receivers>
-      </subscription>
+      <receivers>
+	<receiver>
+	  <name>my-receiver</name>
+	  <receiver-ref
+	      xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif">foo</receiver-ref>
+	</receiver>
+      </receivers>
+    </subscription>
   </subscriptions>
   
   <truststore xmlns="urn:ietf:params:xml:ns:yang:ietf-truststore">
     <certificates>
-       <name>explicitly-trusted-server-certs</name>
-       <description>
-         Specific server authentication certificates for explicitly
-         trusted servers.  These are needed for server certificates
-         that are not signed by a pinned CA.
-       </description>
-       <certificate>
-         <name>Fred Flintstone</name>
-         <cert>base64encodedvalue==</cert>
-       </certificate>
-     </certificates>
-     <certificates>
-       <name>explicitly-trusted-server-ca-certs</name>
-       <description>
-         Trust anchors (i.e. CA certs) that are used to authenticate
-         server connections.  Servers are authenticated if their
-         certificate has a chain of trust to one of these CA
-         certificates.
-       </description>
-       <certificate>
-         <name>ca.example.com</name>
-         <cert>base64encodedvalue==</cert>
-       </certificate>
-     </certificates>
+      <name>explicitly-trusted-server-certs</name>
+      <description>
+        Specific server authentication certificates for explicitly
+        trusted servers.  These are needed for server certificates
+        that are not signed by a pinned CA.
+      </description>
+      <certificate>
+        <name>Fred Flintstone</name>
+        <cert>base64encodedvalue==</cert>
+      </certificate>
+    </certificates>
+    <certificates>
+      <name>explicitly-trusted-server-ca-certs</name>
+      <description>
+        Trust anchors (i.e. CA certs) that are used to authenticate
+        server connections.  Servers are authenticated if their
+        certificate has a chain of trust to one of these CA
+        certificates.
+      </description>
+      <certificate>
+        <name>ca.example.com</name>
+        <cert>base64encodedvalue==</cert>
+      </certificate>
+    </certificates>
   </truststore>
 </config>
