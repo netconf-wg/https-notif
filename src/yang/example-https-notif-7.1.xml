@@ -2,41 +2,52 @@
 <config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
   <subscriptions
       xmlns="urn:ietf:params:xml:ns:yang:ietf-subscribed-notifications">
-    <https-receivers
-	xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif"
-	xmlns:x509c2n="urn:ietf:params:xml:ns:yang:ietf-x509-cert-to-name">
-      <https-receiver>
+    <receiver-instances
+	xmlns="urn:ietf:params:xml:ns:yang:ietf-sub-notif-recv-list">
+      <receiver-instance>
 	<name>foo</name>
-	<tcp-params>
-	  <remote-address>my-receiver.my-domain.com</remote-address>
-	  <remote-port>443</remote-port>
-	</tcp-params>
-	<tls-params>
-	  <server-authentication>
-	    <ca-certs>explicitly-trusted-server-ca-certs</ca-certs>
-	    <server-certs>explicitly-trusted-server-certs</server-certs>
-	  </server-authentication>
-	</tls-params>
-	<http-params>
-          <client-identity>
-	    <basic>
-	      <user-id>my-name</user-id>
-	      <password>my-password</password>
-	    </basic>
-          </client-identity>
-          <path>/some/path</path>
-	</http-params>
-	<receiver-identity>
-          <cert-maps>
-	    <cert-to-name>
-	      <id>1</id>
-	      <fingerprint>11:0A:05:11:00</fingerprint>
-	      <map-type>x509c2n:san-any</map-type>
-	    </cert-to-name>
-          </cert-maps>
-	</receiver-identity>
-      </https-receiver>
-    </https-receivers>
+	<https-receiver
+	    xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif"
+	    xmlns:x509c2n="urn:ietf:params:xml:ns:yang:ietf-x509-cert-to-name">
+	  <tls>
+	    <tcp-client-parameters>
+	      <remote-address>my-receiver.my-domain.com</remote-address>
+	      <remote-port>443</remote-port>
+	    </tcp-client-parameters>
+	    <tls-client-parameters>
+	      <server-authentication>
+		<ca-certs>
+		  <local-definition>
+		    <certificate>
+		      <name>Server Cert Issuer #1</name>
+		      <cert-data>base64encodedvalue==</cert-data>
+		    </certificate>
+		  </local-definition>
+		</ca-certs>
+	      </server-authentication>
+	    </tls-client-parameters>
+	    <http-client-parameters>
+              <client-identity>
+		<basic>
+		  <user-id>my-name</user-id>
+		  <password>my-password</password>
+		</basic>
+              </client-identity>
+              <path>/some/path</path>
+	    </http-client-parameters>
+	  </tls>
+	  <receiver-identity>
+            <cert-maps>
+	      <cert-to-name>
+		<id>1</id>
+		<fingerprint>11:0A:05:11:00</fingerprint>
+		<map-type>x509c2n:san-any</map-type>
+	      </cert-to-name>
+            </cert-maps>
+	  </receiver-identity>
+	</https-receiver>
+      </receiver-instance>
+    </receiver-instances>
     <subscription>
       <id>6666</id>
       <stream-subtree-filter>foo</stream-subtree-filter>
@@ -44,38 +55,32 @@
       <receivers>
 	<receiver>
 	  <name>my-receiver</name>
-	  <receiver-ref
-	      xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif">foo</receiver-ref>
+	  <receiver-instance-ref
+	      xmlns="urn:ietf:params:xml:ns:yang:ietf-sub-notif-recv-list">foo</receiver-instance-ref>
 	</receiver>
       </receivers>
     </subscription>
   </subscriptions>
   
   <truststore xmlns="urn:ietf:params:xml:ns:yang:ietf-truststore">
-    <certificates>
-      <name>explicitly-trusted-server-certs</name>
-      <description>
-        Specific server authentication certificates for explicitly
-        trusted servers.  These are needed for server certificates
-        that are not signed by a pinned CA.
-      </description>
-      <certificate>
-        <name>Fred Flintstone</name>
-        <cert>base64encodedvalue==</cert>
-      </certificate>
-    </certificates>
-    <certificates>
-      <name>explicitly-trusted-server-ca-certs</name>
-      <description>
-        Trust anchors (i.e. CA certs) that are used to authenticate
-        server connections.  Servers are authenticated if their
-        certificate has a chain of trust to one of these CA
-        certificates.
-      </description>
-      <certificate>
-        <name>ca.example.com</name>
-        <cert>base64encodedvalue==</cert>
-      </certificate>
-    </certificates>
+    <certificate-bags>
+      <certificate-bag>
+	<name>explicitly-trusted-server-ca-certs</name>
+	<description>
+          Trust anchors (i.e. CA certs) that are used to authenticate
+          server connections.  Servers are authenticated if their
+          certificate has a chain of trust to one of these CA
+          certificates.
+	</description>
+	<certificate>
+          <name>ca.example.com</name>
+          <cert-data>base64encodedvalue==</cert-data>
+	</certificate>
+	<certificate>
+          <name>Fred Flintstone</name>
+          <cert-data>base64encodedvalue==</cert-data>
+	</certificate>
+      </certificate-bag>
+    </certificate-bags>
   </truststore>
 </config>
