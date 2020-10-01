@@ -50,6 +50,9 @@
     </receiver-instances>
     <subscription>
       <id>6666</id>
+      <transport xmlns:hn="urn:ietf:params:xml:ns:yang:ietf-https-notif">
+	hn:https
+      </transport>
       <stream-subtree-filter>foo</stream-subtree-filter>
       <stream>some-stream</stream>
       <receivers>
