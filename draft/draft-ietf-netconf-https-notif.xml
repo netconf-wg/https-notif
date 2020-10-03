@@ -449,6 +449,31 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD.yang)
       data:   }
       data: }]]></artwork>
         </figure></t>
+
+      <t>A similar example for XML would look something like this:</t>
+
+      <figure>
+        <artwork><![CDATA[     data: <notification xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
+     data:  <eventTime>2017-10-25T08:00:11.22Z</eventTime>
+     data:  <push-update xmlns="urn:ietf:params:xml:ns:yang:ietf-yang-push">
+     data:   <id>1011</id>
+     data:   <datastore-contents>
+     data:     <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+     data:      <interface>
+     data:       <name>eth0</name>
+     data:        <oper-status>up</oper-status>
+     data:       </interface>
+     data:      </interfaces>
+     data:      <eventClass>state</eventClass>
+     data:      <reportingEntity>
+     data:       <card>Ethernet0</card>
+     data:      </reportingEntity>
+     data:    <serverity>minor</serverity>
+     data:    </datastore-contents>
+     data:   </push-update>
+     data:  </notification>
+]]></artwork>
+      </figure>
     </section>
 
     <section title="IANA Considerations">
