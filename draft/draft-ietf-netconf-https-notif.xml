@@ -53,7 +53,7 @@
       </address>
     </author>
 
-    <date day="27" month="July" year="2020"/>
+    <date day="23" month="October" year="2020"/>
 
     <area>Routing</area>
 
@@ -425,32 +425,41 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD.yang)
       operations and their sensitivity/vulnerability:</t>
     </section>
 
-    <section title="Receiving Event Notifications">
-      <t>Encoding notifications for the HTTPS notifications is the same as the
-      encoding notifications as defined in <xref target="RFC8040">RESTCONF
-      </xref> Section 6.4, with the following changes. Instead of saying that
-      for JSON-encoding purposes, the module name for "notification" element
-      will be "ietf-restconf, it will say that for JSON-encoding purposes, the
-      module name for "notification" element will be "ietf-https-notif".</t>
+    <section title="Encoding Event Notifications">
+      <t>Notifications are encoded as defined in <xref
+      target="RFC8040">RESTCONF </xref> Section 6.4. The examples in that
+      section apply for sending notifications over the "https-notif" based
+      transport.</t>
 
-      <t>With those changes, the SSE event notification encoded JSON example
-      that would be sent over the HTTPS notif transport would appear as
-      follows:</t>
+      <t>An example of YANG-Push in JSON would look something like this:</t>
 
       <t><figure>
           <artwork><![CDATA[      data: {
-      data:   "ietf-https-notif:notification" : {
-      data:     "eventTime" : "2013-12-21T00:01:00Z",
-      data:     "example-mod:event" : {
-      data:       "event-class" : "fault",
-      data:       "reporting-entity" : { "card" : "Ethernet0" },
-      data:       "severity" : "major"
+      data:   "ietf-restconf:notification" : {
+      data:     "eventTime" : "2017-10-25T08:00:11.22Z",
+      data:     "ietf-yang-push:push-update" : {
+      data:       "id" : 1011,
+      data:       "datastore-contents" : {
+      data:         "ietf-interfaces:interfaces" : {
+      data:           "interface": [
+      data:             {
+      data:               "name": "eth0",
+      data:               "oper-status": "up"
+      data:             }
+      data:           ],
+      data:         },
+      data:         "eventClass" : "state",
+      data:         "reportingEntity": {
+      data:           "card": "Ethernet0"
+      data:         }
+      data:         "severity" : "minor"
+      data:       }
       data:     }
       data:   }
       data: }]]></artwork>
         </figure></t>
 
-      <t>A similar example for XML would look something like this:</t>
+      <t>An example of YANG-Push in XML would look something like this:</t>
 
       <figure>
         <artwork><![CDATA[     data: <notification xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
@@ -468,7 +477,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD.yang)
      data:      <reportingEntity>
      data:       <card>Ethernet0</card>
      data:      </reportingEntity>
-     data:    <serverity>minor</serverity>
+     data:      <serverity>minor</serverity>
      data:    </datastore-contents>
      data:   </push-update>
      data:  </notification>
