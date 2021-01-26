@@ -8,61 +8,25 @@
     <title abbrev="HTTPS Configured Subscription">An HTTPS-based Transport for
     Configured Subscriptions</title>
 
-    <author fullname="Mahesh Jethanandani" initials="M.J."
-            surname="Jethanandani">
+    <author fullname="Mahesh Jethanandani" initials="M.J." surname="Jethanandani">
       <organization>Kloud Services</organization>
-
       <address>
-        <postal>
-          <street/>
-
-          <city/>
-
-          <region/>
-
-          <code/>
-
-          <country/>
-        </postal>
-
-        <phone/>
-
-        <facsimile/>
-
         <email>mjethanandani@gmail.com</email>
-
-        <uri/>
       </address>
     </author>
 
     <author fullname="Kent Watsen" initials="K.W." surname="Watsen">
       <organization>Watsen Networks</organization>
-
       <address>
-        <postal>
-          <street/>
-
-          <city/>
-
-          <region/>
-
-          <country>USA</country>
-        </postal>
-
         <email>kent+ietf@watsen.net</email>
       </address>
     </author>
 
     <date day="16" month="November" year="2020"/>
-
     <area>Routing</area>
-
     <workgroup>NETCONF</workgroup>
-
     <keyword>http</keyword>
-
     <keyword>yang</keyword>
-
     <keyword>notification</keyword>
 
     <abstract>
@@ -202,7 +166,7 @@
           <figure>
             <artwork><![CDATA[Request:
 
-    POST /some/path HTTP/1.1
+    POST /restconf/operations/ietf−notif-receiver−https:relay−notification HTTP/1.1
     Host: my-receiver.my-domain.com
     Content-Type: application/yang-data+xml
 
@@ -275,7 +239,7 @@ Response:
           <figure>
             <artwork><![CDATA[Request:
 
-    POST /some/path HTTP/1.1
+    POST /restconf/operations/ietf−notif-receiver−https:relay−notification HTTP/1.1
     Host: my-receiver.my-domain.com
     Content-Type: application/yang-data+xml
 
@@ -287,7 +251,7 @@ Response:
       </foo>
     </notification>
 
-    POST /some/path HTTP/1.1
+    POST /restconf/operations/ietf−notif-receiver−https:relay−notification HTTP/1.1
     Host: my-receiver.my-domain.com
     Content-Type: application/yang-data+xml
 
@@ -299,7 +263,7 @@ Response:
       </bar>
     </notification>
 
-    POST /some/path HTTP/1.1
+    POST /restconf/operations/ietf−notif-receiver−https:relay−notification HTTP/1.1
     Host: my-receiver.my-domain.com
     Content-Type: application/yang-data+xml
 
@@ -334,8 +298,8 @@ Response:
       <section title="Introduction">
         <t>To learn the capabilities of the receiver, the publisher can issue
         a HTTPS GET request with Accept-Type set to
-        application/ietf-https-notif-cap+xml or
-        application/ietf-https-notif-cap+json, with latter as the mandatory to
+        application/ietf-notif-receiver-https-cap+xml or
+        application/ietf-notif-receiver-https-cap+json, with latter as the mandatory to
         implement, and the default in case the type is not specified. If the
         receiver supports capabilities such as <xref
         target="I-D.ietf-netconf-notification-messages">bundled-message</xref>
@@ -357,9 +321,9 @@ Response:
         capability of binary encoding defined.</t>
 
         <t><figure>
-            <artwork><![CDATA[GET /some/path/capabilities HTTP/1.1
+            <artwork><![CDATA[GET /restconf/data/ietf−notif-receiver−https:receiver-capabilities HTTP/1.1
 Host: example.com
-Accept-Type: application/ietf-https-notif-cap+xml, application/ietf-https-notif-cap+json]]></artwork>
+Accept-Type: application/ietf-notif-receiver-https-cap+xml, application/ietf-notif-receiver-https-cap+json]]></artwork>
           </figure></t>
 
         <t>In case the receiver supports the first Accept-Type, its response
@@ -370,7 +334,7 @@ Accept-Type: application/ietf-https-notif-cap+xml, application/ietf-https-notif-
 Date: Wed, 26 Feb 2020 20:33:30 GMT
 Server: example-server
 Cache-Control: no-cache
-Content-Type: application/ietf-https-notif-cap+xml
+Content-Type: application/ietf-notif-receiver-https-cap+xml
 Content-Length: nnn
 
 <receiver-capabilities>
@@ -385,16 +349,16 @@ Content-Length: nnn
       </section>
     </section>
 
-    <section title="The &quot;ietf-sub-notif-recv-list&quot; Module">
+    <section title="The &quot;ietf-notif-publisher-list&quot; Module">
       <section title="Data Model Overview">
         <t>This YANG module augments ietf-subscribed-notifications module to
         define a choice of transport types that other modules such as the
-        ietf-https-notif module can use to define a transport specific
+        ietf-notif-publisher-https module can use to define a transport specific
         receiver.</t>
 
         <t><figure>
             <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(../bin/ietf-sub-notif-recv-list@YYYY-MM-DD-tree.txt)
+INSERT_TEXT_FROM_FILE(../bin/ietf-notif-publisher-list@YYYY-MM-DD-tree.txt)
 
 ]]></artwork>
           </figure></t>
@@ -403,8 +367,8 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-sub-notif-recv-list@YYYY-MM-DD-tree.txt)
       <section title="YANG Module">
         <t><figure>
             <artwork><![CDATA[
-<CODE BEGINS> file "ietf-sub-notif-recv-list@YYYY-MM-DD.yang"
-INSERT_TEXT_FROM_FILE(../bin/ietf-sub-notif-recv-list@YYYY-MM-DD.yang)
+<CODE BEGINS> file "ietf-notif-publisher-list@YYYY-MM-DD.yang"
+INSERT_TEXT_FROM_FILE(../bin/ietf-notif-publisher-list@YYYY-MM-DD.yang)
 <CODE ENDS>
 
 ]]></artwork>
@@ -412,20 +376,22 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-sub-notif-recv-list@YYYY-MM-DD.yang)
       </section>
     </section>
 
-    <section title="The &quot;ietf-https-notif-capabilities&quot; Module">
+    <section title="The &quot;ietf-notif-receiver-https&quot; Module">
       <section title="Data Model Overview">
-        <t>This YANG module is definition of the list of capabilities of the
-        receiver. A publisher can request these capabilities from the
-        receiver, e.g. by issuing a GET request towards it. It consists of a
-        &lt;rpc&gt; statement that takes an 'input' argument describing the
-        path to the reciever capabilities, and an output statement which is a
-        list of 'receiver-capability".</t>
+        <t>This YANG module provide a &lt;config false&gt; data node called 
+          &lt;receiver-capabilities&gt; and an RPC called &lt;relay-notification&gt;.</t>
+
+        <t>A publisher can learn what optional capabilities a receiver supports
+          by issuing a GET request on the &lt;receiver-capabilities&gt; data node.</t>
+
+        <t>A publisher can send a notification to the receiver using the
+          &lt;relay-notification&gt; RPC.</t>
 
         <t>An abridged tree diagram representing the module is show below.</t>
 
         <t><figure>
             <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-capabilities@YYYY-MM-DD-sub-tree.txt)
+INSERT_TEXT_FROM_FILE(../bin/ietf-notif-receiver-https@YYYY-MM-DD-sub-tree.txt)
 
 ]]></artwork>
           </figure></t>
@@ -439,8 +405,8 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-capabilities@YYYY-MM-DD-sub-tree.t
 
         <t><figure>
             <artwork><![CDATA[
-<CODE BEGINS> file "ietf-https-notif-capabilities@YYYY-MM-DD.yang"
-INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-capabilities@YYYY-MM-DD.yang)
+<CODE BEGINS> file "ietf-notif-receiver-https@YYYY-MM-DD.yang"
+INSERT_TEXT_FROM_FILE(../bin/ietf-notif-receiver-https@YYYY-MM-DD.yang)
 <CODE ENDS>
 
 ]]></artwork>
@@ -448,13 +414,13 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-capabilities@YYYY-MM-DD.yang)
       </section>
     </section>
 
-    <section anchor="overview" title="The &quot;ietf-https-notif&quot; Module">
+    <section anchor="overview" title="The &quot;ietf-notif-publisher-https&quot; Module">
       <section anchor="overview.protocol" title="Data Model Overview">
         <t>This YANG module is a definition of a set of receivers that are
         interested in the notifications published by the publisher. The module
         contains the TCP, TLS and HTTPS parameters that are needed to
         communicate with the receiver. The module augments the
-        ietf-sub-notif-recv-list module to define a transport specific
+        ietf-notif-publisher-list module to define a transport specific
         receiver. As mentioned earlier, it uses POST method to deliver the
         notification. The attribute 'path' defines the path for the resource
         on the receiver, as defined by 'path-absolute' in <xref
@@ -468,7 +434,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-capabilities@YYYY-MM-DD.yang)
 
         <figure>
           <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD-sub-tree.txt)
+INSERT_TEXT_FROM_FILE(../bin/ietf-notif-publisher-https@YYYY-MM-DD-sub-tree.txt)
 
 ]]></artwork>
         </figure>
@@ -485,8 +451,8 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD-sub-tree.txt)
 
         <figure>
           <artwork><![CDATA[
-<CODE BEGINS> file "ietf-https-notif@YYYY-MM-DD.yang"
-INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD.yang)
+<CODE BEGINS> file "ietf-notif-publisher-https@YYYY-MM-DD.yang"
+INSERT_TEXT_FROM_FILE(../bin/ietf-notif-publisher-https@YYYY-MM-DD.yang)
 <CODE ENDS>
 
 ]]></artwork>
@@ -524,7 +490,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD.yang)
       sensitivity/vulnerability:</t>
 
       <t><list style="symbols">
-          <t>The 'path' node in ietf-https-notif module can be modified by a
+          <t>The 'path' node in ietf-notif-publisher-https module can be modified by a
           malcious user to point to an invalid URI.</t>
         </list></t>
 
@@ -541,12 +507,13 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD.yang)
     </section>
 
     <section title="Receiving Event Notifications">
+<!--
       <t>Encoding notifications for the HTTPS notifications is the same as the
       encoding notifications as defined in <xref target="RFC8040">RESTCONF
       </xref> Section 6.4, with the following changes. Instead of saying that
       for JSON-encoding purposes, the module name for "notification" element
       will be "ietf-restconf, it will say that for JSON-encoding purposes, the
-      module name for "notification" element will be "ietf-https-notif".</t>
+      module name for "notification" element will be "ietf-notif-publisher-https".</t>
 
       <t>With those changes, the SSE event notification encoded JSON example
       that would be sent over the HTTPS notif transport would appear as
@@ -554,7 +521,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD.yang)
 
       <t><figure>
           <artwork><![CDATA[      data: {
-      data:   "ietf-https-notif:notification" : {
+      data:   "ietf-notif-publisher-https:notification" : {
       data:     "eventTime" : "2013-12-21T00:01:00Z",
       data:     "example-mod:event" : {
       data:       "event-class" : "fault",
@@ -564,6 +531,39 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD.yang)
       data:   }
       data: }]]></artwork>
         </figure></t>
+-->
+      <t>FIXME</t>
+      <t><figure>
+          <artwork><![CDATA[{
+  ”ietf−notif−receiver-https:input” : {
+     ”ietf-restconf:notification ”: {
+      ”eventTime”: ”2013-12-21T00:01:00Z",
+      "example-mod:event" : {
+        "event-class" : "fault",
+        "reporting-entity" : { "card" : "Ethernet0" },
+        "severity" : "major"
+      }
+    }
+  }
+}]]></artwork>
+        </figure></t>
+
+      <t>FIXME</t>
+      <t><figure>
+          <artwork><![CDATA[<input xmlns="urn:ietf:params:xml:ns:yang:ietf-notif-receiver-https">
+  <notification xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
+    <eventTime>2019-03-22T12:35:00Z</eventTime>
+    <event xmlns="https://example.com/example-mod">
+      <event-class>fault</fault>
+      <reporting-entity>
+        <card>Ethernet0</card>
+      </reporting-entity>
+      <severity>major</severity>
+    </event>
+  </notification>
+</input>]]></artwork>
+        </figure></t>
+
     </section>
 
     <section title="IANA Considerations">
@@ -575,7 +575,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD.yang)
         the format in RFC 3688, the following registration is requested to be
         made: <figure>
             <artwork><![CDATA[URI: urn:ietf:params:xml:ns:yang:ietf-http-notif
-URI: urn:ietf:params:xml:ns:yang:ietf-sub-notif-recv-list]]></artwork>
+URI: urn:ietf:params:xml:ns:yang:ietf-notif-publisher-list]]></artwork>
           </figure></t>
 
         <t>Registrant Contact: The IESG. XML: N/A, the requested URI is an XML
@@ -587,13 +587,13 @@ URI: urn:ietf:params:xml:ns:yang:ietf-sub-notif-recv-list]]></artwork>
         registry <xref target="RFC6020">YANG</xref>.</t>
 
         <t><figure>
-            <artwork><![CDATA[name: ietf-https-notif
-namespace: urn:ietf:params:xml:ns:yang:ietf-https-notif
+            <artwork><![CDATA[name: ietf-notif-publisher-https
+namespace: urn:ietf:params:xml:ns:yang:ietf-notif-publisher-https
 prefix: hn
 reference: RFC XXXX
 
 name: ietf-sub-recv-list
-namespace: urn:ietf:params:xml:ns:yang:ietf-sub-notif-recv-list
+namespace: urn:ietf:params:xml:ns:yang:ietf-notif-publisher-list
 prefix: snrl
 reference: RFC XXXX
 ]]></artwork>
@@ -601,11 +601,11 @@ reference: RFC XXXX
       </section>
 
       <section title="Media Types">
-        <section title="Media Type &quot;application/ietf-https-notif-cap+xml">
+        <section title="Media Type &quot;application/ietf-notif-receiver-https-cap+xml">
           <t><figure>
               <artwork><![CDATA[Type name: application
 
-Subtype name: ietf-https-notif-cap+xml
+Subtype name: ietf-notif-receiver-https-cap+xml
 
 Required parameters: None
 
@@ -659,11 +659,11 @@ Provisional registration? (standards tree only): no]]></artwork>
             </figure></t>
         </section>
 
-        <section title="Media Type &quot;application/ietf-https-notif-cap+json">
+        <section title="Media Type &quot;application/ietf-notif-receiver-https-cap+json">
           <t><figure>
               <artwork><![CDATA[Type name: application
 
-Subtype name: ietf-https-notif-cap+json
+Subtype name: ietf-notif-receiver-https-cap+json
 
 Required parameters: None
 
@@ -784,7 +784,9 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-custom-https-notif.xml,68)
 
         <figure>
           <artwork><![CDATA[Request:
-    POST /some/path HTTP/1.1
+    POST /restconf/operations/ietf−notif-receiver−https:relay−notification HTTP/1.1
+      <or, if supporting NMDA>
+    POST /restconf/ds/ietf−datastores:operational/ietf−notif-receiver−https:relay−notification HTTP/1.1
     Host: my-receiver.my-domain.com
     Content-Type: application/yang-data+xml
     <bundled-message

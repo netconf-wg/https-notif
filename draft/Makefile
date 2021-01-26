@@ -47,15 +47,15 @@ ifeq (org,$(draft_type))
 endif
 	-rm -f ../bin/*\@*-tree.txt*
 	-rm -f ../bin/*\@*.yang
-	-rm -f ../packages/https-notif/src/yang/*\@*.yang
+	-rm -f ../src/yang/*\@*.yang
 
-$(next).xml: $(draft).xml ../src/yang/ietf-https-notif.yang ../src/yang/ietf-sub-notif-recv-list.yang ../src/yang/ietf-https-notif-capabilities.yang ../src/yang/example-custom-module.yang
+$(next).xml: $(draft).xml ../src/yang/example-custom-module.yang ../src/yang/ietf-notif-publisher-list.yang ../src/yang/ietf-notif-publisher-https.yang ../src/yang/ietf-notif-receiver-https.yang
 	-mkdir -p ../bin
 	sed -e"s/$(basename $<)-latest/$(basename $@)/" -e"s/YYYY-MM-DD/$(shell date +%Y-%m-%d)/" $< > $@
 	cd ../src; ./sed.sh; cd ..;
-	cp ../bin/*\@$(shell date +%Y-%m-%d).yang ../packages/https-notif/src/yang/
-	cp ../bin/imported-modules/*.yang ../packages/https-notif/src/yang/
-#	cd ../src; python ./download-dependent-models.py; ./validate-and-gen-trees.sh; cd ..;
+	cp ../bin/*\@$(shell date +%Y-%m-%d).yang ../src/yang/
+	#cd ../src; python ./download-dependent-models.py; ./validate-and-gen-trees.sh; cd ..;
+	cp ../bin/imported-modules/*.yang ../src/yang/
 	cd ../src; ./validate-and-gen-trees.sh; cd ..;
 	../src/insert-figures.sh $@ > tmp; mv tmp $@
 

@@ -49,6 +49,9 @@ module example-custom-module {
 	    // transport
 	    if-feature "not httpc:tcp-supported";
 	  }
+      /*
+      NO LONGER NEEDED?
+
 	  augment "transport/tls/tls/http-client-parameters" {
 	    leaf path {
 	      type string;
@@ -58,6 +61,7 @@ module example-custom-module {
 	    description
 	      "Augmentation to add a path to the target resource.";
 	  }
+      */
 	}
 	description
 	  "Just include the grouping from ietf-http-client to 

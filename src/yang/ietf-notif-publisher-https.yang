@@ -1,35 +1,33 @@
-module ietf-https-notif {
+module ietf-notif-publisher-https {
   yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:ietf-https-notif";
-  prefix "hn";
+  namespace "urn:ietf:params:xml:ns:yang:ietf-notif-publisher-https";
+  prefix "nph";
+
+  import ietf-x509-cert-to-name {
+    prefix x509c2n;
+    reference
+      "RFC 7407: YANG Data Model for SNMP Configuration.";
+  }
 
   import ietf-subscribed-notifications {
     prefix sn;
     reference
-      "I-D.ietf-netconf-subscribed-notifications";
+      "RFC 8639: Subscription to YANG Notifications";
   }
 
-  import ietf-http-client {
-    prefix httpc;
-
+  import ietf-notif-publisher-list {
+    prefix npl;
     reference
-      "I-D.ietf-netconf-http-client-server";
-  }
-
-  import ietf-sub-notif-recv-list {
-    prefix snrl;
-
-    reference
-      "RFC XXXX, YANG Data Module for HTTPS Notifications.";
-  }
-
-  import ietf-x509-cert-to-name {
-    prefix x509c2n;
-
-    reference
-      "RFC 7407: YANG Data Model for SNMP Configuration.";
+      "RFC XXXX: An HTTPS-based Transport for
+                 Configured Subscriptions";
   }
   
+  import ietf-http-client {
+    prefix httpc;
+    reference
+      "RFC YYYY: YANG Groupings for HTTP Clients and HTTP Servers";
+  }
+
   organization
     "IETF NETCONF Working Group";
 
@@ -39,10 +37,16 @@ module ietf-https-notif {
 
      Authors: Mahesh Jethanandani (mjethanandani at gmail dot com)
               Kent Watsen (kent plus ietf at watsen dot net)";
-  description
-    "YANG module for configuring HTTPS base configuration.
 
-     Copyright (c) 2018 IETF Trust and the persons identified as
+  description
+    "This YANG module is implemented by Publishers that implement
+     the 'ietf-subscribed-notifications' module defined in RFC 8639.
+
+     This module augments a 'case' statement called 'https' into
+     the 'choice' statement called 'transport-type' defined
+     by the 'ietf-notif-publisher-list' module defined in RFC XXXX. 
+
+     Copyright (c) 2021 IETF Trust and the persons identified as
      the document authors.  All rights reserved.
      Redistribution and use in source and binary forms, with or
      without modification, is permitted pursuant to, and subject
@@ -73,29 +77,29 @@ module ietf-https-notif {
       "HTTPS transport for notifications.";
   }
 
-  augment "/sn:subscriptions/snrl:receiver-instances/" +
-          "snrl:receiver-instance/snrl:transport-type" {
+  augment "/sn:subscriptions/npl:receiver-instances/" +
+          "npl:receiver-instance/npl:transport-type" {
     case https {
       container https-receiver {
-	description
-	  "HTTPS receiver for notification";
-
-	uses httpc:http-client-stack-grouping {
-	  refine "transport/tcp" {
-	    // create the logical impossibility of enabling "tcp"
-	    // transport
-	    if-feature "not httpc:tcp-supported";
-	  }
-	  augment "transport/tls/tls/http-client-parameters" {
-	    leaf path {
-	      type string;
-	      description
-		"Relative URI to the target resource.";
-	    }
-	    description
-	      "Augmentation to add a path to the target resource.";
-	  }
-	}
+        description
+          "The HTTPS receiver to send notifications to.";
+    
+        uses httpc:http-client-stack-grouping {
+          refine "transport/tcp" {
+            // create the logical impossibility of enabling "tcp"
+            // transport
+            if-feature "not httpc:tcp-supported";
+          }
+          augment "transport/tls/tls/http-client-parameters" {
+            leaf path {
+              type string;
+              description
+            "Relative URI to the target resource.";
+            }
+            description
+              "Augmentation to add a path to the target resource.";
+          }
+        }
 
         container receiver-identity {
           description
@@ -115,7 +119,7 @@ module ietf-https-notif {
             reference
               "RFC 7407: A YANG Data Model for SNMP Configuration.";
           }
-	}
+        }
       }
     }
     description

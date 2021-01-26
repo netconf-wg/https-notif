@@ -1,7 +1,7 @@
-module ietf-https-notif-capabilities {
+module ietf-notif-receiver-https {
   yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:ietf-https-notif-capabilities";
-  prefix "hnc";
+  namespace "urn:ietf:params:xml:ns:yang:ietf-notif-receiver-https";
+  prefix "nrh";
 
   import ietf-inet-types {
     prefix inet;
@@ -18,10 +18,20 @@ module ietf-https-notif-capabilities {
 
      Authors: Mahesh Jethanandani (mjethanandani at gmail dot com)
               Kent Watsen (kent plus ietf at watsen dot net)";
-  description
-    "YANG module for configuring HTTPS receiver configuration.
 
-     Copyright (c) 2018 IETF Trust and the persons identified as
+  description
+    "This YANG module is implemented by Receivers to receive
+     notifications via HTTPS, as described by RFC XXXX.
+
+     This module defines a top-level 'config false' node called
+     'capabilities' and an RPC called 'relay-notification'.
+
+     These two nodes are used by Publishers in order to determine
+     what optional notification-sending capbilities are supported
+     by Receivers, as well as to send notifications to the
+     Receivers.
+
+     Copyright (c) 2021 IETF Trust and the persons identified as
      the document authors.  All rights reserved.
      Redistribution and use in source and binary forms, with or
      without modification, is permitted pursuant to, and subject
@@ -46,38 +56,37 @@ module ietf-https-notif-capabilities {
       "RFC XXXX, YANG Data Module for HTTPS Notifications.";
   }
 
-  rpc get-capabilities {
+  rpc relay-notification {
     description
-      "Statement to describe the GET operation on receiver
-       capabilities.";
+      "An RPC for relaying a single 'notification',
+       i.e., as defined by a 'notification' statement
+       in a YANG module.
 
+       In the case of an error, the RPC MUST return
+       the 'ietf-restconf:errors' structure defined
+       in Section 7.1 in RFC 8040.";
     input {
-      leaf path {
-        type string;
-        description
-          "A relative URI of the receiver resource.";
-      }
+      anydata notification;
     }
-    
-    output {
-      container receiver-capabilities {
-        list receiver-capability {
-          key "urn";
+  }
 
-          leaf urn {
-            type inet:uri;
-            description
-              "A URN that describes the capability of the receiver.
-               For a list of capabilities supported in this draft,
-               refer to the IANA section in this document.";
-          }
-          description
-            "List of capabilities supported by the receiver.";
-        }
+  container receiver-capabilities {
+    config false;
+    list receiver-capability {
+      key "urn";
+      leaf urn {
+        type inet:uri;
         description
-          "Container for a list of capabilities supported by the
-           receiver.";
+          "The URN for a capability supported by the Receiver.
+           
+           The URN MUST be one defined in the FIXME 
+           registry defined in RFC XXXX.";
       }
+      description
+        "A list of capabilities supported by the Receiver.";
     }
+    description
+      "A container for a list of capabilities supported by
+       the Receiver.";
   }
 }
