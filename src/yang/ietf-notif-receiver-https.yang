@@ -3,12 +3,6 @@ module ietf-notif-receiver-https {
   namespace "urn:ietf:params:xml:ns:yang:ietf-notif-receiver-https";
   prefix "nrh";
 
-  import ietf-inet-types {
-    prefix inet;
-    reference
-      "RFC 6991: Common YANG Types.";
-  }
-  
   organization
     "IETF NETCONF Working Group";
 
@@ -82,8 +76,8 @@ module ietf-notif-receiver-https {
   }
 
   identity xml-encoding {
-    base capability;
     if-feature "xml-encoding";
+    base capability;
     description
       "Identifies support for XML encoding.";
   }

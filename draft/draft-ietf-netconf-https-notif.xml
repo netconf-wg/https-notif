@@ -166,7 +166,7 @@
           <figure>
             <artwork><![CDATA[Request:
 
-    POST /restconf/operations/ietf−notif-receiver−https:relay−notification HTTP/1.1
+    POST /restconf/operations/ietf-notif-receiver-https:relay-notification HTTP/1.1
     Host: my-receiver.my-domain.com
     Content-Type: application/yang-data+xml
 
@@ -239,7 +239,7 @@ Response:
           <figure>
             <artwork><![CDATA[Request:
 
-    POST /restconf/operations/ietf−notif-receiver−https:relay−notification HTTP/1.1
+    POST /restconf/operations/ietf-notif-receiver-https:relay-notification HTTP/1.1
     Host: my-receiver.my-domain.com
     Content-Type: application/yang-data+xml
 
@@ -251,7 +251,7 @@ Response:
       </foo>
     </notification>
 
-    POST /restconf/operations/ietf−notif-receiver−https:relay−notification HTTP/1.1
+    POST /restconf/operations/ietf-notif-receiver-https:relay-notification HTTP/1.1
     Host: my-receiver.my-domain.com
     Content-Type: application/yang-data+xml
 
@@ -263,7 +263,7 @@ Response:
       </bar>
     </notification>
 
-    POST /restconf/operations/ietf−notif-receiver−https:relay−notification HTTP/1.1
+    POST /restconf/operations/ietf-notif-receiver-https:relay-notification HTTP/1.1
     Host: my-receiver.my-domain.com
     Content-Type: application/yang-data+xml
 
@@ -317,7 +317,7 @@ Response:
         capability of binary encoding defined.</t>
 
         <t><figure>
-            <artwork><![CDATA[GET /restconf/data/ietf−notif-receiver−https:receiver-capabilities HTTP/1.1
+            <artwork><![CDATA[GET /restconf/data/ietf-notif-receiver-https:receiver-capabilities HTTP/1.1
 Host: example.com
 Accept-Type: application/yang-data+xml, application/yang-data+json]]></artwork>
           </figure></t>
@@ -544,9 +544,9 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-notif-publisher-https@YYYY-MM-DD.yang)
       <t>FIXME</t>
       <t><figure>
           <artwork><![CDATA[{
-  ”ietf−notif−receiver-https:input” : {
-     ”ietf-restconf:notification ”: {
-      ”eventTime”: ”2013-12-21T00:01:00Z",
+  "ietf-notif-receiver-https:input" : {
+     "ietf-restconf:notification": {
+      "eventTime": "2013-12-21T00:01:00Z",
       "example-mod:event" : {
         "event-class" : "fault",
         "reporting-entity" : { "card" : "Ethernet0" },
@@ -675,9 +675,9 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-custom-https-notif.xml,68)
 
         <figure>
           <artwork><![CDATA[Request:
-    POST /restconf/operations/ietf−notif-receiver−https:relay−notification HTTP/1.1
+    POST /restconf/operations/ietf-notif-receiver-https:relay-notification HTTP/1.1
       <or, if supporting NMDA>
-    POST /restconf/ds/ietf−datastores:operational/ietf−notif-receiver−https:relay−notification HTTP/1.1
+    POST /restconf/ds/ietf-datastores:operational/ietf-notif-receiver-https:relay-notification HTTP/1.1
     Host: my-receiver.my-domain.com
     Content-Type: application/yang-data+xml
     <bundled-message
@@ -766,8 +766,7 @@ Response:
 
       <?rfc include='reference.RFC.8639'?>
 
-      <?rfc include='reference.I-D.ietf-netconf-notification-messages'
-?>
+      <?rfc include='reference.I-D.ietf-netconf-notification-messages'?>
 
       <?rfc include='reference.I-D.ietf-netconf-http-client-server'?>
     </references>
