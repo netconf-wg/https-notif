@@ -56,6 +56,57 @@ module ietf-notif-receiver-https {
       "RFC XXXX, YANG Data Module for HTTPS Notifications.";
   }
 
+  /**************/
+  /*  Features  */
+  /**************/
+
+  feature xml-encoding {
+    description
+      "Indicates that XML encoding is supported.";
+  }
+
+
+  /****************/
+  /*  Identities  */
+  /****************/
+
+  identity capability {
+    description
+      "Base identity for receiver capabilities.";
+  }
+
+  identity json-encoding {
+    base capability;
+    description
+      "Identifies support for JSON encoding.";
+  }
+
+  identity xml-encoding {
+    base capability;
+    if-feature "xml-encoding";
+    description
+      "Identifies support for XML encoding.";
+  }
+
+
+  /*******************************/
+  /*  Protocol-accessible Nodes  */
+  /*******************************/
+
+  container receiver-capabilities {
+    config false;
+    description
+      "A container for a list of capabilities supported by
+       the Receiver.";
+    leaf-list receiver-capablity {
+      type identityref {
+        base "nrh:capability";
+      }
+      description
+        "A capability supported by the Receiver.";
+    }
+  }
+
   rpc relay-notification {
     description
       "An RPC for relaying a single 'notification',
@@ -70,23 +121,4 @@ module ietf-notif-receiver-https {
     }
   }
 
-  container receiver-capabilities {
-    config false;
-    list receiver-capability {
-      key "urn";
-      leaf urn {
-        type inet:uri;
-        description
-          "The URN for a capability supported by the Receiver.
-           
-           The URN MUST be one defined in the FIXME 
-           registry defined in RFC XXXX.";
-      }
-      description
-        "A list of capabilities supported by the Receiver.";
-    }
-    description
-      "A container for a list of capabilities supported by
-       the Receiver.";
-  }
 }
