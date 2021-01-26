@@ -27,7 +27,7 @@ do
 done
 rm ../bin/*-tree.txt.tmp
 
-for i in ../bin/ietf-https-notif\@$(date +%Y-%m-%d).yang
+for i in ../bin/ietf-https-notif*\@$(date +%Y-%m-%d).yang
 do
     name=$(echo $i | cut -f 1-3 -d '.')
     echo "Generating abridged tree diagram for $name.yang"
