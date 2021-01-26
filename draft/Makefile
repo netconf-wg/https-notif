@@ -50,7 +50,7 @@ endif
 	-rm -f ../packages/https-notif/src/yang/*\@*.yang
 
 $(next).xml: $(draft).xml ../src/yang/ietf-https-notif.yang ../src/yang/ietf-sub-notif-recv-list.yang ../src/yang/ietf-https-notif-capabilities.yang ../src/yang/example-custom-module.yang
-	-mkdir -p ../bin
+	-mkdir -p ../bin ../packages
 	sed -e"s/$(basename $<)-latest/$(basename $@)/" -e"s/YYYY-MM-DD/$(shell date +%Y-%m-%d)/" $< > $@
 	cd ../src; ./sed.sh; cd ..;
 	cp ../bin/*\@$(shell date +%Y-%m-%d).yang ../packages/https-notif/src/yang/
