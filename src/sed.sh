@@ -10,5 +10,6 @@ sed_nc_yang_file() {
 }
 
 sed_nc_yang_file yang     ../bin      ietf-https-notif
+sed_nc_yang_file yang     ../bin      ietf-https-notif-capabilities
 sed_nc_yang_file yang     ../bin      ietf-sub-notif-recv-list
 sed_nc_yang_file yang     ../bin      example-custom-module

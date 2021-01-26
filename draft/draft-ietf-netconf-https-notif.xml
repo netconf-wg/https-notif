@@ -165,13 +165,66 @@
       </section>
 
       <section title="Receiver and Publisher Interaction">
-        <t>The interaction between the receiver and the publisher can be of
-        type "pipelining" or send multiple notifications as part of a
-        "bundled-message", as defined in <xref
-        target="I-D.ietf-netconf-notification-messages">Notification Message
-        Headers and Bundles</xref></t>
+        <t>The interaction between the receiver and the publisher can be a
+        single notification with a response or of type "pipelining" where
+        multiple notifications as sent part of a single message.</t>
 
-        <section title="Pipelining of messages">
+        <section title="Single Notification">
+          <t>With a single notification, the interfaction between the receiver
+          and the publisher would look something like this.</t>
+
+          <t><figure>
+              <artwork><![CDATA[       -------------                               --------------
+       | Publisher |                               | Receiver   |
+       -------------                               --------------
+
+       Establish TCP             ------>
+
+       Establish TLS             ------>
+
+       Send HTTPS POST message
+       with <subscription-       ------>
+       started> notification
+
+                                 <------          Send 200 (OK) for
+                                                  <subscription-started>
+
+       Send HTTPS POST message 
+       with YANG defined         ------>
+       notification
+
+                                 <------         Send 204 (No Content)
+                                                 for notification]]></artwork>
+            </figure></t>
+
+          <t>The content of the message would look something like this:</t>
+
+          <figure>
+            <artwork><![CDATA[Request:
+
+    POST /some/path HTTP/1.1
+    Host: my-receiver.my-domain.com
+    Content-Type: application/yang-data+xml
+
+    <notification
+      xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
+      <eventTime>2019-03-22T12:35:00Z</eventTime>
+      <foo xmlns="https://example.com/my-foobar-module">
+        ...
+      </foo>
+    </notification>
+
+Response:
+
+      HTTP/1.1 204 No Content
+      Date: Fri, 03 Mar 2019 12:35:00 GMT
+      Server: my-receiver.my-domain.com
+
+]]></artwork>
+          </figure>
+        </section>
+
+        <section title="Pipelining of Notifications">
           <t>In the case of "pipelining", the flow of messages would look
           something like this. This example shows the flow assuming that
           Subscribed Notifications is used and therefore a
@@ -234,6 +287,10 @@
       </foo>
     </notification>
 
+    POST /some/path HTTP/1.1
+    Host: my-receiver.my-domain.com
+    Content-Type: application/yang-data+xml
+
     <notification
       xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
       <eventTime>2019-03-22T12:35:00Z</eventTime>
@@ -241,6 +298,10 @@
         ...
       </bar>
     </notification>
+
+    POST /some/path HTTP/1.1
+    Host: my-receiver.my-domain.com
+    Content-Type: application/yang-data+xml
 
     <notification
       xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
@@ -256,7 +317,6 @@ Response:
       HTTP/1.1 204 No Content
       Date: Fri, 03 Mar 2019 12:35:00 GMT
       Server: my-receiver.my-domain.com
-
 
       HTTP/1.1 204 No Content
       Date: Fri, 03 Mar 2019 12:35:00 GMT
@@ -277,13 +337,16 @@ Response:
         application/ietf-https-notif-cap+xml or
         application/ietf-https-notif-cap+json, with latter as the mandatory to
         implement, and the default in case the type is not specified. If the
-        receiver supports capabilities such as binary encoding of data, it can
-        return that as a capability in a response. Please note that, when used
-        in conjunction with <xref target="RFC8639">Subscription to YANG
-        Notifications</xref>, dynamic discovery of the receiver&rsquo;s
-        supported encoding is considered only when the
-        "/subscriptions/subscription/encoding&rdquo; leaf is not configured,
-        per the &ldquo;encoding&rdquo; leaf&rsquo;s description statement.</t>
+        receiver supports capabilities such as <xref
+        target="I-D.ietf-netconf-notification-messages">bundled-message</xref>
+        of data, it can return that as a capability in a response. </t>
+
+        <t>Please note that, when used in conjunction with <xref
+        target="RFC8639">Subscription to YANG Notifications</xref>, dynamic
+        discovery of the receiver&rsquo;s supported encoding is considered
+        only when the "/subscriptions/subscription/encoding&rdquo; leaf is not
+        configured, per the &ldquo;encoding&rdquo; leaf&rsquo;s description
+        statement.</t>
       </section>
 
       <section title="Example">
@@ -294,7 +357,7 @@ Response:
         capability of binary encoding defined.</t>
 
         <t><figure>
-            <artwork><![CDATA[GET / HTTP/1.1
+            <artwork><![CDATA[GET /some/path/capabilities HTTP/1.1
 Host: example.com
 Accept-Type: application/ietf-https-notif-cap+xml, application/ietf-https-notif-cap+json]]></artwork>
           </figure></t>
@@ -312,7 +375,10 @@ Content-Length: nnn
 
 <receiver-capabilities>
   <receiver-capability>
-    <urn:ietf:params:https-config:capability:binary-encoding:1.0>
+    <urn:ietf:params:https-config:capability:encoding-xml:1.0>
+  </receiver-capability>
+  <receiver-capability>
+    <urn:ietf:params:https-config:capability:encoding-json:1.0>
   </receiver-capability>
 </receiver-capabilities>]]></artwork>
           </figure></t>
@@ -339,6 +405,42 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-sub-notif-recv-list@YYYY-MM-DD-tree.txt)
             <artwork><![CDATA[
 <CODE BEGINS> file "ietf-sub-notif-recv-list@YYYY-MM-DD.yang"
 INSERT_TEXT_FROM_FILE(../bin/ietf-sub-notif-recv-list@YYYY-MM-DD.yang)
+<CODE ENDS>
+
+]]></artwork>
+          </figure></t>
+      </section>
+    </section>
+
+    <section title="The &quot;ietf-https-notif-capabilities&quot; Module">
+      <section title="Data Model Overview">
+        <t>This YANG module is definition of the list of capabilities of the
+        receiver. A publisher can request these capabilities from the
+        receiver, e.g. by issuing a GET request towards it. It consists of a
+        &lt;rpc&gt; statement that takes an 'input' argument describing the
+        path to the reciever capabilities, and an output statement which is a
+        list of 'receiver-capability".</t>
+
+        <t>An abridged tree diagram representing the module is show below.</t>
+
+        <t><figure>
+            <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-capabilities@YYYY-MM-DD-sub-tree.txt)
+
+]]></artwork>
+          </figure></t>
+      </section>
+
+      <section title="YANG module">
+        <t>The YANG module imports <xref target="RFC6991">Common YANG Data
+        Types</xref>.</t>
+
+        <t>The YANG module is shown below.</t>
+
+        <t><figure>
+            <artwork><![CDATA[
+<CODE BEGINS> file "ietf-https-notif-capabilities@YYYY-MM-DD.yang"
+INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-capabilities@YYYY-MM-DD.yang)
 <CODE ENDS>
 
 ]]></artwork>
@@ -435,7 +537,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif@YYYY-MM-DD.yang)
       <t>Some of the RPC operations in YANG module may be considered sensitive
       or vulnerable in some network environments. It is thus important to
       control access to these operations. The model does not define any RPC
-      operations. </t>
+      operations.</t>
     </section>
 
     <section title="Receiving Event Notifications">
@@ -670,24 +772,12 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-custom-https-notif.xml,68)
             <artwork><![CDATA[       -------------                               --------------
        | Publisher |                               | Receiver   |
        -------------                               --------------
-       Establish TCP             ------>
-       Establish TLS             ------>
-       Send HTTPS POST message
-       with YANG defined         ------>
-       notification #1
-       Send HTTPS POST message
-       with YANG defined         ------>
-       notification #2
-                                                   Send 204 (No Content)
-                                 <------           for notification #1
-
-                                                   Send 204 (No Content)
-                                 <------           for notification #2
-       Send HTTPS POST message
-       with YANG defined         ------->
-       notification #3
-                                                   Send 204 (No Content)
-                                 <------           for notification #3]]></artwork>
+       Establish TCP               ------>
+       Establish TLS               ------>
+       Send HTTPS POST message     ------>
+       with bundled-message      
+                                   <------         Send 204 (No Content)
+                                                   for bundled-message]]></artwork>
           </figure></t>
 
         <t>The content of the exchange would look something like this.</t>
@@ -697,27 +787,37 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-custom-https-notif.xml,68)
     POST /some/path HTTP/1.1
     Host: my-receiver.my-domain.com
     Content-Type: application/yang-data+xml
-    <notification
-      xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
-      <eventTime>2019-03-22T12:35:00Z</eventTime>
-      <foo xmlns="https://example.com/my-foobar-module">
-        ...
-      </foo>
-    </notification>
-    <notification
-      xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
-      <eventTime>2019-03-22T12:35:00Z</eventTime>
-      <bar xmlns="https://example.com/my-foobar-module">
-        ...
-      </bar>
-    </notification>
-    <notification
-      xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
-      <eventTime>2019-03-22T12:35:01Z</eventTime>
-      <baz xmlns="https://example.com/my-foobar-module">
-        ...
-      </baz>
-    </notification>
+    <bundled-message
+     xmlns="urn:ietf:params:xml:ns:yang:ietf-notification-messages:1.0">
+     <message-header>
+       <message-time>2017-02-14T00:00:05Z</message-time>
+       <message-id>456</message-id>
+       <notification-count>2</notification-count>
+     </message-header>
+     <notifications>
+       <notification-header>
+         <notification-time>2017-02-14T00:00:02Z</notification-time>
+         <subscription-id>823472</subscription-id>
+         <yang-module>ietf-yang-push</yang-module>
+         <yang-notification-name>push-change-update</yang-notification-name>
+       </notification-header>
+       <notification-contents>
+         <push-change-update xmlns=
+           "urn:ietf:params:xml:ns:yang:ietf-yang-push:1.0">
+           <datastore-changes-xml>
+             <alpha xmlns="http://example.com/sample-data/1.0">
+                <beta urn:ietf:params:xml:ns:netconf:base:1.0:
+                    operation="delete"/>
+             </alpha>
+           </datastore-changes-xml>
+         </push-change-update>
+       </notification-contents>
+       <notification-header>
+             ...(notification header, contents, footer)...
+       </notification-footer>
+     </notifications>
+   </bundled-message>
+
 Response:
       HTTP/1.1 204 No Content
       Date: Fri, 03 Mar 2019 12:35:00 GMT
