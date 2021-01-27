@@ -28,7 +28,7 @@
                 <cleartext-password>my-password</cleartext-password>
               </basic>
             </client-identity>
-            <!-- FIXME <path>/some/path</path> -->
+            <path>/some/path</path>
           </http-client-parameters>
         </tls>
       </https-receiver>

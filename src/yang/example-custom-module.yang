@@ -3,10 +3,11 @@ module example-custom-module {
   namespace "http://example.com/example-custom-module";
   prefix "custom";
 
-  import ietf-http-client {
-    prefix httpc;
+  import ietf-https-notif-transport {
+    prefix "hnt";
     reference
-      "I-D.ietf-netconf-http-client-server";
+      "RFC XXXX:
+        An HTTPS-based Transport for Configured Subscriptions";
   }
 
   organization
@@ -32,40 +33,17 @@ module example-custom-module {
 
     container https-receivers {
       description
-	"A container of all HTTPS notif receivers.";
-
+	    "A container of all HTTPS notif receivers.";
       list https-receiver {
-	key "name";
-
-	leaf name {
-	  type string;
-	  description
-	    "A unique name for the https notif receiver.";
-	}
-	
-	uses httpc:http-client-stack-grouping {
-	  refine "transport/tcp" {
-	    // create the logical impossibility of enabling "tcp"
-	    // transport
-	    if-feature "not httpc:tcp-supported";
-	  }
-      /*
-      NO LONGER NEEDED?
-
-	  augment "transport/tls/tls/http-client-parameters" {
-	    leaf path {
+	    key "name";
+        description
+          "A list of HTTPS nofif receivers.";
+	    leaf name {
 	      type string;
 	      description
-		"Relative URI to the target resource.";
+	        "A unique name for the https notif receiver.";
 	    }
-	    description
-	      "Augmentation to add a path to the target resource.";
-	  }
-      */
-	}
-	description
-	  "Just include the grouping from ietf-http-client to 
-           realize the 'HTTPS stack'.";
+        uses hnt:https-receiver-grouping;
       }
     }
   }

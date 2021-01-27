@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
   <subscriptions xmlns="urn:ietf:params:xml:ns:yang:ietf-subscribed-notifications">
-    <receiver-instances xmlns="urn:ietf:params:xml:ns:yang:ietf-notif-publisher-list">
+    <receiver-instances xmlns="urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-ext">
       <receiver-instance>
         <name>foo</name>
-        <https-receiver xmlns="urn:ietf:params:xml:ns:yang:ietf-notif-publisher-https" xmlns:x509c2n="urn:ietf:params:xml:ns:yang:ietf-x509-cert-to-name">
+        <https-receiver xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif-transport"
+          xmlns:x509c2n="urn:ietf:params:xml:ns:yang:ietf-x509-cert-to-name">
           <tls>
             <tcp-client-parameters>
               <remote-address>my-receiver.my-domain.com</remote-address>
@@ -29,7 +30,7 @@
                   <cleartext-password>my-password</cleartext-password>
                 </basic>
               </client-identity>
-              <!--FIXME <path>/some/path</path> -->
+              <path>/some/path</path>
             </http-client-parameters>
           </tls>
           <receiver-identity>
@@ -46,13 +47,13 @@
     </receiver-instances>
     <subscription>
       <id>6666</id>
-      <transport xmlns:ph="urn:ietf:params:xml:ns:yang:ietf-notif-publisher-https">ph:https</transport>
+      <transport xmlns:ph="urn:ietf:params:xml:ns:yang:ietf-https-notif-transport">ph:https</transport>
       <stream-subtree-filter>foo</stream-subtree-filter>
       <stream>some-stream</stream>
       <receivers>
         <receiver>
           <name>my-receiver</name>
-          <receiver-instance-ref xmlns="urn:ietf:params:xml:ns:yang:ietf-notif-publisher-list">foo</receiver-instance-ref>
+          <receiver-instance-ref xmlns="urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-ext">foo</receiver-instance-ref>
         </receiver>
       </receivers>
     </subscription>

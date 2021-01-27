@@ -28,7 +28,7 @@ do
 done
 rm ../bin/*-tree.txt.tmp
 
-for i in ../bin/ietf-notif*\@$(date +%Y-%m-%d).yang
+for i in ../bin/ietf-*-notif-*\@$(date +%Y-%m-%d).yang
 do
     name=$(echo $i | cut -f 1-3 -d '.')
     echo "Generating abridged tree diagram for $name.yang"
@@ -54,7 +54,7 @@ for i in yang/example-https-notif-*.xml
 do
     name=$(echo $i | cut -f 1-2 -d '.')
     echo "Validating examples for $name.xml"
-    response=`yanglint -s -i -t auto -p ../bin ../bin/ietf-notif-publisher-https\@$(date +%Y-%m-%d).yang $name.xml`
+    response=`yanglint -s -i -t auto -p ../bin ../bin/ietf-https-notif-transport\@$(date +%Y-%m-%d).yang $name.xml`
     if [ $? -ne 0 ]; then
        printf "failed (error code: $?)\n"
        printf "$response\n\n"

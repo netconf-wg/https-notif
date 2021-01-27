@@ -9,7 +9,6 @@ sed_nc_yang_file() {
    sed -e"s/YYYY-MM-DD/$DATE/" $1/$3.yang > $2/$3\@$DATE.yang
 }
 
-sed_nc_yang_file yang     ../bin      ietf-notif-publisher-list
-sed_nc_yang_file yang     ../bin      ietf-notif-publisher-https
-sed_nc_yang_file yang     ../bin      ietf-notif-receiver-https
+sed_nc_yang_file yang     ../bin      ietf-subscribed-notif-ext
+sed_nc_yang_file yang     ../bin      ietf-https-notif-transport
 sed_nc_yang_file yang     ../bin      example-custom-module

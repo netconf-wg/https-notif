@@ -1,7 +1,7 @@
-module ietf-notif-publisher-list {
+module ietf-subscribed-notif-ext {
   yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:ietf-notif-publisher-list";
-  prefix "npl";
+  namespace "urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-ext";
+  prefix "sne";
 
   import ietf-subscribed-notifications {
     prefix sn;
@@ -65,25 +65,25 @@ module ietf-notif-publisher-list {
   augment "/sn:subscriptions" {
     container receiver-instances {
       description
-	"A container for all instances of receivers.";
+	    "A container for all instances of receivers.";
 
       list receiver-instance {
-	key "name";
+	    key "name";
 
-	leaf name {
-	  type string;
-	  description
-	    "An arbitrary but unique name for this receiver instance.";
-	}
+	    leaf name {
+	      type string;
+	      description
+	        "An arbitrary but unique name for this receiver instance.";
+	    }
 	
-	choice transport-type {
-	  mandatory true;
-	  description
-	    "Choice of different types of transports used to send
+	    choice transport-type {
+	      mandatory true;
+	      description
+	        "Choice of different types of transports used to send
              notifications.";
-	}
-	description
-	  "A list of all receiver instances.";
+	    }
+	    description
+	      "A list of all receiver instances.";
       }
     }
     description
@@ -94,8 +94,8 @@ module ietf-notif-publisher-list {
   augment "/sn:subscriptions/sn:subscription/sn:receivers/sn:receiver" {
     leaf receiver-instance-ref {
       type leafref {
-        path "/sn:subscriptions/npl:receiver-instances/" +
-             "npl:receiver-instance/npl:name";
+        path "/sn:subscriptions/sne:receiver-instances/" +
+             "sne:receiver-instance/sne:name";
       }
       description
         "Reference to a receiver instance.";
