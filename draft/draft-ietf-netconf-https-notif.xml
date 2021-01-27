@@ -145,7 +145,7 @@
                                             by the receiver      
 
 
-  +-- For Each Notification (or bundle of notifications) -----------+
+  +-- For Each Notification ----------------------------------------+
   |                                                                 |
   |    Send HTTPS POST message   ------>                            |
   |    with YANG defined                                            |
@@ -336,34 +336,35 @@ Server: example-server]]></artwork>
       </section>
     </section>
 
-    <section title="The &quot;ietf-subscribed-notif-ext&quot; Module">
+    <section title='The "ietf-subscribed-notif-ext" Module'>
       <section title="Data Model Overview">
         <t>This YANG module augments "ietf-subscribed-notifications" module to
         define a choice of transport types that other modules such as the
         "ietf-subscribed-notif-ext" module can use to define a transport specific
         receiver.</t>
-
-        <t><figure>
+        <t>
+          <figure>
             <artwork><![CDATA[
 INSERT_TEXT_FROM_FILE(../bin/ietf-subscribed-notif-ext@YYYY-MM-DD-tree.txt)
-
 ]]></artwork>
-          </figure></t>
+          </figure>
+        </t>
       </section>
-
       <section title="YANG Module">
-        <t><figure>
+        <t>
+          <figure>
             <artwork><![CDATA[
 <CODE BEGINS> file "ietf-subscribed-notif-ext@YYYY-MM-DD.yang"
 INSERT_TEXT_FROM_FILE(../bin/ietf-subscribed-notif-ext@YYYY-MM-DD.yang)
 <CODE ENDS>
 
 ]]></artwork>
-          </figure></t>
+          </figure>
+        </t>
       </section>
     </section>
 
-    <section title="The &quot;ietf-https-notif-transport&quot; Module">
+    <section title='The "ietf-https-notif-transport" Module'>
       <section title="Data Model Overview">
         <t>This YANG module is a definition of a set of receivers that are
         interested in the notifications published by the publisher. The module
@@ -381,13 +382,13 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-subscribed-notif-ext@YYYY-MM-DD.yang)
 
         <t>An abridged tree diagram representing the module is shown
         below.</t>
-
-        <figure>
-          <artwork><![CDATA[
+        <t>
+          <figure>
+            <artwork><![CDATA[
 INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD-sub-tree.txt)
-
 ]]></artwork>
-        </figure>
+          </figure>
+        </t>
       </section>
 
       <section title="YANG module">
@@ -399,18 +400,17 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD-sub-tree.txt)
 
         <t>The YANG module is shown below.</t>
 
-        <figure>
-          <artwork><![CDATA[
+        <t>
+          <figure>
+            <artwork><![CDATA[
 <CODE BEGINS> file "ietf-https-notif-transport@YYYY-MM-DD.yang"
 INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang)
 <CODE ENDS>
-
 ]]></artwork>
-        </figure>
+          </figure>
+        </t>
       </section>
     </section>
-
-
 
     <section title="Security Considerations">
       <t>The YANG module specified in this document defines a schema for data
@@ -490,7 +490,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang)
             <artwork>
    name:         ietf-subscribed-notif-ext
    namespace:    urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-ext
-   prefix:       snl
+   prefix:       sne
    reference:    RFC XXXX
 
    name:         ietf-https-notif-transport
@@ -511,8 +511,8 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang)
         <t>The following note shall be at the top of the registry:</t>
         <t>
           <figure>
-            <artwork>This registry defines capabilities that can be supported
-by HTTPS-based notification receivers.</artwork>
+            <artwork>This registry defines capabilities that can be
+supported by HTTPS-based notification receivers.</artwork>
           </figure>
         </t>
 
@@ -561,130 +561,54 @@ Record:
           </figure>
         </t>
       </section>
-
     </section>
 
-    <section title="Examples">
-      <t>This section shows some examples in how the module can be used.</t>
+    <section title="Configuration Examples">
+      <t>This section shows two examples for how the "ietf-https-notif-transport"
+        module can be used to configure a publisher to send notifications to
+        a receiver.</t>
 
-      <section title="Subscribed Notification based Configuration">
-        <t>This example shows how a HTTPS client can be configured to send
-        notifications to a receiver at address 192.0.2.1, port 443, a 'path',
-        with server certificates, and the corresponding trust store that is
-        used to authenticate a connection.</t>
+      <t>In both examples, the Publisher, acting as an HTTPS client, is configured
+        to send notifications to a receiver at address 192.0.2.1, port 443, and
+        path "/some/path", with server certificates, and the corresponding trust
+        store that is used to authenticate a connection.</t>
 
-        <t><figure>
+      <section title="Using Subscribed Notifications (RFC 8639)">
+        <t>This example shows how an <xref target="RFC8639">RFC 8639</xref>
+          based publisher can be configured to send notifications to a
+          receiver.</t>
+        <t>
+          <figure>
             <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(../src/yang/example-https-notif-7.1.xml,68)
-
+INSERT_TEXT_FROM_FILE(../src/yang/example-https-notif-7.1.xml)
 ]]></artwork>
-          </figure></t>
+          </figure>
+        </t>
       </section>
 
-      <section title="Non Subscribed Notification based Configuration">
+      <section title="Not Using Subscribed Notifications">
         <t>In the case that it is desired to use HTTPS notif outside of
         Subscribed Notifications, there would have to be a module to define
-        the configuration for where and how to send the notification, such as
-        the following:</t>
-
-        <t><figure>
+        the configuration for where and how to send the notification.</t>
+        <t>Following is an example module.  Note that it is fairly thin as
+          it "uses" the "https-receiver-grouping" grouping from the
+          "ietf-https-notif-transport" module.</t>
+        <t>
+          <figure>
             <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(../bin/example-custom-module@YYYY-MM-DD.yang,68)
-
+INSERT_TEXT_FROM_FILE(../bin/example-custom-module@YYYY-MM-DD.yang)
 ]]></artwork>
-          </figure></t>
-
-        <t>This example shows how a HTTPS client can be configured to send
-        notifications to a receiver at address 192.0.2.1, port 443, a 'path',
-        with server certificates, and the corresponding trust store that is
-        used to authenticate a connection.</t>
-
-        <t><figure>
+          </figure>
+        </t>
+        <t>Following is what the cooresponding configuration looks like:</t>
+        <t>
+          <figure>
             <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(../src/yang/example-custom-https-notif.xml,68)
-
+INSERT_TEXT_FROM_FILE(../src/yang/example-custom-https-notif.xml)
 ]]></artwork>
-          </figure></t>
+          </figure>
+        </t>
       </section>
-
-      <section title="Bundled Message">
-        <t>In the case of "bundled-message" as defined in <xref
-        target="I-D.ietf-netconf-notification-messages">Notification Message
-        Headers and Bundles</xref>, something that this module supports, the
-        flow of messages would look something like this.</t>
-
-        <t><figure>
-            <artwork><![CDATA[       -------------                               --------------
-       | Publisher |                               | Receiver   |
-       -------------                               --------------
-       Establish TCP               ------>
-       Establish TLS               ------>
-       Send HTTPS POST message     ------>
-       with bundled-message      
-                                   <------         Send 204 (No Content)
-                                                   for bundled-message]]></artwork>
-          </figure></t>
-
-        <t>The content of the exchange would look something like this.</t>
-
-        <figure>
-          <artwork><![CDATA[Request:
-    POST /restconf/operations/ietf-notif-receiver-https:relay-notification HTTP/1.1
-      <or, if supporting NMDA>
-    POST /restconf/ds/ietf-datastores:operational/ietf-notif-receiver-https:relay-notification HTTP/1.1
-    Host: my-receiver.my-domain.com
-    Content-Type: application/yang-data+xml
-    <bundled-message
-     xmlns="urn:ietf:params:xml:ns:yang:ietf-notification-messages:1.0">
-     <message-header>
-       <message-time>2017-02-14T00:00:05Z</message-time>
-       <message-id>456</message-id>
-       <notification-count>2</notification-count>
-     </message-header>
-     <notifications>
-       <notification-header>
-         <notification-time>2017-02-14T00:00:02Z</notification-time>
-         <subscription-id>823472</subscription-id>
-         <yang-module>ietf-yang-push</yang-module>
-         <yang-notification-name>push-change-update</yang-notification-name>
-       </notification-header>
-       <notification-contents>
-         <push-change-update xmlns=
-           "urn:ietf:params:xml:ns:yang:ietf-yang-push:1.0">
-           <datastore-changes-xml>
-             <alpha xmlns="http://example.com/sample-data/1.0">
-                <beta urn:ietf:params:xml:ns:netconf:base:1.0:
-                    operation="delete"/>
-             </alpha>
-           </datastore-changes-xml>
-         </push-change-update>
-       </notification-contents>
-       <notification-header>
-             ...(notification header, contents, footer)...
-       </notification-footer>
-     </notifications>
-   </bundled-message>
-
-Response:
-      HTTP/1.1 204 No Content
-      Date: Fri, 03 Mar 2019 12:35:00 GMT
-      Server: my-receiver.my-domain.com
-      HTTP/1.1 204 No Content
-      Date: Fri, 03 Mar 2019 12:35:00 GMT
-      Server: my-receiver.my-domain.com
-      HTTP/1.1 204 No Content
-      Date: Fri, 03 Mar 2019 12:35:01 GMT
-      Server: my-receiver.my-domain.com]]></artwork>
-        </figure>
-      </section>
-    </section>
-
-    <section title="Contributors">
-      <t/>
-    </section>
-
-    <section title="Acknowledgements">
-      <t/>
     </section>
   </middle>
 
@@ -713,5 +637,17 @@ Response:
       <?rfc include='reference.RFC.5226'?>
       <?rfc include='reference.RFC.8141'?>
     </references>
+
+    <section title="Acknowledgements" numbered="no">
+      <t>The authors would like to thank for following for
+      lively discussions on list and in the halls (ordered
+      by first name):
+        Eric Voit,
+        Henning Rogge,
+        Martin Bjorklund,
+        Reshad Rahman,
+        and Rob Wilton
+      </t>
+    </section>
   </back>
 </rfc>
