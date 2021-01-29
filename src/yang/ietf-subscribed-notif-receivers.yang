@@ -1,6 +1,7 @@
 module ietf-subscribed-notif-receivers {
   yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers";
+  namespace
+    "urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers";
   prefix "snr";
 
   import ietf-subscribed-notifications {
@@ -31,7 +32,7 @@ module ietf-subscribed-notif-receivers {
      This module defines two 'augment' statements.  One statement
      augments a 'container' statement called 'receiver-instances'
      into the top-level 'subscriptions' container.  The other 
-     statement, called 'receiver-instance-ref', augemnts a 'leaf'
+     statement, called 'receiver-instance-ref', augments a 'leaf'
      statement into each 'receiver' that references one of the
      afore mentioned receiver instances.  This indirection enables
      multiple configured subscriptions to send notifications to
@@ -73,7 +74,8 @@ module ietf-subscribed-notif-receivers {
         leaf name {
           type string;
           description
-            "An arbitrary but unique name for this receiver instance.";
+            "An arbitrary but unique name for this receiver
+             instance.";
         }
     
         choice transport-type {
@@ -92,7 +94,8 @@ module ietf-subscribed-notif-receivers {
        type.";
   }
 
-  augment "/sn:subscriptions/sn:subscription/sn:receivers/sn:receiver" {
+  augment "/sn:subscriptions/sn:subscription/sn:receivers/"
+          + "sn:receiver" {
     leaf receiver-instance-ref {
       type leafref {
         path "/sn:subscriptions/snr:receiver-instances/" +
@@ -105,5 +108,4 @@ module ietf-subscribed-notif-receivers {
       "Augment the subscriptions container to define an optional
        reference to a receiver instance.";
   }
-
 }

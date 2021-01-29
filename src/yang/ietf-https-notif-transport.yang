@@ -44,7 +44,7 @@ module ietf-https-notif-transport {
 
      This module augments a 'case' statement called 'https' into
      the 'choice' statement called 'transport-type' defined
-     by the 'ietf-https-notif-transport' module defined in RFC XXXX. 
+     by the 'ietf-https-notif-transport' module defined in RFC XXXX.
 
      Copyright (c) 2021 IETF Trust and the persons identified as
      the document authors.  All rights reserved.
@@ -106,7 +106,7 @@ module ietf-https-notif-transport {
         }
         description
           "Augmentation to add a receiver-specific path for the
-           'capabilities' and 'relay-notification' resources.";
+          'capabilities' and 'relay-notification' resources.";
       }
     }
     container receiver-identity {
