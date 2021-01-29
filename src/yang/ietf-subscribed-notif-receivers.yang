@@ -1,7 +1,7 @@
-module ietf-subscribed-notif-ext {
+module ietf-subscribed-notif-receivers {
   yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-ext";
-  prefix "sne";
+  namespace "urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers";
+  prefix "snr";
 
   import ietf-subscribed-notifications {
     prefix sn;
@@ -65,25 +65,26 @@ module ietf-subscribed-notif-ext {
   augment "/sn:subscriptions" {
     container receiver-instances {
       description
-	    "A container for all instances of receivers.";
+        "A container for all instances of receivers.";
 
       list receiver-instance {
-	    key "name";
-
-	    leaf name {
-	      type string;
-	      description
-	        "An arbitrary but unique name for this receiver instance.";
-	    }
-	
-	    choice transport-type {
-	      mandatory true;
-	      description
-	        "Choice of different types of transports used to send
-             notifications.";
-	    }
-	    description
-	      "A list of all receiver instances.";
+        key "name";
+  
+        leaf name {
+          type string;
+          description
+            "An arbitrary but unique name for this receiver instance.";
+        }
+    
+        choice transport-type {
+          mandatory true;
+          description
+            "Choice of different types of transports used to send
+             notifications.  The 'case' statements must be augmented
+             in by other modules.";
+        }
+        description
+          "A list of all receiver instances.";
       }
     }
     description
@@ -94,8 +95,8 @@ module ietf-subscribed-notif-ext {
   augment "/sn:subscriptions/sn:subscription/sn:receivers/sn:receiver" {
     leaf receiver-instance-ref {
       type leafref {
-        path "/sn:subscriptions/sne:receiver-instances/" +
-             "sne:receiver-instance/sne:name";
+        path "/sn:subscriptions/snr:receiver-instances/" +
+             "snr:receiver-instance/snr:name";
       }
       description
         "Reference to a receiver instance.";

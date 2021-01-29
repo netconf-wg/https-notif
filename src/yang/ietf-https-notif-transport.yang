@@ -15,8 +15,8 @@ module ietf-https-notif-transport {
       "RFC 8639: Subscription to YANG Notifications";
   }
 
-  import ietf-subscribed-notif-ext {
-    prefix sne;
+  import ietf-subscribed-notif-receivers {
+    prefix snr;
     reference
       "RFC XXXX: An HTTPS-based Transport for
                  Configured Subscriptions";
@@ -131,8 +131,8 @@ module ietf-https-notif-transport {
     }
   }
 
-  augment "/sn:subscriptions/sne:receiver-instances/" +
-          "sne:receiver-instance/sne:transport-type" {
+  augment "/sn:subscriptions/snr:receiver-instances/" +
+          "snr:receiver-instance/snr:transport-type" {
     case https {
       container https-receiver {
         description

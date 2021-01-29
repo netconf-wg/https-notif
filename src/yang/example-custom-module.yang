@@ -33,16 +33,16 @@ module example-custom-module {
 
     container https-receivers {
       description
-	    "A container of all HTTPS notif receivers.";
+        "A container of all HTTPS notif receivers.";
       list https-receiver {
-	    key "name";
+       key "name";
         description
           "A list of HTTPS nofif receivers.";
-	    leaf name {
-	      type string;
-	      description
-	        "A unique name for the https notif receiver.";
-	    }
+       leaf name {
+         type string;
+         description
+           "A unique name for the https notif receiver.";
+       }
         uses hnt:https-receiver-grouping;
       }
     }

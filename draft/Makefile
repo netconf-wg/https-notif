@@ -49,7 +49,7 @@ endif
 	-rm -f ../bin/*\@*.yang
 	-rm -f ../src/yang/*\@*.yang
 
-$(next).xml: $(draft).xml ../src/yang/ietf-subscribed-notif-ext.yang ../src/yang/ietf-https-notif-transport.yang ../src/yang/example-custom-module.yang
+$(next).xml: $(draft).xml ../src/yang/ietf-subscribed-notif-receivers.yang ../src/yang/ietf-https-notif-transport.yang ../src/yang/example-custom-module.yang
 	-mkdir -p ../bin
 	sed -e"s/$(basename $<)-latest/$(basename $@)/" -e"s/YYYY-MM-DD/$(shell date +%Y-%m-%d)/" $< > $@
 	cd ../src; ./sed.sh; cd ..;

@@ -112,55 +112,52 @@
             </list></t>
         </section>
       </section>
+    </section>
+
+    <section title="Overview of Publisher to Receiver Interaction">
+      <t>The protocol consists of two HTTP-based target resources presented by the receiver:
+        <list style="symbols">
+          <t>A target resource enabling the publisher to discover what optional 
+            capabilities a receiver supports.  Publishers SHOULD query this target
+            when before sending any notifications or if ever an error occurs.</t>
+          <t>A target resource enabling to publish to send one or more notification
+            to a receiver.  This document defines support for sending only one
+            notication per message; a future effort MAY extend the protocol to
+            send multiple notifications per message.</t>
+        </list>
+      </t>
+      <t>The protocol is illustrated in the diagram below:</t>
+      <t>
+        <figure>
+          <artwork><![CDATA[
+          -------------                      --------------
+          | Publisher |                      | Receiver   |
+          -------------                      --------------
+
+     Send HTTPS GET message    ------>
+     to discover receiver's
+     capabilities
+
+                               <------    Send 200 (OK) containing
+                                          capabilities supported
+                                          by the receiver      
 
 
-
-      <section title="Publisher to Receiver Interaction">
-
-        <t>The protocol consists of two HTTP-based target resources presented by the receiver:
-          <list style="symbols">
-            <t>A target resource enabling the publisher to discover what optional 
-              capabilities a receiver supports.  Publishers SHOULD query this target
-              when before sending any notifications or if ever an error occurs.</t>
-            <t>A target resource enabling to publish to send one or more notification
-              to a receiver.  This document defines support for sending only one
-              notication per message; a future effort MAY extend the protocol to
-              send multiple notifications per message.</t>
-          </list>
-        </t>
-        <t>The protocol is illustrated in the diagram below:</t>
-        <t>
-          <figure>
-            <artwork><![CDATA[
-            -------------                      --------------
-            | Publisher |                      | Receiver   |
-            -------------                      --------------
-
-       Send HTTPS GET message    ------>
-       to discover receiver's
-       capabilities
-
-                                 <------    Send 200 (OK) containing
-                                            capabilities supported
-                                            by the receiver      
-
-
-  +-- For Each Notification ----------------------------------------+
-  |                                                                 |
-  |    Send HTTPS POST message   ------>                            |
-  |    with YANG defined                                            |
-  |    notification                                                 |
-  |                                                                 |
-  |                              <------    Send 204 (No Content)   |
-  +-----------------------------------------------------------------+]]></artwork>
-          </figure>
-        </t>
-        <t>Note that, for RFC 8639 configured subscriptions, the very first
-          notification must be the "subscription-started" notification.</t>
-        <t>The POST messages MAY be "pipelined" (not illustrated in the
-          diagram above), whereby multiple notifications are sent without
-          waiting for the HTTP part of a single message.</t>
-      </section>
++-- For Each Notification (MAY be pipelined) ---------------------+
+|                                                                 |
+|    Send HTTPS POST message   ------>                            |
+|    with YANG defined                                            |
+|    notification                                                 |
+|                                                                 |
+|                              <------    Send 204 (No Content)   |
++-----------------------------------------------------------------+]]></artwork>
+        </figure>
+      </t>
+      <t>Note that, for RFC 8639 configured subscriptions, the very first
+        notification must be the "subscription-started" notification.</t>
+      <t>The POST messages MAY be "pipelined" (not illustrated in the
+        diagram above), whereby multiple notifications are sent without
+        waiting for the HTTP response for a previous request.</t>
     </section>
 
     <section title="Discovering a Receiver's Capabilities">
@@ -175,7 +172,7 @@
       <section title="Request">
         <t>To learn the capabilities of a receiver, a publisher can issue an
           HTTPS GET request to the "capabilities" resource under a known path on
-          the receiver with "Accept-Type" header set using the "application/xml"
+          the receiver with "Accept" header set using the "application/xml"
           and/or "application/json" media-types, with latter as the mandatory
           to implement, and the default in case the type is not specified.</t>
       </section>
@@ -210,17 +207,17 @@
       </section>
       <section title="Example">
         <t>The publisher can send the following request to learn the receiver
-          capabilities. In this example, the "Accept-Type" states that the
+          capabilities. In this example, the "Accept" states that the
           receiver wants to receive notifications in XML but, if not
           supported, to use JSON encoding.</t>
         <t>
           <figure>
             <artwork><![CDATA[GET /some/path/capabilities HTTP/1.1
 Host: example.com
-Accept-Type: application/xml, application/json]]></artwork>
+Accept: application/xml, application/json]]></artwork>
           </figure>
         </t>
-        <t>If the receiver is able to reply using &lt;application/xml&gt;, and
+        <t>If the receiver is able to reply using "application/xml", and
           assuming it is able to receive JSON and XML encoded notifications, the
           response might look like this:</t>
         <t>
@@ -229,7 +226,7 @@ Accept-Type: application/xml, application/json]]></artwork>
 Date: Wed, 26 Feb 2020 20:33:30 GMT
 Server: example-server
 Cache-Control: no-cache
-Content-Type: application/yang-data+xml
+Content-Type: application/xml
 Content-Length: nnn
 
 <receiver-capabilities>
@@ -238,7 +235,7 @@ Content-Length: nnn
 </receiver-capabilities>]]></artwork>
           </figure>
         </t>
-        <t>If the receiver is unable to reply using &lt;application/xml&gt;, the
+        <t>If the receiver is unable to reply using "application/xml", the
         response might look like this:</t>
         <t>
           <figure>
@@ -246,14 +243,14 @@ Content-Length: nnn
 Date: Wed, 26 Feb 2020 20:33:30 GMT
 Server: example-server
 Cache-Control: no-cache
-Content-Type: application/yang-data+json
+Content-Type: application/json
 Content-Length: nnn
 
 {
    receiver-capabilities {
      "receiver-capability": [
        "urn:ietf:capability:receiver:notification:https:encoding:json",
-       "urn:ietf:capability:receiver:notification:https:encoding:json"
+       "urn:ietf:capability:receiver:notification:https:encoding:xml"
      ]
    }
 }]]></artwork>
@@ -290,9 +287,9 @@ Content-Length: nnn
         <t>An XML-encoded notification might be sent as follows:</t>
         <t>
           <figure>
-            <artwork><![CDATA[GET /some/path/relay-notification HTTP/1.1
+            <artwork><![CDATA[POST /some/path/relay-notification HTTP/1.1
 Host: example.com
-Accept-Type: application/xml
+Content-Type: application/xml
 
 <notification xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
   <eventTime>2019-03-22T12:35:00Z</eventTime>
@@ -308,9 +305,9 @@ Accept-Type: application/xml
         </t>
         <t>A JSON-encoded notification might be sent as follows:</t>
         <t><figure>
-            <artwork><![CDATA[GET /some/path/relay-notification HTTP/1.1
+            <artwork><![CDATA[POST /some/path/relay-notification HTTP/1.1
 Host: example.com
-Accept-Type: application/json
+Content-Type: application/json
 
 {
   "ietf-https-notif:notification": {
@@ -336,28 +333,28 @@ Server: example-server]]></artwork>
       </section>
     </section>
 
-    <section title='The "ietf-subscribed-notif-ext" Module'>
+    <section title='The "ietf-subscribed-notif-receivers" Module'>
       <section title="Data Model Overview">
-        <t>This YANG module augments "ietf-subscribed-notifications" module to
+        <t>This YANG module augments the "ietf-subscribed-notifications" module to
         define a choice of transport types that other modules such as the
-        "ietf-subscribed-notif-ext" module can use to define a transport specific
+        "ietf-https-notif-transport" module can use to define a transport specific
         receiver.</t>
         <t>
           <figure>
             <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(../bin/ietf-subscribed-notif-ext@YYYY-MM-DD-tree.txt)
+INSERT_TEXT_FROM_FILE(../bin/ietf-subscribed-notif-receivers@YYYY-MM-DD-tree.txt,69)
 ]]></artwork>
           </figure>
         </t>
       </section>
       <section title="YANG Module">
+        <t>The YANG module imports <xref target="RFC8639">Subscription to YANG Notifications</xref>.</t>
         <t>
           <figure>
             <artwork><![CDATA[
-<CODE BEGINS> file "ietf-subscribed-notif-ext@YYYY-MM-DD.yang"
-INSERT_TEXT_FROM_FILE(../bin/ietf-subscribed-notif-ext@YYYY-MM-DD.yang)
+<CODE BEGINS> file "ietf-subscribed-notif-receivers@YYYY-MM-DD.yang"
+INSERT_TEXT_FROM_FILE(../bin/ietf-subscribed-notif-receivers@YYYY-MM-DD.yang,69)
 <CODE ENDS>
-
 ]]></artwork>
           </figure>
         </t>
@@ -367,36 +364,35 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-subscribed-notif-ext@YYYY-MM-DD.yang)
     <section title='The "ietf-https-notif-transport" Module'>
       <section title="Data Model Overview">
         <t>This YANG module is a definition of a set of receivers that are
-        interested in the notifications published by the publisher. The module
-        contains the TCP, TLS and HTTPS parameters that are needed to
-        communicate with the receiver. The module augments the
-        ietf-https-notif-transport module to define a transport specific
+          interested in the notifications published by the publisher. The module
+          contains the TCP, TLS and HTTPS parameters that are needed to
+          communicate with the receiver. The module augments the
+          "ietf-subscribed-notif-receivers" module to define a transport specific
           receiver. </t>
-        <t>As mentioned earlier, it uses POST method to deliver the
-        notification. The attribute 'path' defines the path for the resource
-        on the receiver, as defined by 'path-absolute' in <xref
-        target="RFC3986">URI Generic Syntax</xref>. The user-id used by <xref
-        target="RFC8341">Network Configuration Access Control Model</xref>, is
-        that of the receiver and is derived from the certificate presented by
-        the receiver as part of 'receiver-identity'.</t>
-
+        <t>As mentioned earlier, it uses a POST method to deliver the
+          notification. The "http-receiver/tls/http-client-parameters/path" leaf
+          defines the path for the resource on the receiver, as defined by
+          "path-absolute" in <xref target="RFC3986">URI Generic Syntax</xref>.
+          The user-id used by <xref target="RFC8341">Network Configuration Access
+          Control Model</xref>, is that of the receiver and is derived from the
+          certificate presented by the receiver as part of "receiver-identity".</t>
         <t>An abridged tree diagram representing the module is shown
-        below.</t>
+          below.</t>
         <t>
           <figure>
             <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD-sub-tree.txt)
+INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD-sub-tree.txt,69)
 ]]></artwork>
           </figure>
         </t>
       </section>
 
       <section title="YANG module">
-        <t>The YANG module imports <xref target="RFC6991">Common YANG Data
-        Types</xref>, <xref target="RFC7407">A YANG Data Model for SNMP
-        Configuration</xref>, <xref target="RFC7951">JSON Encoding of Data
-        Modeled with YANG</xref>, and <xref target="RFC8639">Subscription to
-        YANG Notifications</xref>.</t>
+        <t>The YANG module imports 
+        <xref target="RFC7407">A YANG Data Model for SNMP Configuration</xref>,
+        <xref target="RFC8639">Subscription to YANG Notifications</xref>,
+          <!--<xref target="I-D.ietf-subscribed-notif-receivers">An HTTPS-based Transport for Configured Subscriptions</xref>,-->
+        and <xref target="I-D.ietf-netconf-http-client-server">YANG Groupings for HTTP Clients and HTTP Servers</xref>.</t>
 
         <t>The YANG module is shown below.</t>
 
@@ -404,7 +400,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD-sub-tree.txt)
           <figure>
             <artwork><![CDATA[
 <CODE BEGINS> file "ietf-https-notif-transport@YYYY-MM-DD.yang"
-INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang)
+INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
 <CODE ENDS>
 ]]></artwork>
           </figure>
@@ -443,7 +439,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang)
 
       <t>
         <list style="symbols">
-          <t>The "path" node in "ietf-subscribed-notif-ext" module can be
+          <t>The "path" node in "ietf-subscribed-notif-receivers" module can be
             modified by a malcious user to point to an invalid URI.</t>
         </list>
       </t>
@@ -469,7 +465,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang)
         <t>
           <figure>
             <artwork>
-   URI: urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-ext
+   URI: urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers
    Registrant Contact: The IESG
    XML: N/A, the requested URI is an XML namespace.
 
@@ -488,9 +484,9 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang)
         <t>
           <figure>
             <artwork>
-   name:         ietf-subscribed-notif-ext
-   namespace:    urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-ext
-   prefix:       sne
+   name:         ietf-subscribed-notif-receivers
+   namespace:    urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers
+   prefix:       snr
    reference:    RFC XXXX
 
    name:         ietf-https-notif-transport
@@ -545,7 +541,8 @@ supported by HTTPS-based notification receivers.</artwork>
         <t>The update policy is either "RFC Required".  Updates do not otherwise
           require an expert review by a Designated Expert.</t>
 
-        <t>Following is the initial assignment for this registry:
+        <t>Following is the initial assignment for this registry:</t>
+        <t>
           <figure>
             <artwork>
 Record:
@@ -563,15 +560,41 @@ Record:
       </section>
     </section>
 
+  </middle>
+
+  <back>
+    <references title="Normative references">
+      <?rfc include='reference.RFC.2119'?>
+      <?rfc include='reference.RFC.3688'?>
+      <?rfc include='reference.RFC.3986'?>
+      <?rfc include='reference.RFC.5277'?>
+      <?rfc include='reference.RFC.6020'?>
+      <?rfc include='reference.RFC.6241'?>
+      <?rfc include='reference.RFC.6242'?>
+      <?rfc include='reference.RFC.7407'?>
+      <?rfc include='reference.RFC.7950'?>
+      <?rfc include='reference.RFC.8040'?>
+      <?rfc include='reference.RFC.8174'?>
+      <?rfc include='reference.RFC.8341'?>
+      <?rfc include='reference.RFC.8446'?>
+      <?rfc include='reference.RFC.8639'?>
+      <?rfc include='reference.I-D.ietf-netconf-notification-messages'?>
+      <?rfc include='reference.I-D.ietf-netconf-http-client-server'?>
+    </references>
+    <references title="Informative references">
+      <?rfc include='reference.RFC.5226'?>
+      <?rfc include='reference.RFC.8141'?>
+    </references>
+
     <section title="Configuration Examples">
-      <t>This section shows two examples for how the "ietf-https-notif-transport"
+      <t>This non-normative section shows two examples for how the "ietf-https-notif-transport"
         module can be used to configure a publisher to send notifications to
         a receiver.</t>
 
       <t>In both examples, the Publisher, acting as an HTTPS client, is configured
         to send notifications to a receiver at address 192.0.2.1, port 443, and
-        path "/some/path", with server certificates, and the corresponding trust
-        store that is used to authenticate a connection.</t>
+        configures the "path" leaf value to  "/some/path", with server certificates,
+        and the corresponding trust store that is used to authenticate a connection.</t>
 
       <section title="Using Subscribed Notifications (RFC 8639)">
         <t>This example shows how an <xref target="RFC8639">RFC 8639</xref>
@@ -580,7 +603,7 @@ Record:
         <t>
           <figure>
             <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(../src/yang/example-https-notif-7.1.xml)
+INSERT_TEXT_FROM_FILE(../src/yang/example-https-notif-7.1.xml,69)
 ]]></artwork>
           </figure>
         </t>
@@ -596,7 +619,7 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-https-notif-7.1.xml)
         <t>
           <figure>
             <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(../bin/example-custom-module@YYYY-MM-DD.yang)
+INSERT_TEXT_FROM_FILE(../bin/example-custom-module@YYYY-MM-DD.yang,69)
 ]]></artwork>
           </figure>
         </t>
@@ -604,39 +627,12 @@ INSERT_TEXT_FROM_FILE(../bin/example-custom-module@YYYY-MM-DD.yang)
         <t>
           <figure>
             <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(../src/yang/example-custom-https-notif.xml)
+INSERT_TEXT_FROM_FILE(../src/yang/example-custom-https-notif.xml,69)
 ]]></artwork>
           </figure>
         </t>
       </section>
     </section>
-  </middle>
-
-  <back>
-    <references title="Normative references">
-      <?rfc include='reference.RFC.2119'?>
-      <?rfc include='reference.RFC.3688'?>
-      <?rfc include='reference.RFC.3986'?>
-      <?rfc include='reference.RFC.5277'?>
-      <?rfc include='reference.RFC.6020'?>
-      <?rfc include='reference.RFC.6241'?>
-      <?rfc include='reference.RFC.6242'?>
-      <?rfc include='reference.RFC.6991'?>
-      <?rfc include='reference.RFC.7407'?>
-      <?rfc include='reference.RFC.7950'?>
-      <?rfc include='reference.RFC.7951'?>
-      <?rfc include='reference.RFC.8040'?>
-      <?rfc include='reference.RFC.8174'?>
-      <?rfc include='reference.RFC.8341'?>
-      <?rfc include='reference.RFC.8446'?>
-      <?rfc include='reference.RFC.8639'?>
-      <?rfc include='reference.I-D.ietf-netconf-notification-messages'?>
-      <?rfc include='reference.I-D.ietf-netconf-http-client-server'?>
-    </references>
-    <references title="Informative references">
-      <?rfc include='reference.RFC.5226'?>
-      <?rfc include='reference.RFC.8141'?>
-    </references>
 
     <section title="Acknowledgements" numbered="no">
       <t>The authors would like to thank for following for
@@ -646,7 +642,7 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-custom-https-notif.xml)
         Henning Rogge,
         Martin Bjorklund,
         Reshad Rahman,
-        and Rob Wilton
+        and Rob Wilton.
       </t>
     </section>
   </back>
