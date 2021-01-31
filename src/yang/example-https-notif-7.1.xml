@@ -3,12 +3,12 @@
   <subscriptions xmlns="urn:ietf:params:xml:ns:yang:ietf-subscribed-notifications">
     <receiver-instances xmlns="urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers">
       <receiver-instance>
-        <name>foo</name>
+        <name>global-receiver-def</name>
         <https-receiver xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif-transport"
           xmlns:x509c2n="urn:ietf:params:xml:ns:yang:ietf-x509-cert-to-name">
           <tls>
             <tcp-client-parameters>
-              <remote-address>my-receiver.my-domain.com</remote-address>
+              <remote-address>receiver.example.com</remote-address>
               <remote-port>443</remote-port>
             </tcp-client-parameters>
             <tls-client-parameters>
@@ -48,12 +48,12 @@
     <subscription>
       <id>6666</id>
       <transport xmlns:ph="urn:ietf:params:xml:ns:yang:ietf-https-notif-transport">ph:https</transport>
-      <stream-subtree-filter>foo</stream-subtree-filter>
+      <stream-subtree-filter>some-subtree-filter</stream-subtree-filter>
       <stream>some-stream</stream>
       <receivers>
         <receiver>
-          <name>my-receiver</name>
-          <receiver-instance-ref xmlns="urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers">foo</receiver-instance-ref>
+          <name>subscription-specific-receiver-def</name>
+          <receiver-instance-ref xmlns="urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers">global-receiver-def</receiver-instance-ref>
         </receiver>
       </receivers>
     </subscription>
@@ -63,11 +63,12 @@
       <certificate-bag>
         <name>explicitly-trusted-server-ca-certs</name>
         <description>
-          Trust anchors (i.e. CA certs) that are used to authenticate
-          server connections.  Servers are authenticated if their
-          certificate has a chain of trust to one of these CA
+          Trust anchors (i.e. CA certs) that are used to
+          authenticate connections to receivers.  Receivers
+          are authenticated if their certificate has a chain
+          of trust to one of these CA certificates.
           certificates.
-	</description>
+	    </description>
         <certificate>
           <name>ca.example.com</name>
           <cert-data>base64encodedvalue==</cert-data>

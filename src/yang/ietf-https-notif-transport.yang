@@ -99,7 +99,7 @@ module ietf-https-notif-transport {
           type string;
           mandatory true;
           description
-            "Relative URI to the target resource.  Under this
+            "URI prefix to the target resources.  Under this
              path the receiver must support both the 'capabilities'
              and 'relay-notification' resource targets, as described
              in RFC XXXX.";

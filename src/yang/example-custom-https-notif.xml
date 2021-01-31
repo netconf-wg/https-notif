@@ -6,7 +6,7 @@
         <name>foo</name>
         <tls>
           <tcp-client-parameters>
-            <remote-address>my-receiver.my-domain.com</remote-address>
+            <remote-address>receiver.example.com</remote-address>
             <remote-port>443</remote-port>
           </tcp-client-parameters>
           <tls-client-parameters>
@@ -39,10 +39,10 @@
       <certificate-bag>
         <name>explicitly-trusted-server-ca-certs</name>
         <description>
-          Trust anchors (i.e. CA certs) that are used to authenticate
-          server connections.  Servers are authenticated if their
-          certificate has a chain of trust to one of these CA
-          certificates.
+          Trust anchors (i.e. CA certs) that are used to
+          authenticate connections to receivers.  Receivers
+          are authenticated if their certificate has a chain
+          of trust to one of these CA certificates.
 	</description>
         <certificate>
           <name>ca.example.com</name>
