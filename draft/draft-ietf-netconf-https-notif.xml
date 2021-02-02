@@ -22,8 +22,8 @@
       </address>
     </author>
 
-    <date day="16" month="November" year="2020"/>
-    <area>Routing</area>
+    <date/>
+    <area>Operations</area>
     <workgroup>NETCONF</workgroup>
     <keyword>http</keyword>
     <keyword>yang</keyword>
