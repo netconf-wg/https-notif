@@ -122,7 +122,7 @@
             when before sending any notifications or if ever an error occurs.</t>
           <t>A target resource enabling to publish to send one or more notification
             to a receiver.  This document defines support for sending only one
-            notication per message; a future effort MAY extend the protocol to
+            notification per message; a future effort MAY extend the protocol to
             send multiple notifications per message.</t>
         </list>
       </t>
@@ -164,7 +164,7 @@
       <section title="Applicability">
         <t>For publishers using <xref target="RFC8639">Subscription to YANG
           Notifications</xref>, dynamic discovery of a receiver's supported
-          encoding is neccessary only when the "/subscriptions/subscription/encoding"
+          encoding is necessary only when the "/subscriptions/subscription/encoding"
           leaf is not configured, per the "encoding" leaf's description statement
           in the "ietf-subscribed-notification" module.  FIXME: do they need
           to discover *any* capabilities?</t>
@@ -180,7 +180,7 @@
         <t>The receiver responds with a "200 (OK)" message, having the
           "Content-Type" header set to either "application/xml" or
           "application/json" (which ever was selected), and containing
-          in the response body a list of the receiver's capabilites
+          in the response body a list of the receiver's capabilities
           encoded in the selected format.</t>
         <t>Even though a YANG module is not defined for this interaction,
           the response body MUST conform to the following YANG-modeled
@@ -191,9 +191,9 @@
   description
     "A container for a list of capabilities supported by
      the receiver.";
-  leaf-list receiver-capablity {
+  leaf-list receiver-capability {
     type string {
-      pattern "urn:ietf:capability:receiver:notification:https:*";
+      pattern "urn:ietf:capability:https-notif-receiver:*";
     }
     description
       "A capability supported by the receiver.  A full list of
@@ -230,8 +230,12 @@ Content-Type: application/xml
 Content-Length: nnn
 
 <receiver-capabilities>
-  <receiver-capability>urn:ietf:capability:receiver:notification:https:encoding:json</receiver-capability>
-  <receiver-capability>urn:ietf:capability:receiver:notification:https:encoding:xml</receiver-capability>
+  <receiver-capability>\
+    urn:ietf:capability:https-notif-receiver:encoding:json\
+  </receiver-capability>
+  <receiver-capability>\
+    urn:ietf:capability:https-notif-receiver:encoding:xml\
+  </receiver-capability>
 </receiver-capabilities>]]></artwork>
           </figure>
         </t>
@@ -249,8 +253,8 @@ Content-Length: nnn
 {
    receiver-capabilities {
      "receiver-capability": [
-       "urn:ietf:capability:receiver:notification:https:encoding:json",
-       "urn:ietf:capability:receiver:notification:https:encoding:xml"
+       "urn:ietf:capability:https-notif-receiver:encoding:json",
+       "urn:ietf:capability:https-notif-receiver:encoding:xml"
      ]
    }
 }]]></artwork>
@@ -440,7 +444,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
       <t>
         <list style="symbols">
           <t>The "path" node in "ietf-subscribed-notif-receivers" module can be
-            modified by a malcious user to point to an invalid URI.</t>
+            modified by a malicious user to point to an invalid URI.</t>
         </list>
       </t>
 
@@ -465,13 +469,13 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
         <t>
           <figure>
             <artwork>
-   URI: urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers
-   Registrant Contact: The IESG
-   XML: N/A, the requested URI is an XML namespace.
+URI: urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers
+Registrant Contact: The IESG
+XML: N/A, the requested URI is an XML namespace.
 
-   URI: urn:ietf:params:xml:ns:yang:ietf-https-notif-transport
-   Registrant Contact: The IESG
-   XML: N/A, the requested URI is an XML namespace.
+URI: urn:ietf:params:xml:ns:yang:ietf-https-notif-transport
+Registrant Contact: The IESG
+XML: N/A, the requested URI is an XML namespace.
 </artwork>
           </figure>
         </t>
@@ -484,15 +488,15 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
         <t>
           <figure>
             <artwork>
-   name:         ietf-subscribed-notif-receivers
-   namespace:    urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers
-   prefix:       snr
-   reference:    RFC XXXX
+name:         ietf-subscribed-notif-receivers
+namespace:    urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers
+prefix:       snr
+reference:    RFC XXXX
 
-   name:         ietf-https-notif-transport
-   namespace:    urn:ietf:params:xml:ns:yang:ietf-https-notif-transport
-   prefix:       hnt
-   reference:    RFC XXXX
+name:         ietf-https-notif-transport
+namespace:    urn:ietf:params:xml:ns:yang:ietf-https-notif-transport
+prefix:       hnt
+reference:    RFC XXXX
 </artwork>
           </figure>
         </t>
@@ -518,7 +522,7 @@ supported by HTTPS-based notification receivers.</artwork>
               <list style="symbols">
                 <t>The name of the URN (required).</t>
                 <t>The URN must conform to the syntax described by <xref target="RFC8141"/>.</t>
-                <t>The URN must begin with the string "urn:ietf:capability:receiver:notification:https".</t>
+                <t>The URN must begin with the string "urn:ietf:capability:https-notif-receiver".</t>
               </list>
             </t>
             <t>Reference
@@ -546,12 +550,12 @@ supported by HTTPS-based notification receivers.</artwork>
           <figure>
             <artwork>
 Record:
-   Name:        urn:ietf:capability:receiver:notification:https:encoding:json
+   Name:        urn:ietf:capability:https-notif-receiver:encoding:json
    Reference:   RFC XXXX
    Description: Identifies support for JSON-encoded notifications.
 
 Record:
-   Name:        urn:ietf:capability:receiver:notification:https:encoding:xml
+   Name:        urn:ietf:capability:https-notif-receiver:encoding:xml
    Reference:   RFC XXXX
    Description: Identifies support for XML-encoded notifications.
 </artwork>
@@ -610,11 +614,11 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-https-notif-7.1.xml,69)
       </section>
 
       <section title="Not Using Subscribed Notifications">
-        <t>In the case that it is desired to use HTTPS notif outside of
-        Subscribed Notifications, there would have to be a module to define
-        the configuration for where and how to send the notification.</t>
-        <t>Following is an example module.  Note that it is fairly thin as
-          it "uses" the "https-receiver-grouping" grouping from the
+        <t>In the case that it is desired to use HTTPS-based notifications
+        outside of Subscribed Notifications, an application-specific module
+        would to need define the configuration for sending the notification.</t>
+        <t>Following is an example module.  Note that the module is "uses"
+          the "https-receiver-grouping" grouping from the
           "ietf-https-notif-transport" module.</t>
         <t>
           <figure>
@@ -623,7 +627,7 @@ INSERT_TEXT_FROM_FILE(../bin/example-custom-module@YYYY-MM-DD.yang,69)
 ]]></artwork>
           </figure>
         </t>
-        <t>Following is what the cooresponding configuration looks like:</t>
+        <t>Following is what the corresponding configuration looks like:</t>
         <t>
           <figure>
             <artwork><![CDATA[

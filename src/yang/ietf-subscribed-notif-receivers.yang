@@ -1,6 +1,7 @@
 module ietf-subscribed-notif-receivers {
   yang-version 1.1;
-  namespace "urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers";
+  namespace
+    "urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers";
   prefix "snr";
 
   import ietf-subscribed-notifications {
@@ -73,26 +74,28 @@ module ietf-subscribed-notif-receivers {
         leaf name {
           type string;
           description
-            "An arbitrary but unique name for this receiver instance.";
+            "An arbitrary but unique name for this receiver
+             instance.";
         }
     
         choice transport-type {
           mandatory true;
           description
-            "Choice of different types of transports used to send
-             notifications.  The 'case' statements must be augmented
-             in by other modules.";
+            "Choice of different types of transports used to
+             send notifications.  The 'case' statements must
+             be augmented in by other modules.";
         }
         description
           "A list of all receiver instances.";
       }
     }
     description
-      "Augment the subscriptions container to define the transport
-       type.";
+      "Augment the subscriptions container to define the
+       transport type.";
   }
 
-  augment "/sn:subscriptions/sn:subscription/sn:receivers/sn:receiver" {
+  augment
+    "/sn:subscriptions/sn:subscription/sn:receivers/sn:receiver" {
     leaf receiver-instance-ref {
       type leafref {
         path "/sn:subscriptions/snr:receiver-instances/" +
