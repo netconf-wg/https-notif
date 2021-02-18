@@ -108,5 +108,4 @@ module ietf-subscribed-notif-receivers {
       "Augment the subscriptions container to define an optional
        reference to a receiver instance.";
   }
-
 }

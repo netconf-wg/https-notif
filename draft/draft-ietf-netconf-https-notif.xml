@@ -30,11 +30,10 @@
     <keyword>notification</keyword>
 
     <abstract>
-      <t>This document defines both a protocol for sending notifications
-        over HTTPS as well as extensions to the data model for configured
-        subscriptions defined in RFC 8639.  It also presents an example
-        module for configuration without using the data model defined in
-        RFC 8639.</t>
+      <t>This document defines a protocol for sending notifications over
+      HTTPS. YANG modules for configuring publishers are also defined.
+      Examples are provided illustrating how to configure various publishers.
+      </t>
       <t>This document requires that the publisher is a "server" (e.g.,
         a NETCONF or RESTCONF server), but does not assume that the
         receiver is a server.</t>
@@ -68,7 +67,7 @@
         defined in <xref
         target="I-D.ietf-netconf-http-client-server">Groupings for HTTP
         Clients and Servers</xref>. For an example on how that can be done,
-        see Section 8.2.</t>
+        see Section A.2.</t>
       </section>
 
       <section title="Note to RFC Editor">
@@ -105,22 +104,22 @@
         when, they appear in all capitals, as shown here.</t>
 
         <section title="Subscribed Notifications">
-          <t>The following terms are defined in <xref target="RFC8639">Subscription
-            to YANG Notifications</xref>.</t>
-          <t><list style="symbols">
-              <t>Subscribed Notifications</t>
-            </list></t>
+          <t>The following terms are defined in <xref target="RFC8639">Subscription to YANG Notifications</xref>.
+	    <list style="symbols">
+	      <t>Subscribed Notifications</t>
+            </list>
+	  </t>
         </section>
       </section>
     </section>
 
     <section title="Overview of Publisher to Receiver Interaction">
-      <t>The protocol consists of two HTTP-based target resources presented by the receiver:
+      <t>The protocol consists of two HTTP-based target resources presented by the receiver. These two resources are sub-paths of a common resource that the publisher must know (e.g. specified in its configuration data model).
         <list style="symbols">
           <t>A target resource enabling the publisher to discover what optional 
-            capabilities a receiver supports.  Publishers SHOULD query this target
-            when before sending any notifications or if ever an error occurs.</t>
-          <t>A target resource enabling to publish to send one or more notification
+            capabilities a receiver supports. Publishers SHOULD query this target
+           before sending any notifications or if ever an error occurs.</t>
+          <t>A target resource enabling the publisher to send one or more notification
             to a receiver.  This document defines support for sending only one
             notification per message; a future effort MAY extend the protocol to
             send multiple notifications per message.</t>
@@ -157,7 +156,7 @@
         notification must be the "subscription-started" notification.</t>
       <t>The POST messages MAY be "pipelined" (not illustrated in the
         diagram above), whereby multiple notifications are sent without
-        waiting for the HTTP response for a previous request.</t>
+        waiting for the HTTP response for a previous POST.</t>
     </section>
 
     <section title="Discovering a Receiver's Capabilities">
@@ -166,14 +165,14 @@
           Notifications</xref>, dynamic discovery of a receiver's supported
           encoding is necessary only when the "/subscriptions/subscription/encoding"
           leaf is not configured, per the "encoding" leaf's description statement
-          in the "ietf-subscribed-notification" module.  FIXME: do they need
-          to discover *any* capabilities?</t>
+          in the "ietf-subscribed-notification" module.
+	</t>
       </section>
       <section title="Request">
         <t>To learn the capabilities of a receiver, a publisher can issue an
           HTTPS GET request to the "capabilities" resource under a known path on
           the receiver with "Accept" header set using the "application/xml"
-          and/or "application/json" media-types, with latter as the mandatory
+          and/or "application/json" media-types, with the latter as mandatory
           to implement, and the default in case the type is not specified.</t>
       </section>
       <section title="Response">
@@ -193,7 +192,7 @@
      the receiver.";
   leaf-list receiver-capability {
     type string {
-      pattern "urn:ietf:capability:https-notif-receiver:*";
+      pattern "inet:uri";
     }
     description
       "A capability supported by the receiver.  A full list of
@@ -204,12 +203,14 @@
             </artwork>
           </figure>
         </t>
+	<t>The publisher MUST ignore any capabilities that it does not recognize.
+	</t>
       </section>
       <section title="Example">
         <t>The publisher can send the following request to learn the receiver
           capabilities. In this example, the "Accept" states that the
-          receiver wants to receive notifications in XML but, if not
-          supported, to use JSON encoding.</t>
+          receiver wants to receive the capabilities response in XML but,
+	  if not supported, then in JSON.</t>
         <t>
           <figure>
             <artwork><![CDATA[GET /some/path/capabilities HTTP/1.1
@@ -268,7 +269,7 @@ Content-Length: nnn
         <t>The publisher sends an HTTPS POST request to the "relay-notifications"
           resource under a known path on the receiver with the "Content-Type"
           header set to either "application/json" or "application/xml" and a
-          request body containing the notification encoded using the specified
+          body containing the notification encoded using the specified
           format.</t>
         <t>XML-encoded notifications are encoded using the format defined
           by <xref target="RFC5277">NETCONF Event Notifications</xref>
@@ -280,7 +281,7 @@ Content-Length: nnn
             <t>The notifications do not contain the "data:" prefix used by SSE.</t>
             <t>Instead of saying that, for JSON-encoding purposes, the module
               name for the "notification" element is "ietf-restconf, the module
-              name will instead by "ietf-https-notif".</t>
+              name will instead be "ietf-https-notif".</t>
           </list>
         </t>
       </section>
@@ -298,7 +299,7 @@ Content-Type: application/xml
 <notification xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
   <eventTime>2019-03-22T12:35:00Z</eventTime>
   <event xmlns="https://example.com/example-mod">
-    <event-class>fault</fault>
+    <event-class>fault</event-class>
     <reporting-entity>
       <card>Ethernet0</card>
     </reporting-entity>
@@ -373,7 +374,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-subscribed-notif-receivers@YYYY-MM-DD.yang,69)
           communicate with the receiver. The module augments the
           "ietf-subscribed-notif-receivers" module to define a transport specific
           receiver. </t>
-        <t>As mentioned earlier, it uses a POST method to deliver the
+        <t>As mentioned earlier, it uses an POST method to deliver the
           notification. The "http-receiver/tls/http-client-parameters/path" leaf
           defines the path for the resource on the receiver, as defined by
           "path-absolute" in <xref target="RFC3986">URI Generic Syntax</xref>.
@@ -504,7 +505,7 @@ reference:    RFC XXXX
 
       <section title='The "Capabilities for HTTPS Notification Receivers" Registry'>
 
-        <t>Following the guidelines defined in <xref target="RFC5226"/>,
+        <t>Following the guidelines defined in <xref target="RFC8126"/>,
           this document defines a new registry called "Capabilities for
           HTTPS Notification Receivers".  This registry defines capabilities
           that can be supported by HTTPS-based notification receivers.</t>
@@ -582,11 +583,10 @@ Record:
       <?rfc include='reference.RFC.8341'?>
       <?rfc include='reference.RFC.8446'?>
       <?rfc include='reference.RFC.8639'?>
-      <?rfc include='reference.I-D.ietf-netconf-notification-messages'?>
       <?rfc include='reference.I-D.ietf-netconf-http-client-server'?>
     </references>
     <references title="Informative references">
-      <?rfc include='reference.RFC.5226'?>
+      <?rfc include='reference.RFC.8126'?>
       <?rfc include='reference.RFC.8141'?>
     </references>
 
