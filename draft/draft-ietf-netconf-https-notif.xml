@@ -266,7 +266,7 @@ Content-Length: nnn
 
     <section title="Sending Event Notifications"> 
       <section title="Request">
-        <t>The publisher sends an HTTPS POST request to the "relay-notifications"
+        <t>The publisher sends an HTTPS POST request to the "relay-notification"
           resource under a known path on the receiver with the "Content-Type"
           header set to either "application/json" or "application/xml" and a
           body containing the notification encoded using the specified
