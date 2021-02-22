@@ -22,7 +22,7 @@
       </address>
     </author>
 
-    <date day="16" month="November" year="2020"/>
+    <date day="22" month="February" year="2021"/>
     <area>Routing</area>
     <workgroup>NETCONF</workgroup>
     <keyword>http</keyword>
@@ -192,7 +192,7 @@
      the receiver.";
   leaf-list receiver-capability {
     type string {
-      pattern "inet:uri";
+      type "inet:uri";
     }
     description
       "A capability supported by the receiver.  A full list of
@@ -203,7 +203,9 @@
             </artwork>
           </figure>
         </t>
-	<t>The publisher MUST ignore any capabilities that it does not recognize.
+	<t>As it is possible that the receiver may return custom capability
+	URIs, the publisher MUST ignore any capabilities that it does not
+	recognize.
 	</t>
       </section>
       <section title="Example">
@@ -374,7 +376,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-subscribed-notif-receivers@YYYY-MM-DD.yang,69)
           communicate with the receiver. The module augments the
           "ietf-subscribed-notif-receivers" module to define a transport specific
           receiver. </t>
-        <t>As mentioned earlier, it uses an POST method to deliver the
+        <t>As mentioned earlier, it uses a POST method to deliver the
           notification. The "http-receiver/tls/http-client-parameters/path" leaf
           defines the path for the resource on the receiver, as defined by
           "path-absolute" in <xref target="RFC3986">URI Generic Syntax</xref>.

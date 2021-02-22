@@ -106,7 +106,7 @@ module ietf-https-notif-transport {
         }
         description
           "Augmentation to add a receiver-specific path for the
-          'capabilities' and 'relay-notification' resources.";
+           'capabilities' and 'relay-notification' resources.";
       }
     }
     container receiver-identity {
