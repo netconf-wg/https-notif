@@ -5,8 +5,7 @@
   <?rfc toc="yes"?>
 
   <front>
-    <title abbrev="HTTPS-based Notification Transport">An HTTPS-based Transport for
-    Configured Subscriptions</title>
+    <title abbrev="An HTTPS-based Transport for YANG Notifications">An HTTPS-based Transport for YANG Notifications</title>
 
     <author fullname="Mahesh Jethanandani" initials="M.J." surname="Jethanandani">
       <organization>Kloud Services</organization>
@@ -191,9 +190,7 @@
     "A container for a list of capabilities supported by
      the receiver.";
   leaf-list receiver-capability {
-    type string {
-      type "inet:uri";
-    }
+    type "inet:uri";
     description
       "A capability supported by the receiver.  A full list of
        capabilities is defined in the 'Capabilities for HTTPS
