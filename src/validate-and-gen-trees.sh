@@ -1,5 +1,12 @@
 #!/bin/sh
 
+#
+# Does the user have all the IETF published models.
+#
+if [ ! -d ../../iana/yang-parameters ]; then
+   rsync -avz --delete rsync.iana.org::assignments/yang-parameters ../../iana/
+fi
+
 for i in ../bin/*\@$(date +%Y-%m-%d).yang
 do
     name=$(echo $i | cut -f 1-3 -d '.')
