@@ -50,7 +50,9 @@
   <subscription>
     <id>6666</id>
     <transport xmlns:ph="urn:ietf:params:xml:ns:yang:ietf-https-notif-transport">ph:https</transport>
-    <stream-subtree-filter>some-subtree-filter</stream-subtree-filter>
+    <stream-subtree-filter>
+      <some-subtree-filter/>
+    </stream-subtree-filter>
     <stream>some-stream</stream>
     <receivers>
       <receiver>
