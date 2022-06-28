@@ -1,0 +1,14 @@
+# Emacs tmp files
+*~
+#*#
+
+# Build folder
+bin/
+draft/draft-ietf-netconf-https-notif-*.*
+
+# Copied files
+src/yang/*@20*.yang
+src/yang/ietf-https-notif-1.yang
+src/yang/*-tree.txt
+src/yang/*.save
+src/yang/ietf-sub-notif-recv-list-1.yang
