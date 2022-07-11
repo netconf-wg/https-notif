@@ -23,7 +23,7 @@ module example-custom-module {
     description
       "Initial Version.";
     reference
-      "RFC XXXX, YANG Data Module for HTTPS Notifications.";
+      "RFC XXXX: An HTTPS-based Transport for YANG Notifications.";
   }
 
   container example-module {

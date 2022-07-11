@@ -40,21 +40,28 @@
 
   <middle>
     <section anchor="intro" title="Introduction">
-      <t>This document defines a protocol for sending notifications over
-        HTTPS.  Using HTTPS maximizes transport-level interoperability,
-        while allowing for a variety of encoding options.  This document
-        defines support for JSON and XML; future efforts may define support
-        for other encodings (e.g., binary).</t>
-      <t>This document also defines two <xref target="RFC7950">YANG 1.1</xref>
-        modules that extend the data model defined in
-        <xref target="RFC8639">Subscription to YANG Notifications</xref>,
-        enabling the configuration of HTTPS-based receivers.</t>
-      <t>An example module illustrating the configuration of a publisher
-        not using the data model defined in RFC 8639 is also provided.</t>
-      <t>Configured subscriptions enable a server, acting as a publisher of
-        notifications, to proactively push notifications to external receivers
-        without the receivers needing to first connect to the server, as is the
-        case with dynamic subscriptions.</t>
+      <t>This document defines a protocol for sending notifications
+      over HTTPS.  Using HTTPS maximizes transport-level
+      interoperability, while allowing for a variety of encoding
+      options.  This document defines support for JSON and XML; future
+      efforts may define support for other encodings (e.g.,
+      binary).</t>
+      <t>This document requires that the publisher is a "server"
+      (e.g., a NETCONF or RESTCONF server), but does not assume that
+      the receiver is a NETCONF or RESTCONF server. It does expect the
+      receiver to be an HTTPS server to receive the notfications.</t>
+      <t>This document also defines two <xref target="RFC7950">YANG
+      1.1</xref> modules that extend the data model defined in <xref
+      target="RFC8639">Subscription to YANG Notifications</xref>,
+      enabling the configuration of HTTPS-based receivers.</t>
+      <t>An example module illustrating the configuration of a
+      publisher not using the data model defined in RFC 8639 is also
+      provided.</t>
+      <t>Configured subscriptions enable a server, acting as a
+      publisher of notifications, to proactively push notifications to
+      external receivers without the receivers needing to first
+      connect to the server, as is the case with dynamic
+      subscriptions.</t>
 
       <section title="Applicability Statement">
         <t>While the YANG modules have been defined as an augmentation of
@@ -84,7 +91,7 @@
           <ttcol>Acronym</ttcol>
           <ttcol>Expansion</ttcol>
           <c>HTTP</c>
-          <c>Hyper Text Transport Protocol</c>
+          <c>Hypertext Transfer Protocol</c>
           <c>HTTPS</c>
           <c>Hyper Text Transport Protocol Secure</c>
           <c>TCP</c>
@@ -101,7 +108,7 @@
         14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only
         when, they appear in all capitals, as shown here.</t>
 
-        <section title="Subscribed Notifications">
+        <section title="Terms Imported from RFC 8639">
           <t>The following terms are defined in <xref target="RFC8639">Subscription to YANG Notifications</xref>.
 	    <list style="symbols">
 	      <t>Subscribed Notifications</t>
@@ -214,10 +221,10 @@
 	</t>
       </section>
       <section title="Example">
-        <t>The publisher can send the following request to learn the receiver
-          capabilities. In this example, the "Accept" states that the
-          receiver wants to receive the capabilities response in XML but,
-	  if not supported, then in JSON.</t>
+        <t>The publisher can send the following request to learn the
+        receiver capabilities. In this example, the "Accept" states
+        that the publisher wants to receive the capabilities response
+        in XML but, if not supported, then in JSON.</t>
         <t>
           <figure>
             <artwork><![CDATA[GET /some/path/capabilities HTTP/1.1
@@ -246,7 +253,7 @@ Content-Length: nnn
     urn:ietf:capability:https-notif-receiver:encoding:xml\
   </receiver-capability>
   <receiver-capability>\
-    urn:ietf:capability:https-notif-receiver:encoding:sub-notif\
+    urn:ietf:capability:https-notif-receiver:sub-notif\
   </receiver-capability>
 </receiver-capabilities>]]></artwork>
           </figure>
@@ -263,11 +270,11 @@ Content-Type: application/json
 Content-Length: nnn
 
 {
-   receiver-capabilities {
+   "receiver-capabilities": {
      "receiver-capability": [
        "urn:ietf:capability:https-notif-receiver:encoding:json",
        "urn:ietf:capability:https-notif-receiver:encoding:xml",
-       "urn:ietf:capability:https-notif-receiver:encoding:sub-notif"
+       "urn:ietf:capability:https-notif-receiver:sub-notif"
      ]
    }
 }]]></artwork>
@@ -291,9 +298,10 @@ Content-Length: nnn
           the following deviations:
           <list style="symbols">
             <t>The notifications do not contain the "data:" prefix used by SSE.</t>
-            <t>Instead of saying that, for JSON-encoding purposes, the module
-              name for the "notification" element is "ietf-restconf, the module
-              name will instead be "ietf-https-notif".</t>
+            <t>Instead of saying that, for JSON-encoding purposes, the
+            module name for the "notification" element is
+            "ietf-restconf", the module name will instead be
+            "ietf-https-notif".</t>
           </list>
         </t>
       </section>
@@ -426,51 +434,57 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
     </section>
 
     <section title="Security Considerations">
-      <t>The YANG module specified in this document defines a schema for data
-      that is designed to be accessed via network management protocols such as
-      <xref target="RFC6241">NETCONF</xref> or <xref
-      target="RFC8040">RESTCONF</xref>. The lowest NETCONF layer is the secure
-      transport layer, and the mandatory-to-implement secure transport is
-      <xref target="RFC6242">Secure Shell (SSH)</xref>. The lowest RESTCONF
-      layer is HTTPS, and the mandatory-to-implement secure transport is <xref
-      target="RFC8446">TLS</xref>. The <xref target="RFC8341">NETCONF Access
-      Control Model (NACM) </xref> provides the means to restrict access for
-      particular NETCONF or RESTCONF users to a preconfigured subset of all
-      available NETCONF or RESTCONF protocol operations and content.</t>
+      <t>The YANG modules specified in this document defines a schema
+      for data that is designed to be accessed via network management
+      protocols such as <xref target="RFC6241">NETCONF</xref> or <xref
+      target="RFC8040">RESTCONF</xref>. The lowest NETCONF layer is
+      the secure transport layer, and the mandatory-to-implement
+      secure transport is <xref target="RFC6242">Secure Shell
+      (SSH)</xref>. The lowest RESTCONF layer is HTTPS, and the
+      mandatory-to-implement secure transport is <xref
+      target="RFC8446">TLS</xref>. The <xref target="RFC8341">NETCONF
+      Access Control Model (NACM) </xref> provides the means to
+      restrict access for particular NETCONF or RESTCONF users to a
+      preconfigured subset of all available NETCONF or RESTCONF
+      protocol operations and content.</t>
 
-      <t>The YANG module in this document makes use of grouping that are
-      defined in <xref target="I-D.ietf-netconf-http-client-server">YANG
-      Groupings for HTTP Clients and HTTP Servers</xref>, and <xref
-      target="RFC7407">A YANG Data Model for SNMP Configuration</xref>. Please
-      see the Security Considerations section of those documents for
-      considerations related to sensitivity and vulnerability of the data
-      nodes defined in them.</t>
+      <t>The YANG modules in this document makes use of grouping that
+      are defined in <xref
+      target="I-D.ietf-netconf-http-client-server">YANG Groupings for
+      HTTP Clients and HTTP Servers</xref>, and <xref
+      target="RFC7407">A YANG Data Model for SNMP
+      Configuration</xref>. Please see the Security Considerations
+      section of those documents for considerations related to
+      sensitivity and vulnerability of the data nodes defined in
+      them.</t>
 
-      <t>There are a number of data nodes defined in this YANG module that are
-      writable/creatable/deletable (i.e., config true, which is the default).
-      These data nodes may be considered sensitive or vulnerable in some
-      network environments. Write operations (e.g., edit-config) to these data
-      nodes without proper protection can have a negative effect on network
+      <t>There are a number of data nodes defined in the YANG modules
+      that are writable/creatable/deletable (i.e., config true, which
+      is the default).  These data nodes may be considered sensitive
+      or vulnerable in some network environments. Write operations
+      (e.g., edit-config) to these data nodes without proper
+      protection can have a negative effect on network
       operations. These are the subtrees and data nodes and their
       sensitivity/vulnerability:</t>
 
       <t>
         <list style="symbols">
-          <t>The "path" node in "ietf-subscribed-notif-receivers" module can be
-            modified by a malicious user to point to an invalid URI.</t>
+          <t>The "path" node in "ietf-subscribed-notif-receivers"
+          module can be modified by a malicious user to point to an
+          invalid URI.</t>
         </list>
       </t>
 
-      <t>Some of the readable data nodes in YANG module may be considered
-      sensitive or vulnerable in some network environments. It is thus
-      important to control read access (e.g., via get, get-config, or
-      notification) to these data nodes. The model does not define any
-      readable subtrees and data nodes.</t>
+      <t>Some of the readable data nodes in the YANG modules may be
+      considered sensitive or vulnerable in some network
+      environments. It is thus important to control read access (e.g.,
+      via get, get-config, or notification) to these data nodes. The
+      model does not define any readable subtrees and data nodes.</t>
 
-      <t>Some of the RPC operations in YANG module may be considered sensitive
-      or vulnerable in some network environments. It is thus important to
-      control access to these operations. The model does not define any RPC
-      operations.</t>
+      <t>Some of the RPC operations in the YANG modules may be
+      considered sensitive or vulnerable in some network
+      environments. It is thus important to control access to these
+      operations. The model does not define any RPC operations.</t>
     </section>
 
     <section title="IANA Considerations">
@@ -546,7 +560,8 @@ supported by HTTPS-based notification receivers.</artwork>
             </t>
             <t>Description
               <list style="symbols">
-                <t>An arbitrary description of the algorithm (optional).</t> 
+                <t>An arbitrary description of the capability
+                (optional).</t>
                 <t>The description should be no more than a few sentences.</t>
                 <t>The description is to be in English, but may contain
                   UTF-8 characters as may be needed in some cases.</t>
@@ -555,25 +570,25 @@ supported by HTTPS-based notification receivers.</artwork>
           </list>
         </t>
 
-        <t>The update policy is either "RFC Required".  Updates do not otherwise
-          require an expert review by a Designated Expert.</t>
+        <t>The update policy is "RFC Required".  Updates do not
+        require an expert review by a Designated Expert.</t>
 
         <t>Following is the initial assignment for this registry:</t>
         <t>
           <figure>
             <artwork>
 Record:
-   Name:        urn:ietf:capability:https-notif-receiver:encoding:json
+   URN:         urn:ietf:capability:https-notif-receiver:encoding:json
    Reference:   RFC XXXX
    Description: Identifies support for JSON-encoded notifications.
 
 Record:
-   Name:        urn:ietf:capability:https-notif-receiver:encoding:xml
+   URN:         urn:ietf:capability:https-notif-receiver:encoding:xml
    Reference:   RFC XXXX
    Description: Identifies support for XML-encoded notifications.
 
 Record:
-   Name:        urn:ietf:capability:https-notif-receiver:encoding:sub-notif
+   URN:         urn:ietf:capability:https-notif-receiver:encoding:sub-notif
    Reference:   RFC XXXX
    Description: Identifies support for state machine described in
                 RFC 8639, enabling the publisher to send, e.g., the
@@ -614,10 +629,8 @@ Record:
         module can be used to configure a publisher to send notifications to
         a receiver.</t>
 
-      <t>In both examples, the Publisher, acting as an HTTPS client, is configured
-        to send notifications to a receiver at address 192.0.2.1, port 443, and
-        configures the "path" leaf value to  "/some/path", with server certificates,
-        and the corresponding trust store that is used to authenticate a connection.</t>
+      <t>In both examples, the publisher, being an HTTPS client, is
+      configured to send notifications to a receiver.</t>
 
       <section title="Using Subscribed Notifications (RFC 8639)">
         <t>This example shows how an <xref target="RFC8639">RFC 8639</xref>
@@ -633,12 +646,13 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-https-notif-7.1.xml,69)
       </section>
 
       <section title="Not Using Subscribed Notifications">
-        <t>In the case that it is desired to use HTTPS-based notifications
-        outside of Subscribed Notifications, an application-specific module
-        would to need define the configuration for sending the notification.</t>
-        <t>Following is an example module.  Note that the module is "uses"
-          the "https-receiver-grouping" grouping from the
-          "ietf-https-notif-transport" module.</t>
+        <t>In the case that it is desired to use HTTPS-based
+        notifications outside of Subscribed Notifications, an
+        application-specific module would need to define the
+        configuration for sending the notification.</t>
+        <t>Following is an example module.  Note that the module
+        "uses" the "https-receiver-grouping" grouping from the
+        "ietf-https-notif-transport" module.</t>
         <t>
           <figure>
             <artwork><![CDATA[
