@@ -32,6 +32,11 @@ src/yang/ietf-trust-anchors*
 src/yang/ietf-subscribed-notification*
 src/yang/ietf-ip*
 src/yang/ietf-network-instance*
+src/yang/example-custom-module@*.yang
+src/yang/iana-tls-cipher-suite-algs*
+src/yang/ietf-https-notif-*
+src/yang/ietf-sub-notif-recv-list-*
+src/yang/ietf-subscribed-notif-receivers@*.yang
 
 # Emacs tmp files.
 *~
