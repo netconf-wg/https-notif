@@ -93,7 +93,7 @@
           <c>HTTP</c>
           <c>Hypertext Transfer Protocol</c>
           <c>HTTPS</c>
-          <c>Hyper Text Transport Protocol Secure</c>
+          <c>Hyper Text Transfer Protocol Secure</c>
           <c>TCP</c>
           <c>Transmission Control Protocol</c>
           <c>TLS</c>
@@ -515,15 +515,15 @@ XML: N/A, the requested URI is an XML namespace.
         <t>
           <figure>
             <artwork>
-name:         ietf-subscribed-notif-receivers
-namespace:    urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers
-prefix:       snr
-reference:    RFC XXXX
+name:      ietf-subscribed-notif-receivers
+namespace: urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers
+prefix:    snr
+reference: RFC XXXX
 
-name:         ietf-https-notif-transport
-namespace:    urn:ietf:params:xml:ns:yang:ietf-https-notif-transport
-prefix:       hnt
-reference:    RFC XXXX
+name:      ietf-https-notif-transport
+namespace: urn:ietf:params:xml:ns:yang:ietf-https-notif-transport
+prefix:    hnt
+reference: RFC XXXX
 </artwork>
           </figure>
         </t>
@@ -588,7 +588,7 @@ Record:
    Description: Identifies support for XML-encoded notifications.
 
 Record:
-   URN:         urn:ietf:capability:https-notif-receiver:encoding:sub-notif
+   URN:         urn:ietf:capability:https-notif-receiver:sub-notif
    Reference:   RFC XXXX
    Description: Identifies support for state machine described in
                 RFC 8639, enabling the publisher to send, e.g., the
