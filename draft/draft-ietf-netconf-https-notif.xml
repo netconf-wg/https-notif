@@ -49,7 +49,7 @@
       <t>This document requires that the publisher is a "server"
       (e.g., a NETCONF or RESTCONF server), but does not assume that
       the receiver is a NETCONF or RESTCONF server. It does expect the
-      receiver to be an HTTPS server to receive the notfications.</t>
+      receiver to be an HTTPS server to receive the notifications.</t>
       <t>This document also defines two <xref target="RFC7950">YANG
       1.1</xref> modules that extend the data model defined in <xref
       target="RFC8639">Subscription to YANG Notifications</xref>,
@@ -93,7 +93,7 @@
           <c>HTTP</c>
           <c>Hypertext Transfer Protocol</c>
           <c>HTTPS</c>
-          <c>Hyper Text Transfer Protocol Secure</c>
+          <c>Hypertext Transfer Protocol Secure</c>
           <c>TCP</c>
           <c>Transmission Control Protocol</c>
           <c>TLS</c>
@@ -434,7 +434,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
     </section>
 
     <section title="Security Considerations">
-      <t>The YANG modules specified in this document defines a schema
+      <t>The YANG modules specified in this document define a schema
       for data that is designed to be accessed via network management
       protocols such as <xref target="RFC6241">NETCONF</xref> or <xref
       target="RFC8040">RESTCONF</xref>. The lowest NETCONF layer is
@@ -448,7 +448,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
       preconfigured subset of all available NETCONF or RESTCONF
       protocol operations and content.</t>
 
-      <t>The YANG modules in this document makes use of grouping that
+      <t>The YANG modules in this document make use of grouping that
       are defined in <xref
       target="I-D.ietf-netconf-http-client-server">YANG Groupings for
       HTTP Clients and HTTP Servers</xref>, and <xref

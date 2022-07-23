@@ -47,7 +47,7 @@ module ietf-https-notif-transport {
      by the 'ietf-https-notif-transport' module defined in RFC XXXX.
 
      Copyright (c) 2022 IETF Trust and the persons identified as
-     the document authors.  All rights reserved.
+     authors of the code.  All rights reserved.
      Redistribution and use in source and binary forms, with or
      without modification, is permitted pursuant to, and subject
      to the license terms contained in, the Revised BSD
@@ -123,7 +123,7 @@ module ietf-https-notif-transport {
            server to map the HTTPS client's presented X.509
            certificate to a 'local' username. If no matching and
            valid cert-to-name list entry is found, the publisher
-           MUST close the connection, and MUST NOT not send any
+           MUST close the connection, and MUST NOT send any
            notifications over it.";
         reference
           "RFC 7407: A YANG Data Model for SNMP Configuration.";
