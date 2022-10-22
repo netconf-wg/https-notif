@@ -306,7 +306,9 @@ Content-Length: nnn
         </t>
       </section>
       <section title="Response">
-        <t>The response should be "204 (No Content)".</t>
+        <t>The response on success should be "204 (No Content)". In
+        case of corrupted or malformed event, the response should be
+        one of HTTP error responses.</t>
       </section>
       <section title="Example">
         <t>An XML-encoded notification might be sent as follows:</t>
@@ -347,7 +349,8 @@ Content-Type: application/json
           </figure>
         </t>
 
-        <t>And, in either case, the response might be as follows:</t>
+        <t>And, in either case, the response on success might be as
+        follows:</t>
         <t>
           <figure>
             <artwork><![CDATA[HTTP/1.1 204 No Content
@@ -473,13 +476,22 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
           module can be modified by a malicious user to point to an
           invalid URI.</t>
         </list>
+	<list>
+	  <t>The container "receiver-identity" contains nodes like
+	  "cert-maps" that are used by the HTTP server to map to the
+	  HTTPS client's certificate to a 'local' username. A
+	  modification of these nodes will result in the connection
+	  being closed and all notifications in the connection to be
+	  rejected.</t>
+	</list>
       </t>
 
       <t>Some of the readable data nodes in the YANG modules may be
       considered sensitive or vulnerable in some network
       environments. It is thus important to control read access (e.g.,
       via get, get-config, or notification) to these data nodes. The
-      model does not define any readable subtrees and data nodes.</t>
+      model does not define any readable subtrees and data nodes that
+      are particularly sensitive or vulnerable.</t>
 
       <t>Some of the RPC operations in the YANG modules may be
       considered sensitive or vulnerable in some network
@@ -681,6 +693,9 @@ INSERT_TEXT_FROM_FILE(../src/yang/example-custom-https-notif.xml,69)
         Reshad Rahman,
         and Rob Wilton.
       </t>
+      <t>In addition, the authors would also like to thank Quifang Ma
+      for providing thoughtful comments as part of shepherd
+      writeup.</t>
     </section>
   </back>
 </rfc>

@@ -54,7 +54,7 @@ $(next).xml: $(draft).xml ../src/yang/ietf-subscribed-notif-receivers.yang ../sr
 	sed -e"s/$(basename $<)-latest/$(basename $@)/" -e"s/YYYY-MM-DD/$(shell date +%Y-%m-%d)/" $< > $@
 	cd ../src; ./sed.sh; cd ..;
 	cp ../bin/*\@$(shell date +%Y-%m-%d).yang ../src/yang/
-	#cd ../src; python ./download-dependent-models.py; ./validate-and-gen-trees.sh; cd ..;
+	cd ../src; python ./download-dependent-models.py; ./validate-and-gen-trees.sh; cd ..;
 	cp ../bin/imported-modules/*.yang ../src/yang/
 	cd ../src; ./validate-and-gen-trees.sh; cd ..;
 	../src/insert-figures.sh $@ > tmp; mv tmp $@
