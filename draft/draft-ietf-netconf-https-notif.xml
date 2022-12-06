@@ -28,9 +28,11 @@
     <keyword>notification</keyword>
 
     <abstract>
-      <t>This document defines a protocol for sending notifications over
-      HTTPS. YANG modules for configuring publishers are also defined.
-      Examples are provided illustrating how to configure various publishers.
+      <t>This document defines a protocol for sending asynchronous
+      event notifications similar to notifications defined in RFC
+      5277, but over HTTPS. YANG modules for configuring publishers
+      are also defined.  Examples are provided illustrating how to
+      configure various publishers.
       </t>
       <t>This document requires that the publisher is a "server" (e.g.,
         a NETCONF or RESTCONF server), but does not assume that the
@@ -40,12 +42,15 @@
 
   <middle>
     <section anchor="intro" title="Introduction">
-      <t>This document defines a protocol for sending notifications
-      over HTTPS.  Using HTTPS maximizes transport-level
-      interoperability, while allowing for a variety of encoding
-      options.  This document defines support for JSON and XML; future
-      efforts may define support for other encodings (e.g.,
-      binary).</t>
+      <t>This document defines a protocol for sending asynchronous
+      event notifications similar to notifications defined in <xref
+      target="RFC5277">NETCONF Event Notifications</xref>, but over
+      HTTPS. Using HTTPS, which is a secure form of <xref
+      target="RFC9110">HTTP Semantics</xref>, maximizes
+      transport-level interoperability, while allowing for a variety
+      of encoding options.  This document defines support for JSON and
+      XML; future efforts may define support for other encodings
+      (e.g., binary).</t>
       <t>This document requires that the publisher is a "server"
       (e.g., a NETCONF or RESTCONF server), but does not assume that
       the receiver is a NETCONF or RESTCONF server. It does expect the
@@ -57,11 +62,11 @@
       <t>An example module illustrating the configuration of a
       publisher not using the data model defined in RFC 8639 is also
       provided.</t>
-      <t>Configured subscriptions enable a server, acting as a
-      publisher of notifications, to proactively push notifications to
-      external receivers without the receivers needing to first
-      connect to the server, as is the case with dynamic
-      subscriptions.</t>
+      <t>Configured subscriptions enable a server (e.g., a NETCONF or
+      RESTCONF server), acting as a publisher of notifications, to
+      proactively push notifications to external receivers without the
+      receivers needing to first connect to the server, as is the case
+      with dynamic subscriptions.</t>
 
       <section title="Applicability Statement">
         <t>While the YANG modules have been defined as an augmentation of
@@ -108,20 +113,30 @@
         14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only
         when, they appear in all capitals, as shown here.</t>
 
-        <section title="Terms Imported from RFC 8639">
-          <t>The following terms are defined in <xref target="RFC8639">Subscription to YANG Notifications</xref>.
-	    <list style="symbols">
-	      <t>Subscribed Notifications</t>
-            </list>
+        <section title="Terms Imported from other RFCs">
+          <t>The following terms are defined in <xref
+          target="RFC8639">Subscription to YANG Notifications</xref>.
+	  <list style="symbols">
+	    <t>Publisher</t>
+	    <t>Receiver</t>
+	    <t>Subscribed Notifications</t>
+          </list>
+	  </t>
+	  <t>The following term is defined in <xref
+	  target="RFC8040">RESTCONF Protocol</xref>.
+	  <list style="symbols">
+	    <t>target resource</t>
+	  </list>
 	  </t>
         </section>
       </section>
     </section>
 
     <section title="Overview of Publisher to Receiver Interaction" anchor="overview">
-      <t>The protocol consists of two HTTP-based target resources presented by
-      the receiver.  These two resources share a common prefix
-      that the publisher must know. If the data model in section 6.2 is
+      <t>The protocol consists of two HTTP-based target resources
+      presented by the receiver.  These two resources share a common
+      prefix that the publisher learns from a request it issues, as
+      defined in section 3.2. If the data model in section 6.2 is
       used, this common prefix is defined by the "path" leaf in the
       "http-client-parameters" container.
 
@@ -155,7 +170,7 @@
                                           by the receiver      
 
 
-+-- For Each Notification (MAY be pipelined) ---------------------+
++-- For Each Notification ------------------ ---------------------+
 |                                                                 |
 |    Send HTTPS POST message   ------>                            |
 |    with YANG defined                                            |
@@ -167,9 +182,6 @@
       </t>
       <t>Note that, for RFC 8639 configured subscriptions, the very first
         notification must be the "subscription-started" notification.</t>
-      <t>The POST messages MAY be "pipelined" (not illustrated in the
-        diagram above), whereby multiple notifications are sent without
-        waiting for the HTTP response for a previous POST.</t>
     </section>
 
     <section title="Discovering a Receiver's Capabilities">
@@ -229,7 +241,7 @@
           <figure>
             <artwork><![CDATA[GET /some/path/capabilities HTTP/1.1
 Host: example.com
-Accept: application/xml, application/json]]></artwork>
+Accept: application/xml, application/json;q=0.5]]></artwork>
           </figure>
         </t>
         <t>If the receiver is able to reply using "application/xml", and
@@ -628,6 +640,7 @@ Record:
       <?rfc include='reference.RFC.8341.xml'?>
       <?rfc include='reference.RFC.8446.xml'?>
       <?rfc include='reference.RFC.8639.xml'?>
+      <?rfc include='reference.RFC.9110.xml'?>
       <?rfc include='reference.I-D.ietf-netconf-http-client-server.xml'?>
     </references>
     <references title="Informative references">
