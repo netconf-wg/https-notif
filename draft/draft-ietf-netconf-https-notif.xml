@@ -99,6 +99,8 @@
           <c>Hypertext Transfer Protocol</c>
           <c>HTTPS</c>
           <c>Hypertext Transfer Protocol Secure</c>
+	  <c>SSE</c>
+	  <c>Server-Sent Events</c>
           <c>TCP</c>
           <c>Transmission Control Protocol</c>
           <c>TLS</c>
