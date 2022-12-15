@@ -6,14 +6,14 @@
   <front>
     <title abbrev="HTTPS Notification Transport">An HTTPS-based Transport for YANG Notifications</title>
 
-    <author fullname="Mahesh Jethanandani" initials="M.J." surname="Jethanandani">
+    <author fullname="Mahesh Jethanandani" initials="M." surname="Jethanandani">
       <organization>Kloud Services</organization>
       <address>
         <email>mjethanandani@gmail.com</email>
       </address>
     </author>
 
-    <author fullname="Kent Watsen" initials="K.W." surname="Watsen">
+    <author fullname="Kent Watsen" initials="K." surname="Watsen">
       <organization>Watsen Networks</organization>
       <address>
         <email>kent+ietf@watsen.net</email>
@@ -199,7 +199,7 @@
         <t>To learn the capabilities of a receiver, a publisher can issue an
           HTTPS GET request to the "capabilities" resource (see <xref target= "overview"/>) on
           the receiver with "Accept" header set using the "application/xml"
-          and/or "application/json" media-types, with the latter as mandatory
+          and/or "application/json" media-types, with the latter as REQUIRED
           to implement, and the default in case the type is not specified.</t>
       </section>
       <section title="Response">
