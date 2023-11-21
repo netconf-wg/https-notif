@@ -552,20 +552,44 @@ reference: RFC XXXX
         </t>
       </section>
 
-      <section title='The "Capabilities for HTTPS Notification Receivers" Registry'>
-
-        <t>Following the guidelines defined in <xref target="RFC8126"/>,
-          this document defines a new registry called "Capabilities for
-          HTTPS Notification Receivers".  This registry defines capabilities
-          that can be supported by HTTPS-based notification receivers.</t>
+      <section title="Registration of "yang-notif" URN Sub-namespace">
+        <t>
+        IANA needs to register a new URN Sub-namespace within the 
+        "IETF URN Sub-namespace for Registered Protocol Parameter Identifiers" 
+        registry defined in <xref target="RFC3553"/>.
+        </t>
+        <t>
+          <figure>
+            <artwork>
+Registry Name: yang-notif
+Specification: RFC XXXX
+Repository: "YANG Notifications" registry
+            </artwork>
+          </figure>
+        </t>
+      </section>
+      <section title="Registration of "https" URN Sub-namespace">
+        <t>
+        IANA needs to register a new URN Sub-namespace within the 
+        "YANG Notifications" registry defined in <xref target="RFC3553"/>.
+        </t>
+        <t>
+          <figure>
+            <artwork>
+Registry Name: https-capability
+Specification: RFC XXXX
+Repository: "Capabilities for HTTPS Notification Receivers" registry
+            </artwork>
+          </figure>
+        </t>
         <t>The following note shall be at the top of the registry:</t>
         <t>
           <figure>
             <artwork>This registry defines capabilities that can be
-supported by HTTPS-based notification receivers.</artwork>
+supported by HTTPS-based notification receivers.
+            </artwork>
           </figure>
         </t>
-
         <t>The fields for each registry are:
           <list style="symbols">
             <t>URN
@@ -584,7 +608,7 @@ supported by HTTPS-based notification receivers.</artwork>
             <t>Description
               <list style="symbols">
                 <t>An arbitrary description of the capability
-                (optional).</t>
+                  optional).</t>
                 <t>The description should be no more than a few sentences.</t>
                 <t>The description is to be in English, but may contain
                   UTF-8 characters as may be needed in some cases.</t>
@@ -594,32 +618,31 @@ supported by HTTPS-based notification receivers.</artwork>
         </t>
 
         <t>The update policy is "RFC Required".  Updates do not
-        require an expert review by a Designated Expert.</t>
-
+        require an expert review by a Designated Expert.
+        </t>
         <t>Following is the initial assignment for this registry:</t>
         <t>
           <figure>
             <artwork>
 Record:
-   URN:         urn:ietf:capability:https-notif-receiver:encoding:json
+   URN:         urn:ietf:params:yang-notif:https-capability:encoding:json
    Reference:   RFC XXXX
    Description: Identifies support for JSON-encoded notifications.
 
 Record:
-   URN:         urn:ietf:capability:https-notif-receiver:encoding:xml
+   URN:         urn:ietf:params:yang-notif:https-capability:encoding:xml
    Reference:   RFC XXXX
    Description: Identifies support for XML-encoded notifications.
 
 Record:
-   URN:         urn:ietf:capability:https-notif-receiver:sub-notif
+   URN:         urn:ietf:params:yang-notif:https-capability:sub-notif
    Reference:   RFC XXXX
    Description: Identifies support for state machine described in
                 RFC 8639, enabling the publisher to send, e.g., the
                 "subscription-started" notification.
-</artwork>
+            </artwork>
           </figure>
         </t>
-      </section>
     </section>
 
   </middle>
