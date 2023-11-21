@@ -32,7 +32,8 @@
                 <cleartext-password>my-password</cleartext-password>
               </basic>
             </client-identity>
-            <path>/some/path</path>
+            <path
+                xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif-transport">/some/path</path>
           </http-client-parameters>
         </tls>
         <receiver-identity>
@@ -50,7 +51,9 @@
   <subscription>
     <id>6666</id>
     <transport xmlns:ph="urn:ietf:params:xml:ns:yang:ietf-https-notif-transport">ph:https</transport>
-    <stream-subtree-filter>some-subtree-filter</stream-subtree-filter>
+    <stream-subtree-filter>
+      <some-subtree-filter/>
+    </stream-subtree-filter>
     <stream>some-stream</stream>
     <receivers>
       <receiver>
