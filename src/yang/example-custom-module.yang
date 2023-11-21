@@ -23,7 +23,7 @@ module example-custom-module {
     description
       "Initial Version.";
     reference
-      "RFC XXXX, YANG Data Module for HTTPS Notifications.";
+      "RFC XXXX: An HTTPS-based Transport for YANG Notifications.";
   }
 
   container example-module {
@@ -37,7 +37,7 @@ module example-custom-module {
       list https-receiver {
        key "name";
         description
-          "A list of HTTPS nofif receivers.";
+          "A list of HTTPS notif receivers.";
        leaf name {
          type string;
          description

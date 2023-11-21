@@ -32,7 +32,8 @@
                 <cleartext-password>my-password</cleartext-password>
               </basic>
             </client-identity>
-            <path>/some/path</path>
+            <path
+                xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif-transport">/some/path</path>
           </http-client-parameters>
         </tls>
         <receiver-identity>

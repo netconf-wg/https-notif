@@ -1,0 +1,46 @@
+# Generated files
+draft/draft-ietf-netconf-https-notif-*.*
+bin/*
+draft/Diff_*
+logs/*
+ncs-cdb*
+packages/*
+src/yang/example-bgp-configuration-8*
+src/yang/example-bgp-configuration-nsx-*
+src/yang/example-evpn-configuration-*
+src/yang/example-l2vpn-configuration-*
+src/yang/ietf-bgp.mib*
+src/yang/show-*
+state/*
+README.ncs
+ncs.conf
+setup.mk
+
+# Dependent files
+src/yang/ietf-tcp*
+src/yang/ietf-tls*
+src/yang/ietf-truststore*
+src/yang/ietf-x509*
+src/yang/ietf-yang-schema-mount*
+src/yang/ietf-interfaces*
+src/yang/ietf-keystore*
+src/yang/ietf-restconf*
+src/yang/ietf-crypto*
+src/yang/ietf-netconf-acm*
+src/yang/ietf-http-client*
+src/yang/ietf-trust-anchors*
+src/yang/ietf-subscribed-notification*
+src/yang/ietf-ip*
+src/yang/ietf-network-instance*
+src/yang/example-custom-module@*.yang
+src/yang/iana-tls-cipher-suite-algs*
+src/yang/ietf-https-notif-*
+src/yang/ietf-sub-notif-recv-list-*
+src/yang/ietf-subscribed-notif-receivers@*.yang
+
+# Emacs tmp files.
+*~
+src/yang/#*#
+.#*
+
+.DS_Store
