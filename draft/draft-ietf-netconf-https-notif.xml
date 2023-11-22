@@ -470,12 +470,19 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
       <t>The YANG modules in this document make use of grouping that
       are defined in <xref
       target="I-D.ietf-netconf-http-client-server">YANG Groupings for
-      HTTP Clients and HTTP Servers</xref>, and <xref
+      HTTP Clients and HTTP Servers</xref>, <xref
+      target="I-D.ietf-netconf-tls-client-server">YANG Groupings for
+      TLS Clients and TLS Servers</xref>, and <xref
       target="RFC7407">A YANG Data Model for SNMP
       Configuration</xref>. Please see the Security Considerations
       section of those documents for considerations related to
       sensitivity and vulnerability of the data nodes defined in
-      them.</t>
+      them. Additionally, the parameters defined in the 
+      tls-client-grouping in the ietf-tls-client module
+      should follow the recommendations specified in
+      <xref target="RFC9325">Recommendations 
+      for Secure Use of Transport Layer Security (TLS) and Datagram
+      Transport Layer Security (DTLS).</xref></t>
 
       <t>There are a number of data nodes defined in the YANG modules
       that are writable/creatable/deletable (i.e., config true, which
@@ -490,7 +497,9 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
         <list style="symbols">
           <t>The "path" node in "ietf-subscribed-notif-receivers"
           module can be modified by a malicious user to point to an
-          invalid URI.</t>
+          invalid URI. Worse still, it could point the URI of their
+          choosing, exploit the vulnerable client, and if redirects
+          are followed to the same URI, track its usage.</t>
         </list>
 	<list>
 	  <t>The container "receiver-identity" contains nodes like
@@ -645,7 +654,9 @@ Record:
       <?rfc include='reference.RFC.8446.xml'?>
       <?rfc include='reference.RFC.8639.xml'?>
       <?rfc include='reference.RFC.9110.xml'?>
+      <?rfc include='reference.RFC.9325.xml'?>
       <?rfc include='reference.I-D.ietf-netconf-http-client-server.xml'?>
+      <?rfc include='reference.I-D.ietf-netconf-tls-client-server.xml'?>
     </references>
     <references title="Informative references">
       <?rfc include='reference.RFC.8126.xml'?>
