@@ -53,16 +53,22 @@
       target="RFC9110">HTTP Semantics</xref>, maximizes
       transport-level interoperability, while allowing for a variety
       of encoding options. The protocol supports <xref
-      target="RFC2616">Hypertext Transfer Protocol -- HTTP/1.1</xref>,
-      <xref target="RFC7540">Hypertext Transfer Protocol Version 2
-      (HTTP/2)</xref>, and <xref target="RFC9114">HTTP/3</xref>. This
-      document defines support for JSON and XML; future efforts may
-      define support for other encodings (e.g., binary).</t>
-
-      <t>This document requires that the publisher is a "server"
-      (e.g., a NETCONF or RESTCONF server), but does not assume that
-      the receiver is a NETCONF or RESTCONF server. It does expect the
-      receiver to be an HTTPS server to receive the notifications.</t>
+      target="RFC2616">Hypertext Transfer Protocol -- HTTP/1.1</xref>
+      and, <xref target="RFC7540">Hypertext Transfer Protocol Version 2
+      (HTTP/2)</xref>. While the payload does not change between these
+      versions of HTTP and <xref target="RFC9114">HTTP/3</xref>, the
+      underlying transport does. Since NETCONF does not support
+      <xref target="RFC9000">QUIC: A UDP-Based Multiplexed and 
+      Secure Transport</xref>, support for <xref target="RFC9114">
+      HTTP/3</xref>, is considered out of scope of this document.</t>
+      
+      <t>This document defines support for JSON and XML; future 
+      efforts may define support for other encodings 
+      (e.g., binary). This document requires that the publisher is a
+      "server" (e.g., a NETCONF or RESTCONF server), but does not 
+      assume that the receiver is a NETCONF or RESTCONF server. 
+      It does expect the receiver to be an HTTPS server to receive
+      the notifications.</t>
 
       <t>This document also defines two <xref target="RFC7950">YANG
       1.1</xref> modules that extend the data model defined in <xref
@@ -655,6 +661,7 @@ Record:
       <?rfc include='reference.RFC.8341.xml'?>
       <?rfc include='reference.RFC.8446.xml'?>
       <?rfc include='reference.RFC.8639.xml'?>
+      <?rfc include='reference.RFC.9000.xml'?>
       <?rfc include='reference.RFC.9110.xml'?>
       <?rfc include='reference.RFC.9114.xml'?>
       <?rfc include='reference.I-D.ietf-netconf-http-client-server.xml'?>
