@@ -575,7 +575,7 @@ Repository: "YANG Notifications" registry
       <section title="Registration of 'https' URN Sub-namespace">
         <t>
         This document requests that IANA register a new URN Sub-namespace within the
-         "YANG Notifications" registry defined in <xref target="RFC3553"/>.
+         "YANG Notifications" registry group defined in <xref target="RFC3553"/>.
         </t>
         <t>
           <figure>
@@ -611,8 +611,7 @@ supported by HTTPS-based notification receivers.
             </t>
             <t>Description
               <list style="symbols">
-                <t>An arbitrary description of the capability
-                  (optional).</t>
+                <t>An arbitrary description of the capability.</t>
                 <t>The description should be no more than a few sentences.</t>
                 <t>The description is to be in English, but may contain
                   UTF-8 characters as may be needed in some cases.</t>
