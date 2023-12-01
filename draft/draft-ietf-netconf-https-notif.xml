@@ -620,7 +620,7 @@ supported by HTTPS-based notification receivers.
           </list>
         </t>
 
-        <t>The update policy is "RFC Required".  Updates do not
+        <t>The update policy is "Specification Required".  Updates do not
         require an expert review by a Designated Expert.
         </t>
         <t>Following is the initial assignment for this registry:</t>
