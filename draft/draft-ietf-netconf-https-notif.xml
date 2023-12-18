@@ -186,34 +186,37 @@
       </t>
       <t>Note that, for RFC 8639 configured subscriptions, the very first
       notification must be the "subscription-started" notification.</t>
-
-      <t>If the “encoding” leaf is not configured, and the publisher
-      wants to send a notification in a particular format, without
-      going through the setup operation of learning the receiver
-      capabilities, it can do so, but has to be prepared for the case
-      when it receives an error response, because the receiver does
-      not support the format sent by the publisher.</t>
     </section>
 
     <section title="Discovering a Receiver's Capabilities">
       <section title="Applicability">
-        <t>For publishers using <xref target="RFC8639">Subscription to YANG
-          Notifications</xref>, dynamic discovery of a receiver's supported
-          encoding is necessary only when the "/subscriptions/subscription/encoding"
-          leaf is not configured, per the "encoding" leaf's description statement
-          in the "ietf-subscribed-notification" module.
+        <t>
+	  For publishers using <xref target="RFC8639">Subscription to
+	  YANG Notifications</xref>, dynamic discovery of a receiver's
+	  supported encoding is necessary only when the
+	  "/subscriptions/subscription/encoding" leaf is not
+	  configured, per the "encoding" leaf's description statement
+	  in the "ietf-subscribed-notification" module.
+	</t>
+	<t>
+	  If the "encoding" leaf is not configured, and the publisher
+	  wants to send a notification in a particular format, without
+	  going through the setup operation of learning the receiver
+	  capabilities, it can do so, but has to be prepared for the
+	  case when it receives an error response, because the
+	  receiver does not support the format sent by the publisher.
 	</t>
       </section>
       <section title="Request">
-        <t>To learn the capabilities of a receiver, a publisher can
-        issue an HTTPS GET request to the "capabilities" resource (see
-        <xref target= "overview"/>) on the receiver with "Accept"
-        header set using the "application/xml" as defined in <xref
-        target="RFC7303">XML Media Types</xref>, and/or
-        "application/json" as defined in <xref
-        target="RFC8259">JSON</xref> media-types, with the latter as
-        mandatory to implement, and the default in case the type is
-        not specified.</t>
+        <t>
+	  To learn the capabilities of a receiver, a publisher can
+	  issue an HTTPS GET request to the "capabilities" resource
+	  (see <xref target= "overview"/>) on the receiver with
+	  "Accept" header set using the "application/xml" as defined
+	  in <xref target="RFC7303">XML Media Types</xref>, and/or
+	  "application/json" as defined in <xref
+	  target="RFC8259">JSON</xref> media-types.
+	</t>
       </section>
       <section title="Response">
         <t>The receiver responds with a "200 (OK)" message, having the
