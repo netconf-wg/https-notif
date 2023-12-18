@@ -18,14 +18,13 @@ module ietf-https-notif-transport {
   import ietf-subscribed-notif-receivers {
     prefix snr;
     reference
-      "RFC XXXX: An HTTPS-based Transport for
-                 Configured Subscriptions";
+      "RFC XXXX: An HTTPS-based Transport for YANG Notifications.";
   }
   
   import ietf-http-client {
     prefix httpc;
     reference
-      "RFC YYYY: YANG Groupings for HTTP Clients and HTTP Servers";
+      "RFC YYYY: YANG Groupings for HTTP Clients and HTTP Servers.";
   }
 
   organization
