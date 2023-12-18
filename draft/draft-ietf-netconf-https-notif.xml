@@ -134,6 +134,13 @@
 	  </t>
         </section>
       </section>
+      <section anchor="tree-diagram" title="Tree Diagram">
+        <t>
+	  The tree diagram for the YANG modules defined in this
+	  document use annotations defined in <xref
+	  target="RFC8340">YANG Tree Diagrams.</xref>.
+	</t>
+      </section>
     </section>
 
     <section title="Overview of Publisher to Receiver Interaction" anchor="overview">
@@ -150,7 +157,7 @@
 	Publishers SHOULD query this target before sending any
 	notifications or if ever an error occurs.</t>
 
-	<t>"relay-notifications":  A target resource enabling the publisher
+	<t>"relay-notification":  A target resource enabling the publisher
 	to send one or more notification to a receiver.  This document
 	defines support for sending only one notification per message; a
 	future effort MAY extend the protocol to send multiple
@@ -198,11 +205,15 @@
 	</t>
       </section>
       <section title="Request">
-        <t>To learn the capabilities of a receiver, a publisher can issue an
-          HTTPS GET request to the "capabilities" resource (see <xref target= "overview"/>) on
-          the receiver with "Accept" header set using the "application/xml"
-          and/or "application/json" media-types, with the latter as mandatory
-          to implement, and the default in case the type is not specified.</t>
+        <t>
+	  To learn the capabilities of a receiver, a publisher issues
+	  an HTTPS GET request to the "capabilities" resource (see
+	  <xref target= "overview"/>) on the receiver with "Accept"
+	  header set using the "application/xml" and/or
+	  "application/json" media-types, with the latter as mandatory
+	  to implement, and the default in case the type is not
+	  specified.
+	</t>
       </section>
       <section title="Response">
         <t>The receiver responds with a "200 (OK)" message, having the
@@ -259,7 +270,6 @@ Date: Wed, 26 Feb 2020 20:33:30 GMT
 Server: example-server
 Cache-Control: no-cache
 Content-Type: application/xml
-Content-Length: nnn
 
 <receiver-capabilities>
   <receiver-capability>\
@@ -301,11 +311,14 @@ Content-Length: nnn
 
     <section title="Sending Event Notifications"> 
       <section title="Request">
-        <t>The publisher sends an HTTPS POST request to the "relay-notification"
-          resource (see <xref target= "overview"/>) on the receiver with the "Content-Type"
-          header set to either "application/json" or "application/xml" and a
-          body containing the notification encoded using the specified
-          format.</t>
+        <t>
+	  The publisher sends an HTTP POST request to the
+	  "relay-notification" resource (see <xref target=
+	  "overview"/>) on the receiver with the "Content-Type" header
+	  set to either "application/json" or "application/xml" and a
+	  body containing the notification encoded using the specified
+	  format.
+	</t>
         <t>XML-encoded notifications are encoded using the format defined
           by <xref target="RFC5277">NETCONF Event Notifications</xref>
           for XML.</t>
@@ -322,9 +335,11 @@ Content-Length: nnn
         </t>
       </section>
       <section title="Response">
-        <t>The response on success should be "204 (No Content)". In
-        case of corrupted or malformed event, the response should be
-        an appropriate HTTP error response.</t>
+        <t>
+	  The response on success SHOULD be "204 (No Content)". In
+	  case of corrupted or malformed event, the response SHOULD be
+	  an appropriate HTTP error response.
+	</t>
       </section>
       <section title="Example">
         <t>An XML-encoded notification might be sent as follows:</t>
@@ -641,6 +656,7 @@ Record:
       <?rfc include='reference.RFC.7950.xml'?>
       <?rfc include='reference.RFC.8040.xml'?>
       <?rfc include='reference.RFC.8174.xml'?>
+      <?rfc include='reference.RFC.8340.xml'?>
       <?rfc include='reference.RFC.8341.xml'?>
       <?rfc include='reference.RFC.8446.xml'?>
       <?rfc include='reference.RFC.8639.xml'?>
