@@ -103,6 +103,8 @@
           <c>Hypertext Transfer Protocol</c>
           <c>HTTPS</c>
           <c>Hypertext Transfer Protocol Secure</c>
+	  <c>SSE</c>
+	  <c>Server-Sent Events</c>
           <c>TCP</c>
           <c>Transmission Control Protocol</c>
           <c>TLS</c>
@@ -313,7 +315,10 @@ Content-Length: nnn
           in Section 6.4 in <xref target="RFC8040">RESTCONF</xref> with
           the following deviations:
           <list style="symbols">
-            <t>The notifications do not contain the "data:" prefix used by SSE.</t>
+            <t>
+	    The notifications do not contain the "data:" prefix used
+	    by Server-Sent Events (SSE).
+	    </t>
             <t>Instead of saying that, for JSON-encoding purposes, the
             module name for the "notification" element is
             "ietf-restconf", the module name will instead be
