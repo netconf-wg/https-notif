@@ -48,7 +48,7 @@ endif
 	-rm -f ../bin/*\@*-tree.txt*
 	-rm -f ../bin/*\@*.yang
 	-rm -f ../src/yang/*\@*.yang
-	-rm -f ../bin/imported-modules
+	-rm -rf ../bin/imported-modules
 
 $(next).xml: $(draft).xml ../src/yang/ietf-subscribed-notif-receivers.yang ../src/yang/ietf-https-notif-transport.yang ../src/yang/example-custom-module.yang
 	-mkdir -p ../bin
