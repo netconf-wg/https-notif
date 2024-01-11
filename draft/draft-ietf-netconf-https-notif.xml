@@ -53,13 +53,14 @@
       target="RFC9110">HTTP Semantics</xref>, maximizes
       transport-level interoperability, while allowing for a variety
       of encoding options. The protocol supports <xref
-      target="RFC2616">Hypertext Transfer Protocol -- HTTP/1.1</xref>
-      and, <xref target="RFC7540">Hypertext Transfer Protocol Version 2
-      (HTTP/2)</xref>. While the payload does not change between these
-      versions of HTTP and <xref target="RFC9114">HTTP/3</xref>, the
-      underlying transport does. Since NETCONF does not support
-      <xref target="RFC9000">QUIC: A UDP-Based Multiplexed and 
-      Secure Transport</xref>, support for <xref target="RFC9114">
+      target="RFC7230">Hypertext Transfer Protocol (HTTP/1.1): Message
+      Syntax and Routing</xref> and, <xref
+      target="RFC9113">HTTP/2</xref>. While the payload does not
+      change between these versions of HTTP and <xref
+      target="RFC9114">HTTP/3</xref>, the underlying transport
+      does. Since NETCONF does not support <xref
+      target="RFC9000">QUIC: A UDP-Based Multiplexed and Secure
+      Transport</xref>, support for <xref target="RFC9114">
       HTTP/3</xref>, is considered out of scope of this document.</t>
       
       <t>This document defines support for JSON and XML; future 
@@ -584,27 +585,51 @@ reference: RFC XXXX
         </t>
       </section>
 
-      <section title='The "Capabilities for HTTPS Notification Receivers" Registry'>
-
-        <t>Following the guidelines defined in <xref target="RFC8126"/>,
-          this document defines a new registry called "Capabilities for
-          HTTPS Notification Receivers".  This registry defines capabilities
-          that can be supported by HTTPS-based notification receivers.</t>
+      <section title="Registration of 'yang-notif' URN Sub-namespace">
+        <t>
+        This document requests that IANA register a new URN Sub-namespace within the
+         "IETF URN Sub-namespace for Registered Protocol Parameter Identifiers"
+         registry defined in <xref target="RFC3553"/>.
+        </t>
+        <t>
+          <figure>
+            <artwork>
+Registry Name: yang-notif
+Specification: RFC XXXX
+Repository: "YANG Notifications" registry
+            </artwork>
+          </figure>
+        </t>
+      </section>
+      <section title="Registration of 'https' URN Sub-namespace">
+        <t>
+        This document requests that IANA register a new URN Sub-namespace within the
+         "YANG Notifications" registry group defined in <xref target="RFC3553"/>.
+        </t>
+        <t>
+          <figure>
+            <artwork>
+Registry Name: https-capability
+Specification: RFC XXXX
+Repository: "Capabilities for HTTPS Notification Receivers" registry
+            </artwork>
+          </figure>
+        </t>
         <t>The following note shall be at the top of the registry:</t>
         <t>
           <figure>
             <artwork>This registry defines capabilities that can be
-supported by HTTPS-based notification receivers.</artwork>
+supported by HTTPS-based notification receivers.
+            </artwork>
           </figure>
         </t>
-
         <t>The fields for each registry are:
           <list style="symbols">
             <t>URN
               <list style="symbols">
                 <t>The name of the URN (required).</t>
                 <t>The URN must conform to the syntax described by <xref target="RFC8141"/>.</t>
-                <t>The URN must begin with the string "urn:ietf:capability:https-notif-receiver".</t>
+                <t>The URN must begin with the string "urn:ietf:params:yang-notif:https-capability".</t>
               </list>
             </t>
             <t>Reference
@@ -615,8 +640,7 @@ supported by HTTPS-based notification receivers.</artwork>
             </t>
             <t>Description
               <list style="symbols">
-                <t>An arbitrary description of the capability
-                (optional).</t>
+                <t>An arbitrary description of the capability.</t>
                 <t>The description should be no more than a few sentences.</t>
                 <t>The description is to be in English, but may contain
                   UTF-8 characters as may be needed in some cases.</t>
@@ -625,49 +649,48 @@ supported by HTTPS-based notification receivers.</artwork>
           </list>
         </t>
 
-        <t>The update policy is "RFC Required".  Updates do not
-        require an expert review by a Designated Expert.</t>
-
+        <t>The update policy is "Specification Required".  Updates do not
+        require an expert review by a Designated Expert.
+        </t>
         <t>Following is the initial assignment for this registry:</t>
         <t>
           <figure>
             <artwork>
 Record:
-   URN:         urn:ietf:capability:https-notif-receiver:encoding:json
-   Reference:   RFC XXXX
+   URN:         urn:ietf:params:yang-notif:https-capability:encoding:json
+   Reference:   RFC XXXX:An HTTPS-based Transport for YANG Notifications
    Description: Identifies support for JSON-encoded notifications.
 
 Record:
-   URN:         urn:ietf:capability:https-notif-receiver:encoding:xml
-   Reference:   RFC XXXX
+   URN:         urn:ietf:params:yang-notif:https-capability:encoding:xml
+   Reference:   RFC XXXX:An HTTPS-based Transport for YANG Notifications
    Description: Identifies support for XML-encoded notifications.
 
 Record:
-   URN:         urn:ietf:capability:https-notif-receiver:sub-notif
-   Reference:   RFC XXXX
+   URN:         urn:ietf:params:yang-notif:https-capability:sub-notif
+   Reference:   RFC XXXX:An HTTPS-based Transport for YANG Notifications
    Description: Identifies support for state machine described in
                 RFC 8639, enabling the publisher to send, e.g., the
                 "subscription-started" notification.
-</artwork>
+            </artwork>
           </figure>
         </t>
       </section>
     </section>
-
   </middle>
 
   <back>
     <references title="Normative references">
       <?rfc include='reference.RFC.2119.xml'?>
-      <?rfc include='reference.RFC.2616.xml'?>
+      <?rfc include='reference.RFC.3553.xml'?>
       <?rfc include='reference.RFC.3688.xml'?>
       <?rfc include='reference.RFC.3986.xml'?>
       <?rfc include='reference.RFC.5277.xml'?>
       <?rfc include='reference.RFC.6020.xml'?>
       <?rfc include='reference.RFC.6241.xml'?>
       <?rfc include='reference.RFC.6242.xml'?>
+      <?rfc include='reference.RFC.7230.xml'?>
       <?rfc include='reference.RFC.7407.xml'?>
-      <?rfc include='reference.RFC.7540.xml'?>
       <?rfc include='reference.RFC.7950.xml'?>
       <?rfc include='reference.RFC.8040.xml'?>
       <?rfc include='reference.RFC.8174.xml'?>
@@ -677,11 +700,11 @@ Record:
       <?rfc include='reference.RFC.8639.xml'?>
       <?rfc include='reference.RFC.9000.xml'?>
       <?rfc include='reference.RFC.9110.xml'?>
+      <?rfc include='reference.RFC.9113.xml'?>
       <?rfc include='reference.RFC.9114.xml'?>
       <?rfc include='reference.I-D.ietf-netconf-http-client-server.xml'?>
     </references>
     <references title="Informative references">
-      <?rfc include='reference.RFC.8126.xml'?>
       <?rfc include='reference.RFC.8141.xml'?>
     </references>
 
