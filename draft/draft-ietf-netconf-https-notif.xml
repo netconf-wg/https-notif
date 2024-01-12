@@ -467,22 +467,21 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
       preconfigured subset of all available NETCONF or RESTCONF
       protocol operations and content.</t>
 
-      <t>The YANG modules in this document make use of grouping that
+      <t>The YANG modules in this document make use of groupings that
       are defined in <xref
       target="I-D.ietf-netconf-http-client-server">YANG Groupings for
       HTTP Clients and HTTP Servers</xref>, <xref
       target="I-D.ietf-netconf-tls-client-server">YANG Groupings for
-      TLS Clients and TLS Servers</xref>, and <xref
-      target="RFC7407">A YANG Data Model for SNMP
-      Configuration</xref>. Please see the Security Considerations
-      section of those documents for considerations related to
-      sensitivity and vulnerability of the data nodes defined in
-      them. Additionally, the parameters defined in the 
-      tls-client-grouping in the ietf-tls-client module
-      should follow the recommendations specified in
-      <xref target="RFC9325">Recommendations 
-      for Secure Use of Transport Layer Security (TLS) and Datagram
-      Transport Layer Security (DTLS).</xref></t>
+      TLS Clients and TLS Servers</xref>, and <xref target="RFC7407">A
+      YANG Data Model for SNMP Configuration</xref>. Please see the
+      Security Considerations section of those documents for
+      considerations related to sensitivity and vulnerability of the
+      data nodes defined in them. Additionally, the parameters defined
+      in the tls-client-grouping in the ietf-tls-client module should
+      follow the recommendations specified in <xref
+      target="RFC9325">Recommendations for Secure Use of Transport
+      Layer Security (TLS) and Datagram Transport Layer Security
+      (DTLS).</xref></t>
 
       <t>There are a number of data nodes defined in the YANG modules
       that are writable/creatable/deletable (i.e., config true, which
