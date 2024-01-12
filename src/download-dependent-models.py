@@ -17,12 +17,21 @@ def fetch_and_extract(draft, module, version):
     print("Fetching file " + draft + " with version " + version)
     draft_version = draft + "-" + version
     print(draft_version)
-    os.system('curl -sO https://www.ietf.org/archive/id/%s.txt' %draft_version)
-    print("Extracting Module from " + draft_version)
-    os.system('xym %s.txt' %draft_version)
-    print("Moving module " + module + " to ../bin/imported-modules/")
-    os.system('mv %s* ../bin/imported-modules/' %module)
-    print("Cleaning up ...")
+    try:
+        os.system('curl -sO https://www.ietf.org/archive/id/%s.txt' %draft_version)
+        print("Extracting Module from " + draft_version)
+        try:
+            os.system('xym %s.txt' %draft_version)
+            print("Moving module " + module + " to ../bin/imported-modules/")
+            try:
+                os.system('mv %s* ../bin/imported-modules/' %module)
+                print("Cleaning up ...")
+            except Exception as e:
+                print ("An error occured while moving", str(e))
+        except Exception as e:
+            print ("An error occured while extracting", str(e))
+    except Exception as e:
+        print ("An error occured while downloading", str(e))
     os.system('rm %s.txt' %draft_version)
 
 def fetch(module, path):
