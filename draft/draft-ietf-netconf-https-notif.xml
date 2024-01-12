@@ -10,14 +10,14 @@
   <front>
     <title abbrev="HTTPS Notification Transport">An HTTPS-based Transport for YANG Notifications</title>
 
-    <author fullname="Mahesh Jethanandani" initials="M.J." surname="Jethanandani">
+    <author fullname="Mahesh Jethanandani" initials="M." surname="Jethanandani">
       <organization>Kloud Services</organization>
       <address>
         <email>mjethanandani@gmail.com</email>
       </address>
     </author>
 
-    <author fullname="Kent Watsen" initials="K.W." surname="Watsen">
+    <author fullname="Kent Watsen" initials="K." surname="Watsen">
       <organization>Watsen Networks</organization>
       <address>
         <email>kent+ietf@watsen.net</email>
@@ -52,20 +52,34 @@
       HTTPS. Using HTTPS, which is a secure form of <xref
       target="RFC9110">HTTP Semantics</xref>, maximizes
       transport-level interoperability, while allowing for a variety
-      of encoding options.  This document defines support for JSON and
-      XML; future efforts may define support for other encodings
-      (e.g., binary).</t>
-      <t>This document requires that the publisher is a "server"
-      (e.g., a NETCONF or RESTCONF server), but does not assume that
-      the receiver is a NETCONF or RESTCONF server. It does expect the
-      receiver to be an HTTPS server to receive the notifications.</t>
+      of encoding options. The protocol supports <xref
+      target="RFC7230">Hypertext Transfer Protocol (HTTP/1.1): Message
+      Syntax and Routing</xref> and, <xref
+      target="RFC9113">HTTP/2</xref>. While the payload does not
+      change between these versions of HTTP and <xref
+      target="RFC9114">HTTP/3</xref>, the underlying transport
+      does. Since NETCONF does not support <xref
+      target="RFC9000">QUIC: A UDP-Based Multiplexed and Secure
+      Transport</xref>, support for <xref target="RFC9114">
+      HTTP/3</xref>, is considered out of scope of this document.</t>
+      
+      <t>This document defines support for JSON and XML; future 
+      efforts may define support for other encodings 
+      (e.g., binary). This document requires that the publisher is a
+      "server" (e.g., a NETCONF or RESTCONF server), but does not 
+      assume that the receiver is a NETCONF or RESTCONF server. 
+      It does expect the receiver to be an HTTPS server to receive
+      the notifications.</t>
+
       <t>This document also defines two <xref target="RFC7950">YANG
       1.1</xref> modules that extend the data model defined in <xref
       target="RFC8639">Subscription to YANG Notifications</xref>,
       enabling the configuration of HTTPS-based receivers.</t>
+
       <t>An example module illustrating the configuration of a
       publisher not using the data model defined in RFC 8639 is also
       provided.</t>
+
       <t>Configured subscriptions enable a server (e.g., a NETCONF or
       RESTCONF server), acting as a publisher of notifications, to
       proactively push notifications to external receivers without the
@@ -103,6 +117,8 @@
           <c>Hypertext Transfer Protocol</c>
           <c>HTTPS</c>
           <c>Hypertext Transfer Protocol Secure</c>
+	  <c>SSE</c>
+	  <c>Server-Sent Events</c>
           <c>TCP</c>
           <c>Transmission Control Protocol</c>
           <c>TLS</c>
@@ -134,6 +150,13 @@
 	  </t>
         </section>
       </section>
+      <section anchor="tree-diagram" title="Tree Diagram">
+        <t>
+	  The tree diagram for the YANG modules defined in this
+	  document use annotations defined in <xref
+	  target="RFC8340">YANG Tree Diagrams.</xref>.
+	</t>
+      </section>
     </section>
 
     <section title="Overview of Publisher to Receiver Interaction" anchor="overview">
@@ -150,7 +173,7 @@
 	Publishers SHOULD query this target before sending any
 	notifications or if ever an error occurs.</t>
 
-	<t>"relay-notifications":  A target resource enabling the publisher
+	<t>"relay-notification":  A target resource enabling the publisher
 	to send one or more notification to a receiver.  This document
 	defines support for sending only one notification per message; a
 	future effort MAY extend the protocol to send multiple
@@ -273,7 +296,6 @@ Date: Wed, 26 Feb 2020 20:33:30 GMT
 Server: example-server
 Cache-Control: no-cache
 Content-Type: application/xml
-Content-Length: nnn
 
 <receiver-capabilities>
   <receiver-capability>\
@@ -315,11 +337,14 @@ Content-Length: nnn
 
     <section title="Sending Event Notifications"> 
       <section title="Request">
-        <t>The publisher sends an HTTPS POST request to the "relay-notification"
-          resource (see <xref target= "overview"/>) on the receiver with the "Content-Type"
-          header set to either "application/json" or "application/xml" and a
-          body containing the notification encoded using the specified
-          format.</t>
+        <t>
+	  The publisher sends an HTTP POST request to the
+	  "relay-notification" resource (see <xref target=
+	  "overview"/>) on the receiver with the "Content-Type" header
+	  set to either "application/json" or "application/xml" and a
+	  body containing the notification encoded using the specified
+	  format.
+	</t>
         <t>XML-encoded notifications are encoded using the format defined
           by <xref target="RFC5277">NETCONF Event Notifications</xref>
           for XML.</t>
@@ -327,7 +352,10 @@ Content-Length: nnn
           in Section 6.4 in <xref target="RFC8040">RESTCONF</xref> with
           the following deviations:
           <list style="symbols">
-            <t>The notifications do not contain the "data:" prefix used by SSE.</t>
+            <t>
+	    The notifications do not contain the "data:" prefix used
+	    by Server-Sent Events (SSE).
+	    </t>
             <t>Instead of saying that, for JSON-encoding purposes, the
             module name for the "notification" element is
             "ietf-restconf", the module name will instead be
@@ -336,9 +364,11 @@ Content-Length: nnn
         </t>
       </section>
       <section title="Response">
-        <t>The response on success should be "204 (No Content)". In
-        case of corrupted or malformed event, the response should be
-        an appropriate HTTP error response.</t>
+        <t>
+	  The response on success SHOULD be "204 (No Content)". In
+	  case of corrupted or malformed event, the response SHOULD be
+	  an appropriate HTTP error response.
+	</t>
       </section>
       <section title="Example">
         <t>An XML-encoded notification might be sent as follows:</t>
@@ -570,27 +600,51 @@ reference: RFC XXXX
         </t>
       </section>
 
-      <section title='The "Capabilities for HTTPS Notification Receivers" Registry'>
-
-        <t>Following the guidelines defined in <xref target="RFC8126"/>,
-          this document defines a new registry called "Capabilities for
-          HTTPS Notification Receivers".  This registry defines capabilities
-          that can be supported by HTTPS-based notification receivers.</t>
+      <section title="Registration of 'yang-notif' URN Sub-namespace">
+        <t>
+        This document requests that IANA register a new URN Sub-namespace within the
+         "IETF URN Sub-namespace for Registered Protocol Parameter Identifiers"
+         registry defined in <xref target="RFC3553"/>.
+        </t>
+        <t>
+          <figure>
+            <artwork>
+Registry Name: yang-notif
+Specification: RFC XXXX
+Repository: "YANG Notifications" registry
+            </artwork>
+          </figure>
+        </t>
+      </section>
+      <section title="Registration of 'https' URN Sub-namespace">
+        <t>
+        This document requests that IANA register a new URN Sub-namespace within the
+         "YANG Notifications" registry group defined in <xref target="RFC3553"/>.
+        </t>
+        <t>
+          <figure>
+            <artwork>
+Registry Name: https-capability
+Specification: RFC XXXX
+Repository: "Capabilities for HTTPS Notification Receivers" registry
+            </artwork>
+          </figure>
+        </t>
         <t>The following note shall be at the top of the registry:</t>
         <t>
           <figure>
             <artwork>This registry defines capabilities that can be
-supported by HTTPS-based notification receivers.</artwork>
+supported by HTTPS-based notification receivers.
+            </artwork>
           </figure>
         </t>
-
         <t>The fields for each registry are:
           <list style="symbols">
             <t>URN
               <list style="symbols">
                 <t>The name of the URN (required).</t>
                 <t>The URN must conform to the syntax described by <xref target="RFC8141"/>.</t>
-                <t>The URN must begin with the string "urn:ietf:capability:https-notif-receiver".</t>
+                <t>The URN must begin with the string "urn:ietf:params:yang-notif:https-capability".</t>
               </list>
             </t>
             <t>Reference
@@ -601,8 +655,7 @@ supported by HTTPS-based notification receivers.</artwork>
             </t>
             <t>Description
               <list style="symbols">
-                <t>An arbitrary description of the capability
-                (optional).</t>
+                <t>An arbitrary description of the capability.</t>
                 <t>The description should be no more than a few sentences.</t>
                 <t>The description is to be in English, but may contain
                   UTF-8 characters as may be needed in some cases.</t>
@@ -611,40 +664,40 @@ supported by HTTPS-based notification receivers.</artwork>
           </list>
         </t>
 
-        <t>The update policy is "RFC Required".  Updates do not
-        require an expert review by a Designated Expert.</t>
-
+        <t>The update policy is "Specification Required".  Updates do not
+        require an expert review by a Designated Expert.
+        </t>
         <t>Following is the initial assignment for this registry:</t>
         <t>
           <figure>
             <artwork>
 Record:
-   URN:         urn:ietf:capability:https-notif-receiver:encoding:json
-   Reference:   RFC XXXX
+   URN:         urn:ietf:params:yang-notif:https-capability:encoding:json
+   Reference:   RFC XXXX:An HTTPS-based Transport for YANG Notifications
    Description: Identifies support for JSON-encoded notifications.
 
 Record:
-   URN:         urn:ietf:capability:https-notif-receiver:encoding:xml
-   Reference:   RFC XXXX
+   URN:         urn:ietf:params:yang-notif:https-capability:encoding:xml
+   Reference:   RFC XXXX:An HTTPS-based Transport for YANG Notifications
    Description: Identifies support for XML-encoded notifications.
 
 Record:
-   URN:         urn:ietf:capability:https-notif-receiver:sub-notif
-   Reference:   RFC XXXX
+   URN:         urn:ietf:params:yang-notif:https-capability:sub-notif
+   Reference:   RFC XXXX:An HTTPS-based Transport for YANG Notifications
    Description: Identifies support for state machine described in
                 RFC 8639, enabling the publisher to send, e.g., the
                 "subscription-started" notification.
-</artwork>
+            </artwork>
           </figure>
         </t>
       </section>
     </section>
-
   </middle>
 
   <back>
     <references title="Normative references">
       <?rfc include='reference.RFC.2119.xml'?>
+      <?rfc include='reference.RFC.3553.xml'?>
       <?rfc include='reference.RFC.3688.xml'?>
       <?rfc include='reference.RFC.3986.xml'?>
       <?rfc include='reference.RFC.5277.xml'?>
@@ -652,19 +705,23 @@ Record:
       <?rfc include='reference.RFC.6241.xml'?>
       <?rfc include='reference.RFC.6242.xml'?>
       <?rfc include='reference.RFC.7303.xml'?>
+      <?rfc include='reference.RFC.7230.xml'?>
       <?rfc include='reference.RFC.7407.xml'?>
       <?rfc include='reference.RFC.7950.xml'?>
       <?rfc include='reference.RFC.8040.xml'?>
       <?rfc include='reference.RFC.8174.xml'?>
       <?rfc include='reference.RFC.8259.xml'?>
+      <?rfc include='reference.RFC.8340.xml'?>
       <?rfc include='reference.RFC.8341.xml'?>
       <?rfc include='reference.RFC.8446.xml'?>
       <?rfc include='reference.RFC.8639.xml'?>
+      <?rfc include='reference.RFC.9000.xml'?>
       <?rfc include='reference.RFC.9110.xml'?>
+      <?rfc include='reference.RFC.9113.xml'?>
+      <?rfc include='reference.RFC.9114.xml'?>
       <?rfc include='reference.I-D.ietf-netconf-http-client-server.xml'?>
     </references>
     <references title="Informative references">
-      <?rfc include='reference.RFC.8126.xml'?>
       <?rfc include='reference.RFC.8141.xml'?>
     </references>
 

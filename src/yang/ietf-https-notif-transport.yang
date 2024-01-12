@@ -18,8 +18,7 @@ module ietf-https-notif-transport {
   import ietf-subscribed-notif-receivers {
     prefix snr;
     reference
-      "RFC XXXX: An HTTPS-based Transport for
-                 Configured Subscriptions";
+      "RFC XXXX: An HTTPS-based Transport for YANG Notifications.";
   }
   
   import ietf-http-client {
@@ -32,7 +31,7 @@ module ietf-https-notif-transport {
     "IETF NETCONF Working Group";
 
   contact
-    "WG Web:   <http://tools.ietf.org/wg/netconf>
+    "WG Web:   <http://datatracker.ietf.org/wg/netconf>
      WG List:  <netconf@ietf.org>
 
      Authors: Mahesh Jethanandani (mjethanandani at gmail dot com)

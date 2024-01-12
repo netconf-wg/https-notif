@@ -14,7 +14,7 @@ module ietf-subscribed-notif-receivers {
     "IETF NETCONF Working Group";
 
   contact
-    "WG Web:   <http://tools.ietf.org/wg/netconf>
+    "WG Web:   <http://datatracker.ietf.org/wg/netconf>
      WG List:  <netconf@ietf.org>
 
      Authors: Mahesh Jethanandani (mjethanandani at gmail dot com)
