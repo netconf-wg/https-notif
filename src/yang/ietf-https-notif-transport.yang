@@ -24,7 +24,7 @@ module ietf-https-notif-transport {
   import ietf-http-client {
     prefix httpc;
     reference
-      "RFC YYYY: YANG Groupings for HTTP Clients and HTTP Servers";
+      "RFC YYYY: YANG Groupings for HTTP Clients and HTTP Servers.";
   }
 
   organization
@@ -45,7 +45,7 @@ module ietf-https-notif-transport {
      the 'choice' statement called 'transport-type' defined
      by the 'ietf-https-notif-transport' module defined in RFC XXXX.
 
-     Copyright (c) 2022 IETF Trust and the persons identified as
+     Copyright (c) 2024 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
      Redistribution and use in source and binary forms, with or
      without modification, is permitted pursuant to, and subject
@@ -120,10 +120,12 @@ module ietf-https-notif-transport {
         description
           "The cert-maps container is used by a TLS-based HTTP
            server to map the HTTPS client's presented X.509
-           certificate to a 'local' username. If no matching and
-           valid cert-to-name list entry is found, the publisher
-           MUST close the connection, and MUST NOT send any
-           notifications over it.";
+           certificate to a 'local' username. Specifically, the
+           'name' field within the module is used along with
+           'specified' identity to perform the match. If no
+           matching and valid cert-to-name list entry is found,
+           the publisher MUST close the connection, and MUST
+           NOT send any notifications over it.";
         reference
           "RFC 7407: A YANG Data Model for SNMP Configuration.";
       }
