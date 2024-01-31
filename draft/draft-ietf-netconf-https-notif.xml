@@ -53,10 +53,9 @@
       target="RFC9110">HTTP Semantics</xref>, maximizes
       transport-level interoperability, while allowing for a variety
       of encoding options. The protocol supports <xref
-      target="RFC7230">Hypertext Transfer Protocol (HTTP/1.1): Message
-      Syntax and Routing</xref> and, <xref
-      target="RFC9113">HTTP/2</xref>. While the payload does not
-      change between these versions of HTTP and <xref
+      target="RFC9112">HTTP/1.1: Message Syntax and Routing</xref>
+      and, <xref target="RFC9113">HTTP/2</xref>. While the payload
+      does not change between these versions of HTTP and <xref
       target="RFC9114">HTTP/3</xref>, the underlying transport
       does. Since NETCONF does not support <xref
       target="RFC9000">QUIC: A UDP-Based Multiplexed and Secure
@@ -713,7 +712,6 @@ Record:
       <?rfc include='reference.RFC.6241.xml'?>
       <?rfc include='reference.RFC.6242.xml'?>
       <?rfc include='reference.RFC.7303.xml'?>
-      <?rfc include='reference.RFC.7230.xml'?>
       <?rfc include='reference.RFC.7407.xml'?>
       <?rfc include='reference.RFC.7950.xml'?>
       <?rfc include='reference.RFC.8040.xml'?>
@@ -725,6 +723,7 @@ Record:
       <?rfc include='reference.RFC.8639.xml'?>
       <?rfc include='reference.RFC.9000.xml'?>
       <?rfc include='reference.RFC.9110.xml'?>
+      <?rfc include='reference.RFC.9112.xml'?>
       <?rfc include='reference.RFC.9113.xml'?>
       <?rfc include='reference.RFC.9114.xml'?>
       <?rfc include='reference.RFC.9325.xml'?>
