@@ -49,26 +49,25 @@
       <t>This document defines a protocol for sending asynchronous
       event notifications similar to notifications defined in <xref
       target="RFC5277">NETCONF Event Notifications</xref>, but over
-      HTTPS. Using HTTPS, which is a secure form of <xref
-      target="RFC9110">HTTP Semantics</xref>, maximizes
-      transport-level interoperability, while allowing for a variety
-      of encoding options. The protocol supports <xref
+      HTTPS. Using <xref target="RFC9110">HTTP Semantics</xref>, which
+      maximizes transport-level interoperability, while allowing for a
+      variety of encoding options. The protocol supports <xref
       target="RFC9112">HTTP/1.1: Message Syntax and Routing</xref>
       and, <xref target="RFC9113">HTTP/2</xref>. While the payload
       does not change between these versions of HTTP and <xref
       target="RFC9114">HTTP/3</xref>, the underlying transport
-      does. Since NETCONF does not support <xref
-      target="RFC9000">QUIC: A UDP-Based Multiplexed and Secure
-      Transport</xref>, support for <xref target="RFC9114">
-      HTTP/3</xref>, is considered out of scope of this document.</t>
+      does. Since there is no support for configuring the minimum
+      required parameters to enable notifications over <xref
+      target="RFC9114"> HTTP/3</xref>, support for it is considered
+      out of scope of this document at this time.</t>
       
-      <t>This document defines support for JSON and XML; future 
-      efforts may define support for other encodings 
-      (e.g., binary). This document requires that the publisher is a
-      "server" (e.g., a NETCONF or RESTCONF server), but does not 
-      assume that the receiver is a NETCONF or RESTCONF server. 
-      It does expect the receiver to be an HTTPS server to receive
-      the notifications.</t>
+      <t>This document defines support for JSON and XML content;
+      future efforts may define support for other encodings (e.g.,
+      binary). This document requires that the publisher is a "server"
+      (e.g., a NETCONF or RESTCONF server), but does not assume that
+      the receiver is a NETCONF or RESTCONF server.  It does expect
+      the receiver to be an HTTPS server to receive the
+      notifications.</t>
 
       <t>This document also defines two <xref target="RFC7950">YANG
       1.1</xref> modules that extend the data model defined in <xref
@@ -364,9 +363,9 @@ Content-Length: nnn
       </section>
       <section title="Response">
         <t>
-	  The response on success SHOULD be "204 (No Content)". In
-	  case of corrupted or malformed event, the response SHOULD be
-	  an appropriate HTTP error response.
+	  The response on success SHOULD be from the 2XX class of
+	  codes. In case of corrupted or malformed event, the response
+	  SHOULD be an appropriate HTTP error response.
 	</t>
       </section>
       <section title="Example">
