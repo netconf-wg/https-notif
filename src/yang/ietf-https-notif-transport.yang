@@ -87,7 +87,18 @@ module ietf-https-notif-transport {
     description
       "A grouping that may be used by other modules wishing to
        configure HTTPS-based notifications without using RFC 8639.";
-    uses httpc:http-client-grouping;
+    container capabilities-endpoint {
+      uses httpc:http-client-grouping;
+      description
+        "Defines 'capabilities' resource endpoint.";
+    }
+
+    container relay-notification-endpoint {
+      uses httpc:http-client-grouping;
+      description
+        "Defines 'relay-notification' resource endpoint.";
+    }
+
     container receiver-identity {
       if-feature receiver-identity;
       description

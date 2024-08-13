@@ -720,7 +720,6 @@ Record:
       <?rfc include='reference.RFC.8341.xml'?>
       <?rfc include='reference.RFC.8446.xml'?>
       <?rfc include='reference.RFC.8639.xml'?>
-      <?rfc include='reference.RFC.9000.xml'?>
       <?rfc include='reference.RFC.9110.xml'?>
       <?rfc include='reference.RFC.9112.xml'?>
       <?rfc include='reference.RFC.9113.xml'?>
