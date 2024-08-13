@@ -87,27 +87,7 @@ module ietf-https-notif-transport {
     description
       "A grouping that may be used by other modules wishing to
        configure HTTPS-based notifications without using RFC 8639.";
-    uses httpc:http-client-stack-grouping {
-      refine "transport/tcp" {
-        // create the logical impossibility of enabling the
-        // "tcp" transport (i.e., "HTTP" without the 'S').
-        if-feature "not httpc:tcp-supported";
-      }
-      augment "transport/tls/tls/http-client-parameters" {
-        leaf path {
-          type string;
-          mandatory true;
-          description
-            "A path to the target resources.  Under this
-             path the receiver must support both the 'capabilities'
-             and 'relay-notification' resource targets, as described
-             in RFC XXXX.";
-        }
-        description
-          "Augmentation to add a receiver-specific path for the
-           'capabilities' and 'relay-notification' resources.";
-      }
-    }
+    uses httpc:http-client-grouping;
     container receiver-identity {
       if-feature receiver-identity;
       description

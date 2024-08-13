@@ -3,11 +3,11 @@ module example-custom-module {
   namespace "http://example.com/example-custom-module";
   prefix "custom";
 
-  import ietf-https-notif-transport {
-    prefix "hnt";
+  import ietf-http-client {
+    prefix "httpc";
     reference
-      "RFC XXXX:
-        An HTTPS-based Transport for Configured Subscriptions";
+      "I-D.ietf-netconf-http-client-server:
+        YANG Groupings for HTTP Clients and HTTP Servers.";
   }
 
   organization
@@ -43,7 +43,7 @@ module example-custom-module {
          description
            "A unique name for the https notif receiver.";
        }
-        uses hnt:https-receiver-grouping;
+        uses httpc:http-client-grouping;
       }
     }
   }
