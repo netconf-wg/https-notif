@@ -40,7 +40,7 @@ module example-custom-module {
         leaf name {
           type string;
           description
-            "A unique name for the https notif receiver.";
+            "A unique name for the https-notif receiver.";
         }
         uses hnt:https-receiver-grouping;
       }
