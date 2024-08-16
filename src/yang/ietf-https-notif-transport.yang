@@ -79,6 +79,7 @@ module ietf-https-notif-transport {
 
   identity https {
     base sn:transport;
+    base sn:configurable-encoding;
     description
       "HTTPS transport for notifications.";
   }
