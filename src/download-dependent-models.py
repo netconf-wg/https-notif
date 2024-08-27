@@ -3,6 +3,10 @@ import os
 list_of_ietf_models =\
 [ ["ietf-crypto-types", "draft-ietf-netconf-crypto-types", "34"],
   ["ietf-truststore", "draft-ietf-netconf-trust-anchors", "28"],
+  ["ietf-keystore", "draft-ietf-netconf-keystore", "35"],
+  ["iana-tls-cipher-suite-algs", "draft-ietf-netconf-tls-client-server", "41"],
+  ["ietf-tls-common", "draft-ietf-netconf-tls-client-server", "41"],
+  ["ietf-tls-client", "draft-ietf-netconf-tls-client-server", "41"],
   ["iana-tls-cipher-suite-algs", "draft-ietf-netconf-tls-client-server", "41"],
   ["ietf-http-client", "draft-ietf-netconf-http-client-server", "23"] ]
 
