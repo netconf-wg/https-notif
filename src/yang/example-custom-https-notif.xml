@@ -4,7 +4,14 @@
     <https-receiver>
       <name>foo</name>
       <capabilities-endpoint>
-        <uri>receiver.example.com:443/some-path</uri>
+        <uri>
+          <scheme>https</scheme>
+          <authority>
+            <host>receiver.example.com</host>
+            <port>443</port>
+          </authority>
+          <path>some-path</path>
+        </uri>
         <tls-client-parameters>
           <server-authentication>
             <ca-certs>
@@ -19,7 +26,14 @@
         </tls-client-parameters>
       </capabilities-endpoint>
       <relay-notification-endpoint>
-        <uri>receiver.example.com:443/some-path</uri>
+        <uri>
+          <scheme>https</scheme>
+          <authority>
+            <host>receiver.example.com</host>
+            <port>443</port>
+          </authority>
+          <path>some-path</path>
+        </uri>
         <tls-client-parameters>
           <server-authentication>
             <ca-certs>

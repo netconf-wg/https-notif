@@ -8,7 +8,7 @@ list_of_ietf_models =\
   ["ietf-tls-common", "draft-ietf-netconf-tls-client-server", "41"],
   ["ietf-tls-client", "draft-ietf-netconf-tls-client-server", "41"],
   ["iana-tls-cipher-suite-algs", "draft-ietf-netconf-tls-client-server", "41"],
-  ["ietf-http-client", "draft-ietf-netconf-http-client-server", "23"] ]
+  ["ietf-http-client", "draft-ietf-netconf-http-client-server", "27"] ]
 
 
 def fetch_and_extract(draft, module, version):

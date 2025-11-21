@@ -26,7 +26,7 @@ do
     echo "Validation of YANG module $name.yang using pyang succeeded."
     fold -w 71 $name-tree.txt.tmp > $name-tree.txt
     echo "Validating YANG module $name.yang using yanglint"
-    response=`yanglint -p ../src/yang -p ../bin $name.yang -i`
+    response=`yanglint -p ../src/yang -p ../bin $name.yang -ii`
     if [ $? -ne 0 ]; then
        printf "$name.yang failed yanglint validation\n"
        printf "$response\n\n"
