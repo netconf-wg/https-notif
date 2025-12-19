@@ -9,7 +9,14 @@
           xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif-transport"
           xmlns:x509c2n="urn:ietf:params:xml:ns:yang:ietf-x509-cert-to-name">
         <capabilities-endpoint>
-          <uri>receiver.example.com:443/some-path</uri>
+          <uri>
+            <scheme>https</scheme>
+            <authority>
+              <host>receiver.example.com</host>
+              <port>443</port>
+            </authority>
+            <path>some-path</path>
+          </uri>
           <tls-client-parameters>
             <server-authentication>
               <ca-certs>
@@ -24,7 +31,14 @@
           </tls-client-parameters>
         </capabilities-endpoint>
         <relay-notification-endpoint>
-          <uri>receiver.example.com:443/some-path</uri>
+          <uri>
+            <scheme>https</scheme>
+            <authority>
+              <host>receiver.example.com</host>
+              <port>443</port>
+            </authority>
+            <path>some-path</path>
+          </uri>
           <tls-client-parameters>
             <server-authentication>
               <ca-certs>
