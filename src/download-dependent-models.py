@@ -1,7 +1,8 @@
 import os
 
 list_of_ietf_models =\
-[ ["ietf-http-client", "draft-ietf-netconf-http-client-server", "33"] ]
+[ ["ietf-http-client", "draft-ietf-netconf-http-client-server", "33"],
+    ["iana-http-versions", "draft-ietf-netconf-http-client-server", "33"]]
 
 
 def fetch_and_extract(draft, module, version):
