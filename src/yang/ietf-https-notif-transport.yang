@@ -3,6 +3,12 @@ module ietf-https-notif-transport {
   namespace "urn:ietf:params:xml:ns:yang:ietf-https-notif-transport";
   prefix "hnt";
 
+  import ietf-inet-types {
+    prefix inet;
+    reference
+      "RFC 9911: Common YANG Data Types.";
+  }
+
   import ietf-x509-cert-to-name {
     prefix x509c2n;
     reference
@@ -20,7 +26,13 @@ module ietf-https-notif-transport {
     reference
       "RFC XXXX: An HTTPS-based Transport for YANG Notifications.";
   }
-  
+
+  import ietf-yang-structure-ext {
+    prefix sx;
+    reference
+      "RFC 8791: YANG Data Structure Extensions.";
+  }
+
   import ietf-http-client {
     prefix httpc;
     reference
@@ -136,5 +148,23 @@ module ietf-https-notif-transport {
     description
       "Augment the transport-type choice to include the 'https'
        transport.";
+  }
+
+  sx:structure receiver-capabilities {
+    description
+      "A structure defining the response body for the GET request
+       to the 'capabilities' resource.  When encoded as
+       'application/yang-data+xml', the root element is
+       'receiver-capabilities' in the namespace of this module.
+       When encoded as 'application/yang-data+json', the top-level
+       key is 'ietf-https-notif-transport:receiver-capabilities'.";
+    leaf-list receiver-capability {
+      type inet:uri;
+      description
+        "A capability supported by the receiver.  A partial list
+         of capabilities is defined in the 'Capabilities for HTTPS
+         Notification Receivers' registry (RFC XXXX).  Additional
+         custom capabilities MAY be defined.";
+    }
   }
 }

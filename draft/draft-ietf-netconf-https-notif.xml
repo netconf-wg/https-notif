@@ -61,9 +61,10 @@
       target="RFC9114"> HTTP/3</xref>, support for it is considered
       out of scope of this document at this time.</t>
       
-      <t>This document defines support for JSON and XML content;
+      <t>This document defines support for JSON and XML content, using
+      the media types defined in <xref target="RFC8040">RESTCONF</xref>;
       future efforts may define support for other encodings (e.g.,
-      binary). This document requires that the publisher is a "server"
+      CBOR). This document requires that the publisher is a "server"
       (e.g., a NETCONF or RESTCONF server), but does not assume that
       the receiver is a NETCONF or RESTCONF server.  It does expect
       the receiver to be an HTTPS server to receive the
@@ -232,30 +233,29 @@
         <t>
 	  To learn the capabilities of a receiver, a publisher can
 	  issue an HTTPS GET request to the "capabilities" resource
-	  (see <xref target= "overview"/>) on the receiver with
-	  "Accept" header set using the "application/xml" as defined
-	  in <xref target="RFC7303">XML Media Types</xref>, and/or
-	  "application/json" as defined in <xref
-	  target="RFC8259">JSON</xref> media-types.
+	  (see <xref target= "overview"/>) on the receiver with the
+	  "Accept" header set to "application/yang-data+xml" and/or
+	  "application/yang-data+json", as defined in
+	  <xref target="RFC8040">RESTCONF</xref>.
 	</t>
       </section>
       <section title="Response">
         <t>The receiver responds with a "200 (OK)" message, having the
-          "Content-Type" header set to either "application/xml" or
-          "application/json" (which ever was selected), and containing
+          "Content-Type" header set to either "application/yang-data+xml" or
+          "application/yang-data+json" (whichever was selected), and containing
           in the response body a list of the receiver's capabilities
           encoded in the selected format.</t>
-        <t>Even though a YANG module is not defined for this interaction,
-          the response body MUST conform to the following YANG-modeled
-          format:</t>
+        <t>The response body MUST conform to the "receiver-capabilities"
+          structure defined in the "ietf-https-notif-transport" YANG module
+          (see <xref target="RFC8791">YANG Data Structure Extensions</xref>):</t>
         <t>
           <figure>
-            <artwork>container receiver-capabilities {
+            <artwork>structure receiver-capabilities {
   description
-    "A container for a list of capabilities supported by
-     the receiver.";
+    "A structure defining the response body for the capabilities
+     GET request.";
   leaf-list receiver-capability {
-    type "inet:uri";
+    type inet:uri;
     description
       "A capability supported by the receiver.  A partial list of
        capabilities is defined in the 'Capabilities for HTTPS
@@ -280,11 +280,11 @@
           <figure>
             <artwork><![CDATA[GET /some/path/capabilities HTTP/1.1
 Host: example.com
-Accept: application/xml, application/json;q=0.5]]></artwork>
+Accept: application/yang-data+xml, application/yang-data+json;q=0.5]]></artwork>
           </figure>
         </t>
-        <t>If the receiver is able to reply using "application/xml", and
-        assuming it is able to receive JSON and XML encoded notifications,
+        <t>If the receiver is able to reply using "application/yang-data+xml",
+        and assuming it is able to receive JSON and XML encoded notifications,
 	and it is able to process the RFC 8639 state machine, the
         response might look like this:</t>
         <t>
@@ -293,40 +293,41 @@ Accept: application/xml, application/json;q=0.5]]></artwork>
 Date: Wed, 26 Feb 2020 20:33:30 GMT
 Server: example-server
 Cache-Control: no-cache
-Content-Type: application/xml
+Content-Type: application/yang-data+xml
 
-<receiver-capabilities>
-  <receiver-capability>\
-    urn:ietf:capability:https-notif-receiver:encoding:json\
+<receiver-capabilities
+    xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif-transport">
+  <receiver-capability>
+    urn:ietf:params:yang-notif:https-capability:encoding:json
   </receiver-capability>
-  <receiver-capability>\
-    urn:ietf:capability:https-notif-receiver:encoding:xml\
+  <receiver-capability>
+    urn:ietf:params:yang-notif:https-capability:encoding:xml
   </receiver-capability>
-  <receiver-capability>\
-    urn:ietf:capability:https-notif-receiver:sub-notif\
+  <receiver-capability>
+    urn:ietf:params:yang-notif:https-capability:sub-notif
   </receiver-capability>
 </receiver-capabilities>]]></artwork>
           </figure>
         </t>
-        <t>If the receiver is unable to reply using "application/xml", the
-        response might look like this:</t>
+        <t>If the receiver is unable to reply using "application/yang-data+xml",
+        the response might look like this:</t>
         <t>
           <figure>
             <artwork><![CDATA[HTTP/1.1 200 OK
 Date: Wed, 26 Feb 2020 20:33:30 GMT
 Server: example-server
 Cache-Control: no-cache
-Content-Type: application/json
+Content-Type: application/yang-data+json
 Content-Length: nnn
 
 {
-   "receiver-capabilities": {
-     "receiver-capability": [
-       "urn:ietf:capability:https-notif-receiver:encoding:json",
-       "urn:ietf:capability:https-notif-receiver:encoding:xml",
-       "urn:ietf:capability:https-notif-receiver:sub-notif"
-     ]
-   }
+  "ietf-https-notif-transport:receiver-capabilities": {
+    "receiver-capability": [
+      "urn:ietf:params:yang-notif:https-capability:encoding:json",
+      "urn:ietf:params:yang-notif:https-capability:encoding:xml",
+      "urn:ietf:params:yang-notif:https-capability:sub-notif"
+    ]
+  }
 }]]></artwork>
           </figure>
         </t>
@@ -339,9 +340,9 @@ Content-Length: nnn
 	  The publisher sends an HTTP POST request to the
 	  "relay-notification" resource (see <xref target=
 	  "overview"/>) on the receiver with the "Content-Type" header
-	  set to either "application/json" or "application/xml" and a
-	  body containing the notification encoded using the specified
-	  format.
+	  set to either "application/yang-data+json" or
+	  "application/yang-data+xml" and a body containing the
+	  notification encoded using the specified format.
 	</t>
         <t>XML-encoded notifications are encoded using the format defined
           by <xref target="RFC5277">NETCONF Event Notifications</xref>
@@ -374,7 +375,7 @@ Content-Length: nnn
           <figure>
             <artwork><![CDATA[POST /some/path/relay-notification HTTP/1.1
 Host: example.com
-Content-Type: application/xml
+Content-Type: application/yang-data+xml
 
 <notification xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
   <eventTime>2019-03-22T12:35:00Z</eventTime>
@@ -392,7 +393,7 @@ Content-Type: application/xml
         <t><figure>
             <artwork><![CDATA[POST /some/path/relay-notification HTTP/1.1
 Host: example.com
-Content-Type: application/json
+Content-Type: application/yang-data+json
 
 {
   "ietf-https-notif:notification": {
@@ -474,11 +475,15 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD-sub-tree.txt,
       </section>
 
       <section title="YANG module">
-        <t>The YANG module imports 
+        <t>The YANG module imports
+        <xref target="RFC9911">Common YANG Data Types</xref>,
         <xref target="RFC7407">A YANG Data Model for SNMP Configuration</xref>,
         <xref target="RFC8639">Subscription to YANG Notifications</xref>,
+        <xref target="RFC8791">YANG Data Structure Extensions</xref>,
           <!--<xref target="I-D.ietf-subscribed-notif-receivers">An HTTPS-based Transport for Configured Subscriptions</xref>,-->
-        and <xref target="I-D.ietf-netconf-http-client-server">YANG Groupings for HTTP Clients and HTTP Servers</xref>.</t>
+        and <xref target="I-D.ietf-netconf-http-client-server">YANG Groupings for HTTP Clients and HTTP Servers</xref>.
+        It also defines the "receiver-capabilities" structure used as
+        the response body of the capabilities GET request.</t>
 
         <t>The YANG module is shown below.</t>
 
@@ -513,7 +518,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
       are defined in <xref
       target="I-D.ietf-netconf-http-client-server">YANG Groupings for
       HTTP Clients and HTTP Servers</xref>, <xref
-      target="I-D.ietf-netconf-tls-client-server">YANG Groupings for
+      target="RFC9645">YANG Groupings for
       TLS Clients and TLS Servers</xref>, and <xref target="RFC7407">A
       YANG Data Model for SNMP Configuration</xref>. Please see the
       Security Considerations section of those documents for
@@ -710,23 +715,23 @@ Record:
       <?rfc include='reference.RFC.6020.xml'?>
       <?rfc include='reference.RFC.6241.xml'?>
       <?rfc include='reference.RFC.6242.xml'?>
-      <?rfc include='reference.RFC.7303.xml'?>
       <?rfc include='reference.RFC.7407.xml'?>
       <?rfc include='reference.RFC.7950.xml'?>
       <?rfc include='reference.RFC.8040.xml'?>
       <?rfc include='reference.RFC.8174.xml'?>
-      <?rfc include='reference.RFC.8259.xml'?>
       <?rfc include='reference.RFC.8340.xml'?>
       <?rfc include='reference.RFC.8341.xml'?>
       <?rfc include='reference.RFC.8446.xml'?>
       <?rfc include='reference.RFC.8639.xml'?>
+      <?rfc include='reference.RFC.8791.xml'?>
       <?rfc include='reference.RFC.9110.xml'?>
       <?rfc include='reference.RFC.9112.xml'?>
       <?rfc include='reference.RFC.9113.xml'?>
       <?rfc include='reference.RFC.9114.xml'?>
       <?rfc include='reference.RFC.9325.xml'?>
+      <?rfc include='reference.RFC.9645.xml'?>
+      <?rfc include='reference.RFC.9911.xml'?>
       <?rfc include='reference.I-D.ietf-netconf-http-client-server.xml'?>
-      <?rfc include='reference.I-D.ietf-netconf-tls-client-server.xml'?>
     </references>
     <references title="Informative references">
       <?rfc include='reference.RFC.8141.xml'?>
