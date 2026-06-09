@@ -513,7 +513,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
       are defined in <xref
       target="I-D.ietf-netconf-http-client-server">YANG Groupings for
       HTTP Clients and HTTP Servers</xref>, <xref
-      target="I-D.ietf-netconf-tls-client-server">YANG Groupings for
+      target="RFC9645">YANG Groupings for
       TLS Clients and TLS Servers</xref>, and <xref target="RFC7407">A
       YANG Data Model for SNMP Configuration</xref>. Please see the
       Security Considerations section of those documents for
@@ -725,8 +725,9 @@ Record:
       <?rfc include='reference.RFC.9113.xml'?>
       <?rfc include='reference.RFC.9114.xml'?>
       <?rfc include='reference.RFC.9325.xml'?>
+      <?rfc include='reference.RFC.9645.xml'?>
       <?rfc include='reference.I-D.ietf-netconf-http-client-server.xml'?>
-      <?rfc include='reference.I-D.ietf-netconf-tls-client-server.xml'?>
+
     </references>
     <references title="Informative references">
       <?rfc include='reference.RFC.8141.xml'?>
