@@ -61,14 +61,20 @@
       target="RFC9114"> HTTP/3</xref>, support for it is considered
       out of scope of this document at this time.</t>
       
-      <t>This document defines support for JSON and XML content, using
-      the media types defined in <xref target="RFC8040">RESTCONF</xref>;
-      future efforts may define support for other encodings (e.g.,
-      CBOR). This document requires that the publisher is a "server"
-      (e.g., a NETCONF or RESTCONF server), but does not assume that
-      the receiver is a NETCONF or RESTCONF server.  It does expect
-      the receiver to be an HTTPS server to receive the
-      notifications.</t>
+      <t>
+	This document defines support for JSON and XML content, using
+	the media types defined in <xref
+	target="RFC8040">RESTCONF</xref>; future efforts may define
+	support for other encodings (e.g., CBOR). This document also
+	defines optional support for sending legacy notifications as
+	defined in <xref target="RFC5277">NETCONF Event
+	Notifications</xref> using "application/xml" as the media
+	type. This document requires that the publisher is a "server"
+	(e.g., a NETCONF or RESTCONF server), but does not assume that
+	the receiver is a NETCONF or RESTCONF server.  It does expect
+	the receiver to be an HTTPS server to receive the
+	notifications.
+      </t>
 
       <t>This document also defines two <xref target="RFC7950">YANG
       1.1</xref> modules that extend the data model defined in <xref
@@ -420,6 +426,131 @@ Server: example-server]]></artwork>
       </section>
     </section>
 
+    <section title="Support for Legacy Notifications (RFC 5277)">
+      <t>
+	This document primarily defines a transport for YANG
+	notifications. However, implementations MAY also use this
+	HTTPS-based transport to send legacy event notifications as
+	defined in <xref target="RFC5277">NETCONF Event
+	Notifications</xref>. This section defines how such legacy
+	notifications are sent and how a receiver advertises support
+	for them.
+      </t>
+
+      <section title="Request">
+        <t>
+	  When sending legacy RFC 5277 notifications, the publisher
+	  sends an HTTP POST request to the "relay-notification"
+	  resource (see <xref target="overview"/>) with the
+	  "Content-Type" header set to "application/xml". The body
+	  MUST contain the notification encoded as defined in <xref
+	  target="RFC5277">NETCONF Event Notifications</xref>.
+	</t>
+      </section>
+
+      <section title="Capabilities">
+        <t>
+	  A receiver that supports legacy RFC 5277 notifications MUST
+	  advertise this capability by including the following URI in
+	  its capabilities response (see <xref
+	  target="overview"/>):
+	</t>
+        <t>
+          <figure>
+            <artwork>urn:ietf:params:yang-notif:https-capability:rfc5277-notif</artwork>
+          </figure>
+        </t>
+
+  <t>
+	  A publisher that intends to send legacy notifications SHOULD
+	  query the receiver's capabilities first and MUST only send
+	  RFC 5277 notifications when this capability URI is present.
+	</t>
+	<t>
+	  A YANG-aware publisher SHOULD issue the capabilities request
+	  with an "Accept" header set to "application/yang-data+xml"
+	  and/or "application/yang-data+json", as described in <xref
+	  target="overview"/>. A legacy publisher that only understands
+	  "application/xml" MAY instead set the "Accept" header to
+	  "application/xml". In that case, the receiver SHOULD respond
+	  with "Content-Type: application/xml" and the same
+	  "receiver-capabilities" XML structure, allowing the legacy
+	  publisher to parse the capability URIs without requiring
+	  knowledge of YANG media types.
+	</t>
+      </section>
+
+      <section title="Example">
+        <t>A legacy publisher that only understands "application/xml"
+        can discover receiver capabilities as follows:</t>
+        <t>
+          <figure>
+            <artwork><![CDATA[GET /some/path/capabilities HTTP/1.1
+Host: example.com
+Accept: application/xml]]></artwork>
+          </figure>
+        </t>
+        <t>
+	  The receiver, recognizing that the publisher sent
+	  "Accept: application/xml", responds with the same
+	  "receiver-capabilities" structure but using
+	  "Content-Type: application/xml":
+	</t>
+        <t>
+          <figure>
+            <artwork><![CDATA[HTTP/1.1 200 OK
+Date: Wed, 26 Feb 2020 20:33:30 GMT
+Server: example-server
+Cache-Control: no-cache
+Content-Type: application/xml
+
+<receiver-capabilities
+    xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif-transport">
+  <receiver-capability>
+    urn:ietf:params:yang-notif:https-capability:encoding:json
+  </receiver-capability>
+  <receiver-capability>
+    urn:ietf:params:yang-notif:https-capability:encoding:xml
+  </receiver-capability>
+  <receiver-capability>
+    urn:ietf:params:yang-notif:https-capability:rfc5277-notif
+  </receiver-capability>
+</receiver-capabilities>]]></artwork>
+          </figure>
+        </t>
+        <t>
+	  Having confirmed the "rfc5277-notif" capability, the legacy
+	  publisher then sends a notification as follows:
+	</t>
+        <t>
+          <figure>
+            <artwork><![CDATA[POST /some/path/relay-notification HTTP/1.1
+Host: example.com
+Content-Type: application/xml
+
+<notification xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
+  <eventTime>2019-03-22T12:35:00Z</eventTime>
+  <event xmlns="https://example.com/example-mod">
+    <event-class>fault</event-class>
+    <reporting-entity>
+      <card>Ethernet0</card>
+    </reporting-entity>
+    <severity>major</severity>
+  </event>
+</notification>]]></artwork>
+          </figure>
+        </t>
+        <t>And the response on success might be as follows:</t>
+        <t>
+          <figure>
+            <artwork><![CDATA[HTTP/1.1 204 No Content
+Date: Wed, 26 Feb 2020 20:33:30 GMT
+Server: example-server]]></artwork>
+          </figure>
+        </t>
+      </section>
+    </section>
+
     <section title='The "ietf-subscribed-notif-receivers" Module'>
       <section title="Data Model Overview">
         <t>This YANG module augments the "ietf-subscribed-notifications" module to
@@ -698,6 +829,12 @@ Record:
    Description: Identifies support for state machine described in
                 RFC 8639, enabling the publisher to send, e.g., the
                 "subscription-started" notification.
+Record:
+   URN:         urn:ietf:params:yang-notif:https-capability:rfc5277-notif
+   Reference:   RFC XXXX:An HTTPS-based Transport for YANG Notifications
+   Description: Identifies support for receiving legacy RFC 5277
+                XML notifications, transmitted using "application/xml"
+                as the Content-Type header value.
             </artwork>
           </figure>
         </t>
