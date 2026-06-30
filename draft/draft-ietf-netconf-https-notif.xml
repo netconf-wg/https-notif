@@ -69,11 +69,11 @@
 	defines optional support for sending legacy notifications as
 	defined in <xref target="RFC5277">NETCONF Event
 	Notifications</xref> using "application/xml" as the media
-	type. This document requires that the publisher is a "server"
-	(e.g., a NETCONF or RESTCONF server), but does not assume that
-	the receiver is a NETCONF or RESTCONF server.  It does expect
-	the receiver to be an HTTPS server to receive the
-	notifications.
+	type. This document requires that the publisher is a network
+	management server (e.g., a NETCONF or RESTCONF server), but
+	does not require that the receiver also be a network management
+	server.  The receiver is, however, required to be an HTTPS
+	server capable of receiving the notifications.
       </t>
 
       <t>This document also defines two <xref target="RFC7950">YANG
@@ -251,9 +251,13 @@
           "application/yang-data+json" (whichever was selected), and containing
           in the response body a list of the receiver's capabilities
           encoded in the selected format.</t>
-        <t>The response body MUST conform to the "receiver-capabilities"
-          structure defined in the "ietf-https-notif-transport" YANG module
-          (see <xref target="RFC8791">YANG Data Structure Extensions</xref>):</t>
+          <t>
+	    The response body MUST conform to the
+	    "receiver-capabilities" structure defined in the
+	    "ietf-https-notif-transport" YANG module (see <xref
+	    target="RFC8791">YANG Data Structure Extensions</xref>),
+	    which is shown below:
+	  </t>
         <t>
           <figure>
             <artwork>structure receiver-capabilities {
@@ -286,7 +290,8 @@
           <figure>
             <artwork><![CDATA[GET /some/path/capabilities HTTP/1.1
 Host: example.com
-Accept: application/yang-data+xml, application/yang-data+json;q=0.5]]></artwork>
+Accept: application/yang-data+xml, application/yang-data+json;q=0.5
+]]></artwork>
           </figure>
         </t>
         <t>If the receiver is able to reply using "application/yang-data+xml",
@@ -429,9 +434,11 @@ Server: example-server]]></artwork>
     <section title="Support for Legacy Notifications (RFC 5277)">
       <t>
 	This document primarily defines a transport for YANG
-	notifications. However, implementations MAY also use this
-	HTTPS-based transport to send legacy event notifications as
-	defined in <xref target="RFC5277">NETCONF Event
+	notifications as defined in <xref
+	target="RFC8639">Subscription to YANG
+	Notifications</xref>. However, implementations MAY also use
+	this HTTPS-based transport to send legacy event notifications
+	as defined in <xref target="RFC5277">NETCONF Event
 	Notifications</xref>. This section defines how such legacy
 	notifications are sent and how a receiver advertises support
 	for them.
@@ -457,14 +464,19 @@ Server: example-server]]></artwork>
 	</t>
         <t>
           <figure>
-            <artwork>urn:ietf:params:yang-notif:https-capability:rfc5277-notif</artwork>
+            <artwork>
+urn:ietf:params:yang-notif:https-capability:rfc5277-notif
+</artwork>
           </figure>
         </t>
 
-  <t>
-	  A publisher that intends to send legacy notifications SHOULD
-	  query the receiver's capabilities first and MUST only send
-	  RFC 5277 notifications when this capability URI is present.
+        <t>
+	  A publisher MUST NOT send RFC 5277 legacy notifications
+	  unless it has confirmed that the receiver supports the
+	  "rfc5277-notif" capability URI.  The publisher MUST confirm
+	  this either by querying the receiver's capabilities as
+	  described in <xref target="overview"/>, or through prior
+	  knowledge (e.g., static configuration).
 	</t>
 	<t>
 	  A YANG-aware publisher SHOULD issue the capabilities request

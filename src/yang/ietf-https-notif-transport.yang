@@ -153,11 +153,12 @@ module ietf-https-notif-transport {
   sx:structure receiver-capabilities {
     description
       "A structure defining the response body for the GET request
-       to the 'capabilities' resource.  When encoded as
-       'application/yang-data+xml', the root element is
-       'receiver-capabilities' in the namespace of this module.
-       When encoded as 'application/yang-data+json', the top-level
-       key is 'ietf-https-notif-transport:receiver-capabilities'.";
+       to the 'capabilities' resource.  Using standard YANG
+       encoding rules, when encoded as 'application/yang-data+xml'
+       the root element is 'receiver-capabilities' in the namespace
+       of this module, and when encoded as
+       'application/yang-data+json' the top-level key is
+       'ietf-https-notif-transport:receiver-capabilities'.";
     leaf-list receiver-capability {
       type inet:uri;
       description
