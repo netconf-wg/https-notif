@@ -345,7 +345,18 @@ Content-Length: nnn
       </section>
     </section>
 
-    <section title="Sending Event Notifications"> 
+    <section title="Sending Event Notifications">
+      <t>
+	This section defines how a publisher sends YANG notifications
+	to a receiver. When used with <xref target="RFC8639">Subscription
+	to YANG Notifications</xref>, this transport applies only to
+	configured subscriptions (see Section 2.5 of <xref
+	target="RFC8639"/>), as notifications for dynamic subscriptions
+	are sent over the session used to establish the
+	subscription. Sending legacy notifications as defined in <xref
+	target="RFC5277">NETCONF Event Notifications</xref> is described
+	in <xref target="legacy"/>.
+      </t>
       <section title="Request">
         <t>
 	  The publisher sends an HTTP POST request to the
@@ -355,23 +366,17 @@ Content-Length: nnn
 	  "application/yang-data+xml" and a body containing the
 	  notification encoded using the specified format.
 	</t>
-        <t>XML-encoded notifications are encoded using the format defined
-          by <xref target="RFC5277">NETCONF Event Notifications</xref>
-          for XML.</t>
-        <t>JSON-encoded notifications are encoded the same as specified
-          in Section 6.4 in <xref target="RFC8040">RESTCONF</xref> with
-          the following deviations:
-          <list style="symbols">
-            <t>
-	    The notifications do not contain the "data:" prefix used
-	    by Server-Sent Events (SSE).
-	    </t>
-            <t>Instead of saying that, for JSON-encoding purposes, the
-            module name for the "notification" element is
-            "ietf-restconf", the module name will instead be
-            "ietf-https-notif".</t>
-          </list>
-        </t>
+        <t>
+	  XML-encoded notifications are encoded as defined in Section
+	  2.6 of <xref target="RFC8639"/>.
+	</t>
+        <t>
+	  JSON-encoded notifications are encoded as defined in Section
+	  6.4 of <xref target="RFC8040">RESTCONF</xref>, including the
+	  use of the "ietf-restconf" module name for the
+	  "notification" element, except that the notifications do not
+	  contain the "data:" prefix used by Server-Sent Events (SSE).
+	</t>
       </section>
       <section title="Response">
         <t>
@@ -407,7 +412,7 @@ Host: example.com
 Content-Type: application/yang-data+json
 
 {
-  "ietf-https-notif:notification": {
+  "ietf-restconf:notification": {
     "eventTime": "2013-12-21T00:01:00Z",
     "example-mod:event" : {
       "event-class" : "fault",
@@ -431,7 +436,7 @@ Server: example-server]]></artwork>
       </section>
     </section>
 
-    <section title="Support for Legacy Notifications (RFC 5277)">
+    <section title="Support for Legacy Notifications (RFC 5277)" anchor="legacy">
       <t>
 	This document primarily defines a transport for YANG
 	notifications as defined in <xref
@@ -518,9 +523,6 @@ Content-Type: application/xml
 
 <receiver-capabilities
     xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif-transport">
-  <receiver-capability>
-    urn:ietf:params:yang-notif:https-capability:encoding:json
-  </receiver-capability>
   <receiver-capability>
     urn:ietf:params:yang-notif:https-capability:encoding:xml
   </receiver-capability>
