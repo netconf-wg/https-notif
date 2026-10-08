@@ -714,41 +714,45 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
 
     <section title="IANA Considerations">
       <section title='The "IETF XML" Registry'>
-        <t>This document registers two URIs in the "ns" subregistry
-          of the "IETF XML" registry <xref target="RFC3688"/>.  Following
-          the format in <xref target="RFC3688"/>, the following
-          registrations are requested:</t>
+        <t>
+	  IANA is requested to register the following URIs in the
+	  "ns" registry within the "IETF XML Registry" group <xref
+	  target="RFC3688"/>:
+	</t>
         <t>
           <figure>
             <artwork>
-URI: urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers
-Registrant Contact: The IESG
-XML: N/A, the requested URI is an XML namespace.
+URI:  urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers
+Registrant Contact:  The IESG
+XML: N/A; the requested URI is an XML namespace.
 
-URI: urn:ietf:params:xml:ns:yang:ietf-https-notif-transport
-Registrant Contact: The IESG
-XML: N/A, the requested URI is an XML namespace.
+URI:  urn:ietf:params:xml:ns:yang:ietf-https-notif-transport
+Registrant Contact:  The IESG
+XML: N/A; the requested URI is an XML namespace.
 </artwork>
           </figure>
         </t>
       </section>
       <section title='The "YANG Module Names" Registry'>
-        <t>This document registers two YANG modules in the
-          "YANG Module Names" registry <xref target="RFC6020"/>.
-          Following the format in <xref target="RFC6020"/>, the
-          following registrations are requested:</t>
+        <t>
+	  IANA is requested to register the following YANG modules in
+	  the "YANG Module Names" registry <xref target="RFC6020"/>
+	  within the "YANG Parameters" registry group:
+	</t>
         <t>
           <figure>
             <artwork>
-name:      ietf-subscribed-notif-receivers
-namespace: urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers
-prefix:    snr
-reference: RFC XXXX
+Name:  ietf-subscribed-notif-receivers
+Maintained by IANA?  N
+Namespace:  urn:ietf:params:xml:ns:yang:ietf-subscribed-notif-receivers
+Prefix:  snr
+Reference:  RFC XXXX
 
-name:      ietf-https-notif-transport
-namespace: urn:ietf:params:xml:ns:yang:ietf-https-notif-transport
-prefix:    hnt
-reference: RFC XXXX
+Name:  ietf-https-notif-transport
+Maintained by IANA?  N
+Namespace:  urn:ietf:params:xml:ns:yang:ietf-https-notif-transport
+Prefix:  hnt
+Reference:  RFC XXXX
 </artwork>
           </figure>
         </t>
@@ -770,19 +774,11 @@ Repository: "YANG Notifications" registry
           </figure>
         </t>
       </section>
-      <section title="Registration of 'https' URN Sub-namespace">
+      <section title='The "Capabilities for HTTPS Notification Receivers" Registry'>
         <t>
-        This document requests that IANA register a new URN Sub-namespace within the
-         "YANG Notifications" registry group defined in <xref target="RFC3553"/>.
-        </t>
-        <t>
-          <figure>
-            <artwork>
-Registry Name: https-capability
-Specification: RFC XXXX
-Repository: "Capabilities for HTTPS Notification Receivers" registry
-            </artwork>
-          </figure>
+	  IANA is requested to create a new registry named
+	  "Capabilities for HTTPS Notification Receivers" within the
+	  "YANG Notifications" registry group.
         </t>
         <t>The following note shall be at the top of the registry:</t>
         <t>
@@ -804,7 +800,7 @@ supported by HTTPS-based notification receivers.
             <t>Reference
               <list style="symbols">
                 <t>The RFC that defined the URN.</t>
-                <t>The RFC must be in the form "RFC &lt;Number&gt;: &lt;Title&gt;.</t>
+                <t>The RFC must be in the form "RFC &lt;Number&gt;: &lt;Title&gt;".</t>
               </list>
             </t>
             <t>Description
@@ -827,23 +823,24 @@ supported by HTTPS-based notification receivers.
             <artwork>
 Record:
    URN:         urn:ietf:params:yang-notif:https-capability:encoding:json
-   Reference:   RFC XXXX:An HTTPS-based Transport for YANG Notifications
+   Reference:   RFC XXXX: An HTTPS-based Transport for YANG Notifications
    Description: Identifies support for JSON-encoded notifications.
 
 Record:
    URN:         urn:ietf:params:yang-notif:https-capability:encoding:xml
-   Reference:   RFC XXXX:An HTTPS-based Transport for YANG Notifications
+   Reference:   RFC XXXX: An HTTPS-based Transport for YANG Notifications
    Description: Identifies support for XML-encoded notifications.
 
 Record:
    URN:         urn:ietf:params:yang-notif:https-capability:sub-notif
-   Reference:   RFC XXXX:An HTTPS-based Transport for YANG Notifications
+   Reference:   RFC XXXX: An HTTPS-based Transport for YANG Notifications
    Description: Identifies support for state machine described in
                 RFC 8639, enabling the publisher to send, e.g., the
                 "subscription-started" notification.
+
 Record:
    URN:         urn:ietf:params:yang-notif:https-capability:rfc5277-notif
-   Reference:   RFC XXXX:An HTTPS-based Transport for YANG Notifications
+   Reference:   RFC XXXX: An HTTPS-based Transport for YANG Notifications
    Description: Identifies support for receiving legacy RFC 5277
                 XML notifications, transmitted using "application/xml"
                 as the Content-Type header value.
