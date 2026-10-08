@@ -653,7 +653,7 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
       secure transport is <xref target="RFC6242">Secure Shell
       (SSH)</xref>. The lowest RESTCONF layer is HTTPS, and the
       mandatory-to-implement secure transport is <xref
-      target="RFC8446">TLS</xref>. The <xref target="RFC8341">NETCONF
+      target="RFC9846">TLS</xref>. The <xref target="RFC8341">NETCONF
       Access Control Model (NACM) </xref> provides the means to
       restrict access for particular NETCONF or RESTCONF users to a
       preconfigured subset of all available NETCONF or RESTCONF
@@ -872,7 +872,6 @@ Record:
       <?rfc include='reference.RFC.8174.xml'?>
       <?rfc include='reference.RFC.8340.xml'?>
       <?rfc include='reference.RFC.8341.xml'?>
-      <?rfc include='reference.RFC.8446.xml'?>
       <?rfc include='reference.RFC.8639.xml'?>
       <?rfc include='reference.RFC.8791.xml'?>
       <?rfc include='reference.RFC.9110.xml'?>
@@ -881,6 +880,7 @@ Record:
       <?rfc include='reference.RFC.9114.xml'?>
       <?rfc include='reference.RFC.9325.xml'?>
       <?rfc include='reference.RFC.9645.xml'?>
+      <?rfc include='reference.RFC.9846.xml'?>
       <?rfc include='reference.RFC.9911.xml'?>
       <?rfc include='reference.I-D.ietf-netconf-http-client-server.xml'?>
     </references>
