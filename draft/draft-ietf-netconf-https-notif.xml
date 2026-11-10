@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="US-ASCII"?>
-<rfc
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude"
     category="std"
     docName="draft-ietf-netconf-https-notif-latest"
     submissionType="IETF"
@@ -856,34 +856,34 @@ Record:
 
   <back>
     <references title="Normative references">
-      <?rfc include='reference.RFC.2119.xml'?>
-      <?rfc include='reference.RFC.3553.xml'?>
-      <?rfc include='reference.RFC.3688.xml'?>
-      <?rfc include='reference.RFC.3986.xml'?>
-      <?rfc include='reference.RFC.5277.xml'?>
-      <?rfc include='reference.RFC.6020.xml'?>
-      <?rfc include='reference.RFC.6241.xml'?>
-      <?rfc include='reference.RFC.6242.xml'?>
-      <?rfc include='reference.RFC.7407.xml'?>
-      <?rfc include='reference.RFC.7950.xml'?>
-      <?rfc include='reference.RFC.8040.xml'?>
-      <?rfc include='reference.RFC.8174.xml'?>
-      <?rfc include='reference.RFC.8340.xml'?>
-      <?rfc include='reference.RFC.8341.xml'?>
-      <?rfc include='reference.RFC.8446.xml'?>
-      <?rfc include='reference.RFC.8639.xml'?>
-      <?rfc include='reference.RFC.8791.xml'?>
-      <?rfc include='reference.RFC.9110.xml'?>
-      <?rfc include='reference.RFC.9112.xml'?>
-      <?rfc include='reference.RFC.9113.xml'?>
-      <?rfc include='reference.RFC.9114.xml'?>
-      <?rfc include='reference.RFC.9325.xml'?>
-      <?rfc include='reference.RFC.9645.xml'?>
-      <?rfc include='reference.RFC.9911.xml'?>
-      <?rfc include='reference.I-D.ietf-netconf-http-client-server.xml'?>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3553.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3688.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.3986.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5277.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6020.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6241.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6242.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7407.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7950.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8040.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8340.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8341.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8446.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8639.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8791.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9110.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9112.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9113.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9114.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9325.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9645.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9911.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-netconf-http-client-server.xml"/>
     </references>
     <references title="Informative references">
-      <?rfc include='reference.RFC.8141.xml'?>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8141.xml"/>
     </references>
 
     <section title="Configuration Examples">
