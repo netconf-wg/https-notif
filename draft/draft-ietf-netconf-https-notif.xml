@@ -717,7 +717,9 @@ INSERT_TEXT_FROM_FILE(../bin/ietf-https-notif-transport@YYYY-MM-DD.yang,69)
         <t>
 	  IANA is requested to register the following URIs in the
 	  "ns" registry within the "IETF XML Registry" group <xref
-	  target="RFC3688"/>:
+	  target="RFC3688"/>.  Following the format in <xref
+	  target="RFC3688"/>, the following registrations are
+	  requested:
 	</t>
         <t>
           <figure>
@@ -737,7 +739,9 @@ XML: N/A; the requested URI is an XML namespace.
         <t>
 	  IANA is requested to register the following YANG modules in
 	  the "YANG Module Names" registry <xref target="RFC6020"/>
-	  within the "YANG Parameters" registry group:
+	  within the "YANG Parameters" registry group.  Following the
+	  format in <xref target="RFC6020"/>, the following
+	  registrations are requested:
 	</t>
         <t>
           <figure>
