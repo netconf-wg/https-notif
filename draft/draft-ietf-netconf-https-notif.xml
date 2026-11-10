@@ -66,7 +66,7 @@
 	the media types defined in <xref
 	target="RFC8040">RESTCONF</xref>; future efforts may define
 	support for other encodings (e.g., CBOR). This document also
-	defines optional support for sending legacy notifications as
+	defines optional support for sending notifications as
 	defined in <xref target="RFC5277">NETCONF Event
 	Notifications</xref> using "application/xml" as the media
 	type. This document requires that the publisher is a network
@@ -353,9 +353,9 @@ Content-Length: nnn
 	configured subscriptions (see Section 2.5 of <xref
 	target="RFC8639"/>), as notifications for dynamic subscriptions
 	are sent over the session used to establish the
-	subscription. Sending legacy notifications as defined in <xref
+	subscription. Sending notifications as defined in <xref
 	target="RFC5277">NETCONF Event Notifications</xref> is described
-	in <xref target="legacy"/>.
+	in <xref target="rfc5277-notif"/>.
       </t>
       <section title="Request">
         <t>
@@ -372,10 +372,24 @@ Content-Length: nnn
 	</t>
         <t>
 	  JSON-encoded notifications are encoded as defined in Section
-	  6.4 of <xref target="RFC8040">RESTCONF</xref>, including the
-	  use of the "ietf-restconf" module name for the
-	  "notification" element, except that the notifications do not
-	  contain the "data:" prefix used by Server-Sent Events (SSE).
+	  6.4 of <xref target="RFC8040">RESTCONF</xref>, with the
+	  following deviations:
+          <list style="symbols">
+            <t>
+	    The notifications do not contain the "data:" prefix used
+	    by Server-Sent Events (SSE).
+	    </t>
+            <t>
+	    The "notification" element is qualified with the module
+	    name "ietf-notification" (i.e.,
+	    "ietf-notification:notification"), following the
+	    example in Section 5.5 of <xref target="RFC7951"/>, instead
+	    of "ietf-restconf".  This keeps the encoding independent
+	    of RESTCONF, as the receiver can be any HTTPS server.  The
+	    "ietf-notification" module name is reserved by this
+	    document (see <xref target="ietf-notification-name"/>).
+	    </t>
+          </list>
 	</t>
       </section>
       <section title="Response">
@@ -412,7 +426,7 @@ Host: example.com
 Content-Type: application/yang-data+json
 
 {
-  "ietf-restconf:notification": {
+  "ietf-notification:notification": {
     "eventTime": "2013-12-21T00:01:00Z",
     "example-mod:event" : {
       "event-class" : "fault",
@@ -436,22 +450,22 @@ Server: example-server]]></artwork>
       </section>
     </section>
 
-    <section title="Support for Legacy Notifications (RFC 5277)" anchor="legacy">
+    <section title="Support for RFC 5277 Notifications" anchor="rfc5277-notif">
       <t>
 	This document primarily defines a transport for YANG
 	notifications as defined in <xref
 	target="RFC8639">Subscription to YANG
 	Notifications</xref>. However, implementations MAY also use
-	this HTTPS-based transport to send legacy event notifications
+	this HTTPS-based transport to send event notifications
 	as defined in <xref target="RFC5277">NETCONF Event
-	Notifications</xref>. This section defines how such legacy
+	Notifications</xref>. This section defines how such
 	notifications are sent and how a receiver advertises support
 	for them.
       </t>
 
       <section title="Request">
         <t>
-	  When sending legacy RFC 5277 notifications, the publisher
+	  When sending RFC 5277 notifications, the publisher
 	  sends an HTTP POST request to the "relay-notification"
 	  resource (see <xref target="overview"/>) with the
 	  "Content-Type" header set to "application/xml". The body
@@ -462,7 +476,7 @@ Server: example-server]]></artwork>
 
       <section title="Capabilities">
         <t>
-	  A receiver that supports legacy RFC 5277 notifications MUST
+	  A receiver that supports RFC 5277 notifications MUST
 	  advertise this capability by including the following URI in
 	  its capabilities response (see <xref
 	  target="overview"/>):
@@ -476,7 +490,7 @@ urn:ietf:params:yang-notif:https-capability:rfc5277-notif
         </t>
 
         <t>
-	  A publisher MUST NOT send RFC 5277 legacy notifications
+	  A publisher MUST NOT send RFC 5277 notifications
 	  unless it has confirmed that the receiver supports the
 	  "rfc5277-notif" capability URI.  The publisher MUST confirm
 	  this either by querying the receiver's capabilities as
@@ -487,18 +501,18 @@ urn:ietf:params:yang-notif:https-capability:rfc5277-notif
 	  A YANG-aware publisher SHOULD issue the capabilities request
 	  with an "Accept" header set to "application/yang-data+xml"
 	  and/or "application/yang-data+json", as described in <xref
-	  target="overview"/>. A legacy publisher that only understands
+	  target="overview"/>. A publisher that only understands
 	  "application/xml" MAY instead set the "Accept" header to
 	  "application/xml". In that case, the receiver SHOULD respond
 	  with "Content-Type: application/xml" and the same
-	  "receiver-capabilities" XML structure, allowing the legacy
+	  "receiver-capabilities" XML structure, allowing the
 	  publisher to parse the capability URIs without requiring
 	  knowledge of YANG media types.
 	</t>
       </section>
 
       <section title="Example">
-        <t>A legacy publisher that only understands "application/xml"
+        <t>A publisher that only understands "application/xml"
         can discover receiver capabilities as follows:</t>
         <t>
           <figure>
@@ -524,6 +538,9 @@ Content-Type: application/xml
 <receiver-capabilities
     xmlns="urn:ietf:params:xml:ns:yang:ietf-https-notif-transport">
   <receiver-capability>
+    urn:ietf:params:yang-notif:https-capability:encoding:json
+  </receiver-capability>
+  <receiver-capability>
     urn:ietf:params:yang-notif:https-capability:encoding:xml
   </receiver-capability>
   <receiver-capability>
@@ -533,7 +550,7 @@ Content-Type: application/xml
           </figure>
         </t>
         <t>
-	  Having confirmed the "rfc5277-notif" capability, the legacy
+	  Having confirmed the "rfc5277-notif" capability, the
 	  publisher then sends a notification as follows:
 	</t>
         <t>
@@ -756,6 +773,31 @@ reference: RFC XXXX
         </t>
       </section>
 
+      <section title='Reservation of the "ietf-notification" YANG Module Name'
+               anchor="ietf-notification-name">
+        <t>
+	  IANA is requested to register the following name in the
+	  "YANG Module Names" registry <xref target="RFC6020"/> within
+	  the "YANG Parameters" registry group.  The name qualifies the
+	  "notification" element in JSON-encoded notifications (see
+	  <xref target="RFC7951"/>) and is mapped to the XML namespace
+	  of the "notification" element defined in <xref
+	  target="RFC5277"/>.  No YANG module with this name is
+	  defined by this document.
+	</t>
+        <t>
+          <figure>
+            <artwork>
+Name:  ietf-notification
+Maintained by IANA?  N
+Namespace:  urn:ietf:params:xml:ns:netconf:notification:1.0
+Prefix:  ncEvent
+Reference:  RFC XXXX
+</artwork>
+          </figure>
+        </t>
+      </section>
+
       <section title="Registration of 'yang-notif' URN Sub-namespace">
         <t>
         This document requests that IANA register a new URN Sub-namespace within the
@@ -846,7 +888,7 @@ Record:
 Record:
    URN:         urn:ietf:params:yang-notif:https-capability:rfc5277-notif
    Reference:   RFC XXXX:An HTTPS-based Transport for YANG Notifications
-   Description: Identifies support for receiving legacy RFC 5277
+   Description: Identifies support for receiving RFC 5277
                 XML notifications, transmitted using "application/xml"
                 as the Content-Type header value.
             </artwork>
@@ -868,6 +910,7 @@ Record:
       <?rfc include='reference.RFC.6242.xml'?>
       <?rfc include='reference.RFC.7407.xml'?>
       <?rfc include='reference.RFC.7950.xml'?>
+      <?rfc include='reference.RFC.7951.xml'?>
       <?rfc include='reference.RFC.8040.xml'?>
       <?rfc include='reference.RFC.8174.xml'?>
       <?rfc include='reference.RFC.8340.xml'?>
